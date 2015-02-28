@@ -224,6 +224,15 @@
 		12E928AB1AA26FF600D11B5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glm",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glew/include",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glfw/include",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glfw";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -231,6 +240,15 @@
 		12E928AC1AA26FF600D11B5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glm",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glew/include",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glfw/include",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glfw";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
