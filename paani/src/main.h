@@ -12,6 +12,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glfw.h>
+#include <GLUT/GLUT.h>
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
