@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>701D76C6-397A-4906-8089-D4F8A856C745</string>
+	<key>IDESourceControlProjectName</key>
+	<string>paani</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>BDB5DC6522B99AA22D91DE398147F6FFF27AD02C</key>
+		<string>https://github.com/debanshusingh/paani.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>paani.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>BDB5DC6522B99AA22D91DE398147F6FFF27AD02C</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/debanshusingh/paani.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>BDB5DC6522B99AA22D91DE398147F6FFF27AD02C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BDB5DC6522B99AA22D91DE398147F6FFF27AD02C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>paani</string>
+		</dict>
+	</array>
+</dict>
+</plist>
