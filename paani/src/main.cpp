@@ -7,6 +7,9 @@
 //
 
 #include <iostream>
+#include "main.h"
+
+using namespace glm;
 
 int main(int argc, const char * argv[]) {
     // insert code here...
