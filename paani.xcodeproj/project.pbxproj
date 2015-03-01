@@ -12,6 +12,8 @@
 		12CB7C481AA276870095666D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C471AA276870095666D /* IOKit.framework */; };
 		12CB7C4A1AA276B30095666D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C491AA276B30095666D /* Cocoa.framework */; };
 		12F5EC961AA27E530055DEE6 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F5EC951AA27E530055DEE6 /* GLUT.framework */; };
+		12F5ECA01AA28E960055DEE6 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F5EC9F1AA28E960055DEE6 /* libGLEW.a */; };
+		12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12F5ECA11AA2900C0055DEE6 /* utilities.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +36,9 @@
 		12CB7C491AA276B30095666D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		12E928A31AA26FF600D11B5B /* paani */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = paani; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F5EC951AA27E530055DEE6 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		12F5EC9F1AA28E960055DEE6 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = paani/thirdparty/osx/glew/lib/libGLEW.a; sourceTree = "<group>"; };
+		12F5ECA11AA2900C0055DEE6 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilities.cpp; sourceTree = "<group>"; };
+		12F5ECA21AA2900C0055DEE6 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12F5ECA01AA28E960055DEE6 /* libGLEW.a in Frameworks */,
 				12F5EC961AA27E530055DEE6 /* GLUT.framework in Frameworks */,
 				12CB7C4A1AA276B30095666D /* Cocoa.framework in Frameworks */,
 				12CB7C481AA276870095666D /* IOKit.framework in Frameworks */,
@@ -54,6 +60,8 @@
 		12CB7C411AA272990095666D /* src */ = {
 			isa = PBXGroup;
 			children = (
+				12F5ECA11AA2900C0055DEE6 /* utilities.cpp */,
+				12F5ECA21AA2900C0055DEE6 /* utilities.h */,
 				12CB7C421AA272990095666D /* main.cpp */,
 				12CB7C441AA2757C0095666D /* main.h */,
 			);
@@ -63,6 +71,7 @@
 		12E9289A1AA26FF600D11B5B = {
 			isa = PBXGroup;
 			children = (
+				12F5EC9F1AA28E960055DEE6 /* libGLEW.a */,
 				12F5EC951AA27E530055DEE6 /* GLUT.framework */,
 				12CB7C491AA276B30095666D /* Cocoa.framework */,
 				12CB7C471AA276870095666D /* IOKit.framework */,
@@ -83,9 +92,17 @@
 		12E928A51AA26FF600D11B5B /* paani */ = {
 			isa = PBXGroup;
 			children = (
+				12F5EC9B1AA2870D0055DEE6 /* thirdparty */,
 				12CB7C411AA272990095666D /* src */,
 			);
 			path = paani;
+			sourceTree = "<group>";
+		};
+		12F5EC9B1AA2870D0055DEE6 /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = thirdparty;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,6 +161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */,
 				12CB7C431AA272990095666D /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,7 +254,7 @@
 					"$(PROJECT_DIR)/paani/thirdparty/osx/glew/include",
 					"$(PROJECT_DIR)/paani/thirdparty/osx/glfw/include",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glfw";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glew/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -252,7 +270,7 @@
 					"$(PROJECT_DIR)/paani/thirdparty/osx/glew/include",
 					"$(PROJECT_DIR)/paani/thirdparty/osx/glfw/include",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glfw";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glew/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

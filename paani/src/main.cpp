@@ -11,8 +11,39 @@
 
 using namespace glm;
 
-int main(int argc, const char * argv[]) {
-
+int main(int argc, char * argv[]) {
+    
+    init(argc, argv);
+    glEnable(GL_DEPTH_TEST);
+    glutDisplayFunc(display);
+    glutMainLoop();
     
     return 0;
+}
+
+
+void init(int argc, char* argv[]){
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutInitWindowSize(width, height);
+    glutCreateWindow("paani");
+    
+    glewInit();
+    
+    
+}
+
+void display(){
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, 1.0, 0.1, 100.0);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glutSolidSphere(0.5f, 10, 10);
+    glutPostRedisplay();
+    glutSwapBuffers();
 }

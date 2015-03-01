@@ -2,7 +2,6 @@ dependencies: \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/src/main.cpp \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/src/main.h \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glew/include/GL/glew.h \
-  /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glfw/include/GL/glfw.h \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/glm.hpp \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/core/_fixes.hpp \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/core/setup.hpp \
