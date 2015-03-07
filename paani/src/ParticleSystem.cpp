@@ -31,23 +31,73 @@ Particle ParticleSystem::getParticle(int index)
 //TODO
 // Improve the neighbos search later
 // Currently naive neighbor searching
-std::vector<int> ParticleSystem::findNeighbors(int index, int distance)
+
+std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, int radius)
 {
-    std::vector<int> neighborsList;
+    std::vector<Neighbor> neighborsList;
     glm::vec3 particlePos = particles[index].getPosition();
     
+    float distance;
     int i;
-    
+    Neighbor p;
+
     for (i = 0; i<particles.size(); i++)
     {
-        if(glm::distance(particlePos, particles[i].getPosition()) < distance)
+        distance = glm::distance(particlePos, particles[i].getPosition());
+
+        if(distance < radius + EPSILON)
         {
             if(i!=index)
             {
-                neighborsList.push_back(i);
+                p.first = i;
+                p.second = index;
+                neighborsList.push_back(p);
             }
         }
     }
     
     return neighborsList;
 }
+
+float ParticleSystem::getDensity(int index, int smoothingRadius)
+{
+    float density = 0;
+    int i;
+    
+    std::vector<Neighbor> neighbors = this->findNeighbors(index, smoothingRadius);
+    
+    //Kernel function implementation
+    //  Using poly6 kernel function
+    
+    //TODO
+    //  Currently mass is 1 for all particles
+    //  If mass is changed, change the for loop to multiply by mass
+    for(i=0; i<neighbors.size(); i++)
+    {
+        density +=  poly6 * pow((pow(smoothingRadius, 2) - pow(neighbors[i].second, 2)),3)
+                            / pow(smoothingRadius, 9);
+    }
+    
+    return density;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -27,6 +27,8 @@ void init(int argc, char* argv[]){
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(width, height);
     glutCreateWindow("paani");
+    glutFullScreen();
+    glutKeyboardFunc(handleKeypress);
     
     glewInit();
     
@@ -46,4 +48,14 @@ void display(){
     glutSolidSphere(0.5f, 10, 10);
     glutPostRedisplay();
     glutSwapBuffers();
+}
+
+void handleKeypress(unsigned char key, int x, int y)
+{
+    switch(key)
+    {
+        case 'q' :
+        case 'Q' :
+            exit(0);
+    }
 }

@@ -19,6 +19,7 @@
 
 void init(int argc, char* argv[]);
 void display();
+void handleKeypress(unsigned char key, int x, int y);
 
 int width=640;
 int height=480;

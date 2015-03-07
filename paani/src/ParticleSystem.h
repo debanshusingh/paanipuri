@@ -12,15 +12,22 @@
 #include <stdio.h>
 #include "Particle.h"
 #include <vector>
+#include <utility>
+#include "utilities.h"
+
 
 //This class stores the list of particles and handles their interactions
 
 class ParticleSystem
 {
+
 private:
     std::vector <Particle> particles;   //List of all particles in the system
-
+    const float poly6 = 315 / (64 * PI);
+    
 public:
+    
+    typedef std::pair<int, float> Neighbor;
     
     //Getter functions
     std::vector<Particle> getAllParticles();   //Returns the list of all particles in the system
@@ -31,7 +38,11 @@ public:
     Particle getParticle(int index);            //Returns a particlular add some index
     
     //Function to return a list of all the neighbors within the specified distance
-    std::vector<int> findNeighbors(int index, int distance);
+    // Stored as a pair of index and distance to the particle
+    std::vector<Neighbor> findNeighbors(int index, int radius);
+    
+    //function that returns the density of a particle
+    float getDensity(int index, int smoothingRadius);
 };
 
 #endif
