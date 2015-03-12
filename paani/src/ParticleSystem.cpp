@@ -89,7 +89,10 @@ float ParticleSystem::getDensity(int index, float smoothingRadius)
     return density;
 }
 
-
+glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
+{
+    return glm::vec3(0,0,0);
+}
 
 
 
