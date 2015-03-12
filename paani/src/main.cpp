@@ -79,7 +79,7 @@ void displayParticles()
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
             glColor3f(color.x, color.y, color.z);
-            glutSolidSphere(0.01f, 10, 10);
+            glutSolidSphere(0.1f, 10, 10);
         glPopMatrix();
     }
 }

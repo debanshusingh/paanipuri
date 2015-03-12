@@ -28,7 +28,7 @@ private:
     
 public:
     
-    typedef std::pair<int, float> Neighbor;
+    typedef std::pair<int, glm::vec3> Neighbor;
     
     //Getter functions
     std::vector<Particle> getAllParticles();   //Returns the list of all particles in the system

@@ -58,7 +58,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
             if(i!=index)
             {
                 p.first = i;
-                p.second = index;
+                p.second = particlePos - particles[i].getPosition();
                 neighborsList.push_back(p);
             }
         }
@@ -82,7 +82,7 @@ float ParticleSystem::getDensity(int index, float smoothingRadius)
     //  If mass is changed, change the for loop to multiply by mass
     for(i=0; i<neighbors.size(); i++)
     {
-        density +=  poly6 * pow((pow(smoothingRadius, 2) - pow(neighbors[i].second, 2)),3)
+        density +=  poly6 * pow((pow(smoothingRadius, 2) - pow(neighbors[i].second.length(), 2)),3)
                             / pow(smoothingRadius, 9);
     }
     
