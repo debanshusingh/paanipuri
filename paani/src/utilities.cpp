@@ -11,6 +11,16 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/matrix_inverse.hpp"
 
+float utilityCore::randomFloat()
+{
+    return (float)rand() / ((float)RAND_MAX + 1);
+}
+
+glm::vec3 utilityCore::randomVec3()
+{
+    return glm::vec3(randomFloat(), randomFloat(), randomFloat());
+}
+
 float utilityCore::clamp(float f, float min, float max){
     if(f<min){
         return min;

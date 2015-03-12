@@ -11,8 +11,9 @@
 
 #include <stdio.h>
 #include <glm/glm.hpp>
+#include "ParticleSystem.h"
 
-#endif /* defined(__paani__scene__) */
+void sceneInit();
 
 class Cube
 {
@@ -28,9 +29,20 @@ public:
     
     // Getters
     glm::vec3 getDimensions();
+    glm::vec3 getHalfDimensions();
     glm::vec3 getCenter();
     
     //Setters
     void setDimension(glm::vec3);
     void setCenter(glm::vec3);
 };
+
+class Scene
+{
+public:
+    float timeStep;
+    glm::vec3 gravity;
+    int numberOfParticles;
+};
+
+#endif /* defined(__paani__scene__) */

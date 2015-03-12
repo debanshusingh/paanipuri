@@ -14,9 +14,17 @@ std::vector<Particle> ParticleSystem::getAllParticles()
     return particles;
 }
 
+float ParticleSystem::getRestDensity()
+{
+    return restDensity;
+}
+
+unsigned int ParticleSystem::getParticleCount()
+{
+    return getAllParticles().size();
+}
 
 //Other functions
-
 void ParticleSystem::addParticle(Particle p)
 {
     particles.push_back(p);
@@ -32,7 +40,7 @@ Particle ParticleSystem::getParticle(int index)
 // Improve the neighbos search later
 // Currently naive neighbor searching
 
-std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, int radius)
+std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, float radius)
 {
     std::vector<Neighbor> neighborsList;
     glm::vec3 particlePos = particles[index].getPosition();
@@ -59,7 +67,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
     return neighborsList;
 }
 
-float ParticleSystem::getDensity(int index, int smoothingRadius)
+float ParticleSystem::getDensity(int index, float smoothingRadius)
 {
     float density = 0;
     int i;

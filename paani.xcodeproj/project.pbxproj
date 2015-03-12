@@ -69,16 +69,16 @@
 		12CB7C411AA272990095666D /* src */ = {
 			isa = PBXGroup;
 			children = (
+				12F5ECA11AA2900C0055DEE6 /* utilities.cpp */,
+				12F5ECA21AA2900C0055DEE6 /* utilities.h */,
 				896ABBF71AA2985C001480C1 /* Particle.cpp */,
 				896ABBF81AA2985C001480C1 /* Particle.h */,
 				896ABBF91AA2985C001480C1 /* ParticleSystem.cpp */,
 				896ABBFA1AA2985C001480C1 /* ParticleSystem.h */,
-				12F5ECA11AA2900C0055DEE6 /* utilities.cpp */,
-				12F5ECA21AA2900C0055DEE6 /* utilities.h */,
-				12CB7C421AA272990095666D /* main.cpp */,
-				12CB7C441AA2757C0095666D /* main.h */,
 				8936A2841AB2244400B9C75D /* scene.cpp */,
 				8936A2851AB2244400B9C75D /* scene.h */,
+				12CB7C421AA272990095666D /* main.cpp */,
+				12CB7C441AA2757C0095666D /* main.h */,
 			);
 			path = src;
 			sourceTree = "<group>";

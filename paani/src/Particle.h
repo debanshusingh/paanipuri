@@ -29,7 +29,7 @@ public:
     
     //Constructors
     Particle();             //Default
-    Particle(glm::vec3);    //Construct a particle a specific position
+    Particle(glm::vec3);    //Construct a particle at a specific position
     Particle(glm::vec3, glm::vec3); //Construct the particle with pos and vel
     
     //getter funcitons

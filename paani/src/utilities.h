@@ -48,5 +48,8 @@ namespace utilityCore {
     extern void printMat4(glm::mat4);
     extern void printVec4(glm::vec4);
     extern void printVec3(glm::vec3);
+    
+    extern float randomFloat();     //generates random float between 0 and 1;
+    extern glm::vec3 randomVec3(); //generate random vec3 between (0,0,0) (1,1,1)
 }
 #endif

@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "main.h"
+#include "scene.h"
 
 using namespace glm;
 
@@ -21,21 +22,21 @@ int main(int argc, char * argv[]) {
     return 0;
 }
 
-
-void init(int argc, char* argv[]){
+void init(int argc, char* argv[]) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(width, height);
     glutCreateWindow("paani");
-    glutFullScreen();
+   // glutFullScreen();
     glutKeyboardFunc(handleKeypress);
     
     glewInit();
-    
-    
+    time_t t;
+    srand((unsigned int)time(&t));
+    sceneInit();
 }
 
-void display(){
+void display() {
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -44,8 +45,10 @@ void display(){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glTranslatef(0,0,-5.0f);
+    //glutSolidSphere(0.5f, 10, 10);
+    displayParticles();
     
-    glutSolidSphere(0.5f, 10, 10);
     glutPostRedisplay();
     glutSwapBuffers();
 }
@@ -57,5 +60,26 @@ void handleKeypress(unsigned char key, int x, int y)
         case 'q' :
         case 'Q' :
             exit(0);
+    }
+}
+
+void displayParticles()
+{
+    extern ParticleSystem particleSystem;
+    
+    unsigned int i;
+    
+    glm::vec3 position, color;
+    
+    for(i=0; i<particleSystem.getParticleCount(); i++)
+    {
+        position = particleSystem.getParticle(i).getPosition();
+        color = utilityCore::randomVec3();
+        
+        glPushMatrix();
+            glTranslatef(position.x, position.y, position.z);
+            glColor3f(color.x, color.y, color.z);
+            glutSolidSphere(0.01f, 10, 10);
+        glPopMatrix();
     }
 }

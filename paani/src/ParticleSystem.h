@@ -24,6 +24,7 @@ class ParticleSystem
 private:
     std::vector <Particle> particles;   //List of all particles in the system
     const float poly6 = 315 / (64 * PI);
+    const float restDensity = 1000;
     
 public:
     
@@ -31,7 +32,8 @@ public:
     
     //Getter functions
     std::vector<Particle> getAllParticles();   //Returns the list of all particles in the system
-    
+    float getRestDensity();
+    unsigned int getParticleCount();
     
     //Other functions
     void addParticle(Particle);               //Add a particle to the system
@@ -39,10 +41,10 @@ public:
     
     //Function to return a list of all the neighbors within the specified distance
     // Stored as a pair of index and distance to the particle
-    std::vector<Neighbor> findNeighbors(int index, int radius);
+    std::vector<Neighbor> findNeighbors(int index, float radius);
     
     //function that returns the density of a particle
-    float getDensity(int index, int smoothingRadius);
+    float getDensity(int index, float smoothingRadius);
 };
 
 #endif
