@@ -55,6 +55,11 @@ glm::vec3 Particle::getForces()
     return this->forces;
 }
 
+std::vector<int> Particle::getNeighborIndices()
+{
+    return neighborIndices;
+}
+
 //Setter functions
 void Particle::setPosition(glm::vec3 pos)
 {
@@ -69,4 +74,9 @@ void Particle::setVelocity(glm::vec3 vel)
 void Particle::setForces(glm::vec3 netForce)
 {
     this->forces = netForce;
+}
+
+void Particle::addNeighborIndex(int index)
+{
+    neighborIndices.push_back(index);
 }

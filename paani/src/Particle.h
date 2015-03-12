@@ -10,7 +10,7 @@
 #define paani_Particle_h
 
 #include <glm/glm.hpp>
-
+#include <vector>
 
 //This class stores the properties of individual particles
 
@@ -25,6 +25,8 @@ private:
     glm::vec3 velocity;     //Stores the current velocity of the particle
     glm::vec3 forces;       //Stores the accumulated forces acting on the particle
     
+    std::vector <int> neighborIndices;    //stores the indices of all the neighbors
+    
 public:
     
     //Constructors
@@ -38,11 +40,14 @@ public:
     glm::vec3 getPosition();
     glm::vec3 getVelocity();
     glm::vec3 getForces();
+    std::vector<int> getNeighborIndices();
     
     //setter functions
     void setPosition(glm::vec3);
     void setVelocity(glm::vec3);
     void setForces(glm::vec3);
+    
+    void addNeighborIndex(int index);
 };
 
 #endif

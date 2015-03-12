@@ -45,10 +45,12 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
     std::vector<Neighbor> neighborsList;
     glm::vec3 particlePos = particles[index].getPosition();
     
+    Particle curParticle = getParticle(index);
+    
     float distance;
     int i;
     Neighbor p;
-
+    
     for (i = 0; i<particles.size(); i++)
     {
         distance = glm::distance(particlePos, particles[i].getPosition());
@@ -58,6 +60,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
             if(i!=index)
             {
                 p.first = i;
+                curParticle.addNeighborIndex(i);
                 p.second = particlePos - particles[i].getPosition();
                 neighborsList.push_back(p);
             }
@@ -105,12 +108,14 @@ glm::vec3 ParticleSystem::gradientConstraint(int index, float smoothingRadius)
     glm::vec3 gradientReturn = glm::vec3(0,0,0);
     
     float restDensityInverse = 1.0/getRestDensity();
+    Particle curParticle = getParticle(index);
     
-    std::vector<Neighbor> neighbors = this->findNeighbors(index, smoothingRadius);
+    std::vector<int> neighbors = curParticle.getNeighborIndices();
     
     for(int i=0; i<neighbors.size(); i++)
     {
-        gradientReturn += restDensityInverse * gradientWSpikyKernel(neighbors[i].second, smoothingRadius);
+        gradientReturn += restDensityInverse *
+                        gradientWSpikyKernel((curParticle.getPosition() - getParticle(neighbors[i]).getPosition()), smoothingRadius);
     }
     
     return gradientReturn;
