@@ -23,7 +23,8 @@ class ParticleSystem
 
 private:
     std::vector <Particle> particles;   //List of all particles in the system
-    const float poly6 = 315 / (64 * PI);
+    const float poly6 = 315.0 / (64 * PI);
+    const float spiky = 45.0 / (PI);
     const float restDensity = 1000;
     
 public:
