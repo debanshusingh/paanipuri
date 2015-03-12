@@ -45,6 +45,8 @@ public:
     
     //function that returns the density of a particle
     float getDensity(int index, float smoothingRadius);
+    glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius);
+    
 };
 
 #endif
