@@ -27,7 +27,7 @@ void init(int argc, char* argv[]) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(width, height);
     glutCreateWindow("paani");
-   // glutFullScreen();
+    glutFullScreen();
     glutKeyboardFunc(handleKeypress);
     
     glewInit();
@@ -45,7 +45,7 @@ void display() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glTranslatef(0,0,-5.0f);
+    glTranslatef(0,0,-10.0f);
     //glutSolidSphere(0.5f, 10, 10);
     displayParticles();
     
@@ -79,7 +79,7 @@ void displayParticles()
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
             glColor3f(color.x, color.y, color.z);
-            glutSolidSphere(0.1f, 10, 10);
+            glutSolidSphere(0.03f, 10, 10);
         glPopMatrix();
     }
 }

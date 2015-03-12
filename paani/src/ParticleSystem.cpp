@@ -37,7 +37,7 @@ Particle ParticleSystem::getParticle(int index)
 
 
 //TODO
-// Improve the neighbos search later
+// Improve the neighbors search later
 // Currently naive neighbor searching
 
 std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, float radius)
@@ -82,23 +82,37 @@ float ParticleSystem::getDensity(int index, float smoothingRadius)
     //  If mass is changed, change the for loop to multiply by mass
     for(i=0; i<neighbors.size(); i++)
     {
-        density +=  poly6 * pow((pow(smoothingRadius, 2) - pow(neighbors[i].second.length(), 2)),3)
+        density +=  poly6Const * pow((pow(smoothingRadius, 2) - pow(neighbors[i].second.length(), 2)),3)
                             / pow(smoothingRadius, 9);
     }
     
     return density;
 }
 
-glm::vec3 wPoly6Kernel(glm::vec3 distance, float smoothingRadius) {
+glm::vec3 ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius) {
     return glm::vec3(0,0,0);
 }
 
-glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
+glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
 {
     return glm::vec3(0,0,0);
 }
 
-
+glm::vec3 ParticleSystem::gradientConstraint(int index, float smoothingRadius)
+{
+    glm::vec3 gradientReturn = glm::vec3(0,0,0);
+    
+    float restDensityInverse = 1.0/getRestDensity();
+    
+    std::vector<Neighbor> neighbors = this->findNeighbors(index, smoothingRadius);
+    
+    for(int i=0; i<neighbors.size(); i++)
+    {
+        gradientReturn += restDensityInverse * gradientWSpikyKernel(neighbors[i].second, smoothingRadius);
+    }
+    
+    return gradientReturn;
+}
 
 
 
