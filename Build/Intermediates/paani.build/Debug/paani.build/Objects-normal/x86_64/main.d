@@ -63,4 +63,8 @@ dependencies: \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/./core/func_noise.hpp \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/core/func_noise.inl \
   /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/gtc/matrix_transform.hpp \
-  /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/gtc/matrix_transform.inl
+  /Users/debanshu/Dropbox/work/code/github/paani/paani/thirdparty/osx/glm/glm/gtc/matrix_transform.inl \
+  /Users/debanshu/Dropbox/work/code/github/paani/paani/src/scene.h \
+  /Users/debanshu/Dropbox/work/code/github/paani/paani/src/ParticleSystem.h \
+  /Users/debanshu/Dropbox/work/code/github/paani/paani/src/Particle.h \
+  /Users/debanshu/Dropbox/work/code/github/paani/paani/src/utilities.h
