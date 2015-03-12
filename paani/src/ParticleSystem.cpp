@@ -103,7 +103,7 @@ glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothi
     return gradientW*distance;
 }
 
-glm::vec3 ParticleSystem::gradientConstraint(int index, float smoothingRadius)
+glm::vec3 ParticleSystem::gradientConstraintAtParticle(int index, float smoothingRadius)
 {
     glm::vec3 gradientReturn = glm::vec3(0,0,0);
     
@@ -121,7 +121,15 @@ glm::vec3 ParticleSystem::gradientConstraint(int index, float smoothingRadius)
     return gradientReturn;
 }
 
+glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborIndex, float smoothingRadius)
+{
+    glm::vec3 gradientReturn;
 
+    gradientReturn = gradientWSpikyKernel((getParticle(index).getPosition() - getParticle(neighborIndex).getPosition()), smoothingRadius)
+                        / getRestDensity();
+    
+    return (-1.0f * gradientReturn);
+}
 
 
 
