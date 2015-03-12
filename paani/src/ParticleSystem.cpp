@@ -21,7 +21,7 @@ float ParticleSystem::getRestDensity()
 
 unsigned int ParticleSystem::getParticleCount()
 {
-    return getAllParticles().size();
+    return static_cast<int> (getAllParticles().size());
 }
 
 //Other functions
