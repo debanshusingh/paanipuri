@@ -23,8 +23,8 @@ class ParticleSystem
 
 private:
     std::vector <Particle> particles;   //List of all particles in the system
-    const float poly6 = 315.0 / (64 * PI);
-    const float spiky = 45.0 / (PI);
+    const float poly6Const = 315.0 / (64 * PI);
+    const float spikyConst = 45.0 / (PI);
     const float restDensity = 1000;
     
 public:
@@ -47,7 +47,7 @@ public:
     //function that returns the density of a particle
     float getDensity(int index, float smoothingRadius);
     glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius);
-    glm::vec3 wPoly6Kernel(glm::vec3 distance, float smoothingRadius);
+    float wPoly6Kernel(glm::vec3 distance, float smoothingRadius);
     
 };
 

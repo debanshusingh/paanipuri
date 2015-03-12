@@ -82,22 +82,21 @@ float ParticleSystem::getDensity(int index, float smoothingRadius)
     //  If mass is changed, change the for loop to multiply by mass
     for(i=0; i<neighbors.size(); i++)
     {
-        density +=  poly6 * pow((pow(smoothingRadius, 2) - pow(neighbors[i].second.length(), 2)),3)
-                            / pow(smoothingRadius, 9);
+        density +=  wPoly6Kernel(neighbors[i].second, smoothingRadius);
     }
     
     return density;
 }
 
-glm::vec3 ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
+float ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
-    return glm::vec3(0,0,0);
+    return poly6Const * pow((pow(smoothingRadius, 2) - pow(glm::length(distance), 2)),3)/ pow(smoothingRadius, 9);
 }
 
 glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
 {
     float distanceLength = glm::length(distance);
-    float gradientW = spiky * (1/pow(smoothingRadius,6)) * pow(smoothingRadius-distanceLength, 2) * 1.0f/(distanceLength+EPSILON);
+    float gradientW = spikyConst * (1/pow(smoothingRadius,6)) * pow(smoothingRadius-distanceLength, 2) * 1.0f/(distanceLength+EPSILON);
     return gradientW*distance;
 }
 
