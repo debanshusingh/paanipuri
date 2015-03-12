@@ -89,13 +89,16 @@ float ParticleSystem::getDensity(int index, float smoothingRadius)
     return density;
 }
 
-glm::vec3 wPoly6Kernel(glm::vec3 distance, float smoothingRadius) {
+glm::vec3 ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
+{
     return glm::vec3(0,0,0);
 }
 
-glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
+glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
 {
-    return glm::vec3(0,0,0);
+    float distanceLength = glm::length(distance);
+    float gradientW = spiky * (1/pow(smoothingRadius,6)) * pow(smoothingRadius-distanceLength, 2) * 1.0f/(distanceLength+EPSILON);
+    return gradientW*distance;
 }
 
 
