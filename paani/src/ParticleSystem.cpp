@@ -143,6 +143,7 @@ void ParticleSystem::update()
     for (int k=0; k<solverIterations; k++) {
         
         for (int i; i<particles.size(); i++) {
+            particleCollision(i);
             findLambda(i);
         }
         
@@ -209,6 +210,11 @@ void ParticleSystem::applyForces()
         p.setVelocity(p.getVelocity() + scene.timeStep * scene.gravity / p.getMass());
         p.setPredictedPosition(p.getPosition() + scene.timeStep * p.getVelocity());
     }
+}
+
+void ParticleSystem::particleCollision(int index){
+    particleBoxCollision(index);
+    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)
