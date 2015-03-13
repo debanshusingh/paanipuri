@@ -44,7 +44,7 @@ public:
     
     //Other functions
     void addParticle(Particle);               //Add a particle to the system
-    Particle getParticle(int index);            //Returns a particlular add some index
+    Particle& getParticle(int index);            //Returns a particlular add some index
     
     //Function to return a list of all the neighbors within the specified distance
     // Stored as a pair of index and vector to the neighboring particle

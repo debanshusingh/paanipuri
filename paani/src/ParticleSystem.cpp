@@ -31,7 +31,7 @@ void ParticleSystem::addParticle(Particle p)
     particles.push_back(p);
 }
 
-Particle ParticleSystem::getParticle(int index)
+Particle& ParticleSystem::getParticle(int index)
 {
     return particles[index];
 }
@@ -150,9 +150,10 @@ void ParticleSystem::update()
             particles[i].setPredictedPosition(particles[i].getPredictedPosition() + findDeltaPosition(i));
         }
     }
-    
+
+//    utilityCore::printVec3(particles[0].getPosition());
     for (int i; i<particles.size(); i++) {
-        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition() / timeStep));
+        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
         particles[i].setPosition(particles[i].getPredictedPosition());
     }
     
@@ -200,14 +201,10 @@ glm::vec3 ParticleSystem::findDeltaPosition(int index)
 
 void ParticleSystem::applyForces()
 {
-    std::vector<Particle> allParticles = this->getAllParticles();
-    
     for(int i=0; i<getParticleCount(); i++)
     {
-        Particle p = getParticle(i);
-        
-        p.setVelocity(p.getVelocity() + timeStep * scene->gravity / p.getMass());
-        p.setPredictedPosition(p.getPosition() + timeStep * p.getVelocity());
+        particles[i].setVelocity(particles[i].getVelocity() + timeStep * scene->gravity / particles[i].getMass());
+        particles[i].setPredictedPosition(particles[i].getPosition() + timeStep * particles[i].getVelocity());
     }
 }
 

@@ -31,7 +31,7 @@ void init(int argc, char* argv[]) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(width, height);
     glutCreateWindow("paani");
-    glutFullScreen();
+//    glutFullScreen();
     glutKeyboardFunc(handleKeypress);
     glewInit();
     time_t t;
