@@ -11,6 +11,7 @@
 #include "scene.h"
 
 using namespace glm;
+extern Scene scene;
 
 int main(int argc, char * argv[]) {
     
@@ -33,7 +34,7 @@ void init(int argc, char* argv[]) {
     glewInit();
     time_t t;
     srand((unsigned int)time(&t));
-    sceneInit();
+    scene.init();
 }
 
 void display() {

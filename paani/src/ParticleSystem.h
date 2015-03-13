@@ -30,6 +30,7 @@ private:
     const float smoothingRadius = 1.0f;
     const int solverIterations = 5;
     const float relaxation = 0.0001f;
+    float timeStep;
     
 public:
     
@@ -40,7 +41,7 @@ public:
     float getRestDensity();
     unsigned int getParticleCount();
     void update();
-
+    
     //Other functions
     void addParticle(Particle);               //Add a particle to the system
     Particle getParticle(int index);            //Returns a particlular add some index

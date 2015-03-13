@@ -143,20 +143,18 @@ void ParticleSystem::update()
     for (int k=0; k<solverIterations; k++) {
         
         for (int i; i<particles.size(); i++) {
+            particleCollision(i);
             findLambda(i);
         }
         
         for (int i; i<particles.size(); i++) {
-
-//            findDeltaPosition(i);
-//            updateCollisionResponse(i);
-//            updatePredictedPosition(i) += deltaPosition(i);
+            particles[i].setPredictedPosition(particles[i].getPredictedPosition() + findDeltaPosition(i));
         }
     }
     
     for (int i; i<particles.size(); i++) {
-        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition() / scene.timeStep));
-            particles[i].setPosition(particles[i].getPredictedPosition());
+        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition() / timeStep));
+        particles[i].setPosition(particles[i].getPredictedPosition());
     }
     
 }
@@ -209,15 +207,21 @@ void ParticleSystem::applyForces()
     {
         Particle p = getParticle(i);
         
-        p.setVelocity(p.getVelocity() + scene.timeStep * scene.gravity / p.getMass());
-        p.setPredictedPosition(p.getPosition() + scene.timeStep * p.getVelocity());
+        p.setVelocity(p.getVelocity() + timeStep * scene.gravity / p.getMass());
+        p.setPredictedPosition(p.getPosition() + timeStep * p.getVelocity());
     }
 }
 
+<<<<<<< HEAD
 void ParticleSystem::particleCollision(int index)
 {
     particleParticleCollision(index);
     particleBoxCollision(index);
+=======
+void ParticleSystem::particleCollision(int index){
+    particleBoxCollision(index);
+    particleParticleCollision(index);
+>>>>>>> c2df42a4413c23bee582b9583f1f4bfface3d4de
 }
 
 void ParticleSystem::particleParticleCollision(int index)
@@ -265,6 +269,7 @@ void ParticleSystem::particleParticleCollision(int index)
             particles[neighbors[i]].setVelocity(neighborVelocity + vPerpendicular);
         }
     }
+<<<<<<< HEAD
 }
 
 void ParticleSystem::particleBoxCollision(int index)
@@ -295,3 +300,6 @@ void ParticleSystem::particleBoxCollision(int index)
 
 
 
+=======
+}
+>>>>>>> c2df42a4413c23bee582b9583f1f4bfface3d4de

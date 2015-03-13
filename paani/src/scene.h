@@ -13,8 +13,6 @@
 #include <glm/glm.hpp>
 #include "ParticleSystem.h"
 
-void sceneInit();
-
 class Cube
 {
 private:
@@ -40,7 +38,8 @@ public:
 class Scene
 {
 public:
-    float timeStep;
+    void init();
+
     glm::vec3 gravity;
     int numberOfParticles;
     Cube cube;

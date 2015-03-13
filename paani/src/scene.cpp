@@ -16,7 +16,7 @@ using namespace std;
 Scene scene;
 ParticleSystem particleSystem;
 
-void sceneInit()
+void Scene::init()
 {
     //need to add particles
     // create box
@@ -34,7 +34,6 @@ void sceneInit()
         particleSystem.addParticle(Particle(position));
     }
     
-    particleSystem.applyForces();
 }
 
 //Cube class functions
