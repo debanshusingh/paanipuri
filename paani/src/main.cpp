@@ -11,12 +11,15 @@
 #include "scene.h"
 
 using namespace glm;
-extern Scene scene;
+Scene* scene;
 
 int main(int argc, char * argv[]) {
     
     init(argc, argv);
     glEnable(GL_DEPTH_TEST);
+    scene = new Scene();
+    scene->init();
+
     glutDisplayFunc(display);
     glutMainLoop();
     
@@ -30,11 +33,9 @@ void init(int argc, char* argv[]) {
     glutCreateWindow("paani");
     glutFullScreen();
     glutKeyboardFunc(handleKeypress);
-    
     glewInit();
     time_t t;
     srand((unsigned int)time(&t));
-    scene.init();
 }
 
 void display() {
@@ -48,7 +49,8 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glTranslatef(0,0,-10.0f);
     //glutSolidSphere(0.5f, 10, 10);
-    displayParticles();
+    scene->particleSystem->update();
+    scene->displayParticles();
     
     glutPostRedisplay();
     glutSwapBuffers();
@@ -64,17 +66,15 @@ void handleKeypress(unsigned char key, int x, int y)
     }
 }
 
-void displayParticles()
-{
-    extern ParticleSystem particleSystem;
-    
+void Scene::displayParticles()
+{    
     unsigned int i;
     
     glm::vec3 position, color;
     
-    for(i=0; i<particleSystem.getParticleCount(); i++)
+    for(i=0; i<particleSystem->getParticleCount(); i++)
     {
-        position = particleSystem.getParticle(i).getPosition();
+        position = particleSystem->getParticle(i).getPosition();
         color = utilityCore::randomVec3();
         
         glPushMatrix();

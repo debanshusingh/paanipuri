@@ -6,9 +6,8 @@
 //  Copyright (c) 2015 Debanshu. All rights reserved.
 //
 
-#include "ParticleSystem.h"
 #include "scene.h"
-extern Scene scene;
+#include "ParticleSystem.h"
 
 //Getter functions
 std::vector<Particle> ParticleSystem::getAllParticles()
@@ -207,21 +206,14 @@ void ParticleSystem::applyForces()
     {
         Particle p = getParticle(i);
         
-        p.setVelocity(p.getVelocity() + timeStep * scene.gravity / p.getMass());
+        p.setVelocity(p.getVelocity() + timeStep * scene->gravity / p.getMass());
         p.setPredictedPosition(p.getPosition() + timeStep * p.getVelocity());
     }
 }
 
-<<<<<<< HEAD
-void ParticleSystem::particleCollision(int index)
-{
-    particleParticleCollision(index);
-    particleBoxCollision(index);
-=======
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
     particleParticleCollision(index);
->>>>>>> c2df42a4413c23bee582b9583f1f4bfface3d4de
 }
 
 void ParticleSystem::particleParticleCollision(int index)
@@ -269,14 +261,13 @@ void ParticleSystem::particleParticleCollision(int index)
             particles[neighbors[i]].setVelocity(neighborVelocity + vPerpendicular);
         }
     }
-<<<<<<< HEAD
 }
 
 void ParticleSystem::particleBoxCollision(int index)
 {
     glm::vec3 particlePosition = particles[index].getPredictedPosition();
-    glm::vec3 upperBounds = scene.cube.getCenter() + scene.cube.getHalfDimensions();
-    glm::vec3 lowerBounds = scene.cube.getCenter() - scene.cube.getHalfDimensions();
+    glm::vec3 upperBounds = scene->cube.getCenter() + scene->cube.getHalfDimensions();
+    glm::vec3 lowerBounds = scene->cube.getCenter() - scene->cube.getHalfDimensions();
     
     float radius = particles[index].getRadius();
     
@@ -289,17 +280,3 @@ void ParticleSystem::particleBoxCollision(int index)
     if(particlePosition.z - radius < lowerBounds.z - EPSILON || particlePosition.z + radius > upperBounds.z + EPSILON)
         particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(0,0,-1));
 }
-
-
-
-
-
-
-
-
-
-
-
-=======
-}
->>>>>>> c2df42a4413c23bee582b9583f1f4bfface3d4de

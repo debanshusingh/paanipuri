@@ -7,33 +7,32 @@
 //
 
 #include "scene.h"
-#include "Particle.h"
-#include "ParticleSystem.h"
 #include <iostream>
 
 using namespace std;
 
-Scene scene;
-ParticleSystem particleSystem;
-
-void Scene::init()
+Scene::Scene()
 {
     //need to add particles
     // create box
     
-    scene.cube.setCenter(glm::vec3(0,0,0));
-    scene.cube.setDimension(glm::vec3(3,3,3));
-    scene.numberOfParticles = 100;
+    cube.setCenter(glm::vec3(0,0,0));
+    cube.setDimension(glm::vec3(3,3,3));
+    numberOfParticles = 100;
+    gravity = glm::vec3(0.0,-0.1,0.0);
     
+}
+
+void Scene::init(){
     int i;
     glm::vec3 position;
+    particleSystem = new ParticleSystem();
     
-    for(i=0; i<scene.numberOfParticles; i++)
+    for(i=0; i<numberOfParticles; i++)
     {
-        position = utilityCore::randomVec3() * scene.cube.getDimensions() - scene.cube.getHalfDimensions();
-        particleSystem.addParticle(Particle(position));
+        position = utilityCore::randomVec3() * cube.getDimensions() - cube.getHalfDimensions();
+        particleSystem->addParticle(Particle(position));
     }
-    
 }
 
 //Cube class functions

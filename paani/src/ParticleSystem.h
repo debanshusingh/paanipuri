@@ -30,10 +30,10 @@ private:
     const float smoothingRadius = 1.0f;
     const int solverIterations = 5;
     const float relaxation = 0.0001f;
-    float timeStep;
+    const float timeStep = 0.01;
     
 public:
-    
+
     typedef std::pair<int, glm::vec3> Neighbor;
     
     //Getter functions

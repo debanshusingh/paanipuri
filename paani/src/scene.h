@@ -13,6 +13,11 @@
 #include <glm/glm.hpp>
 #include "ParticleSystem.h"
 
+class Cube;
+class Scene;
+
+extern Scene* scene;
+
 class Cube
 {
 private:
@@ -22,7 +27,7 @@ private:
 public:
     
     //constructors
-    Cube();
+    Cube(){};
     Cube(glm::vec3, glm::vec3); //Input center and dimensions
     
     // Getters
@@ -38,11 +43,14 @@ public:
 class Scene
 {
 public:
+    Scene();
     void init();
-
+    void displayParticles();
+    
     glm::vec3 gravity;
     int numberOfParticles;
     Cube cube;
+    ParticleSystem* particleSystem;
 };
 
 #endif /* defined(__paani__scene__) */
