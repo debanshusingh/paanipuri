@@ -26,7 +26,9 @@ private:
 
     const float poly6Const = 315.0 / (64 * PI);
     const float spikyConst = 45.0 / (PI);
-    const float restDensity = 1000;
+    const float restDensity = 1000; //1000kg/m3
+    const float smoothingRadius = 1.0f;
+    const int solverIterations = 5;
     
 public:
     
@@ -36,7 +38,8 @@ public:
     std::vector<Particle> getAllParticles();   //Returns the list of all particles in the system
     float getRestDensity();
     unsigned int getParticleCount();
-    
+    void update();
+
     //Other functions
     void addParticle(Particle);               //Add a particle to the system
     Particle getParticle(int index);            //Returns a particlular add some index
@@ -48,11 +51,11 @@ public:
     //function that returns the density of a particle
     float getDensity(int index, float smoothingRadius);
     
+    float wPoly6Kernel(glm::vec3 distance, float smoothingRadius);
     glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius);
 
     glm::vec3 gradientConstraint(int index, float distance);
 
-    float wPoly6Kernel(glm::vec3 distance, float smoothingRadius);
 };
 
 #endif

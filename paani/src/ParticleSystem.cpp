@@ -7,6 +7,7 @@
 //
 
 #include "ParticleSystem.h"
+#include "scene.h"
 
 //Getter functions
 std::vector<Particle> ParticleSystem::getAllParticles()
@@ -116,8 +117,20 @@ glm::vec3 ParticleSystem::gradientConstraint(int index, float smoothingRadius)
     return gradientReturn;
 }
 
-
-
+void ParticleSystem::update()
+{
+    applyForces(); // apply forces and predict position
+    for (int i; i<particles.size(); i++) {
+        findNeighbors(i, smoothingRadius);
+    }
+    
+    for (int k=0; k<solverIterations; k++) {
+        
+        for (int i; i<particles.size(); i++) {
+            findLambda(i);
+        }
+    }
+}
 
 
 
