@@ -128,7 +128,7 @@ glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborI
     glm::vec3 gradientReturn;
     
     gradientReturn = gradientWSpikyKernel((getParticle(index).getPosition() - getParticle(neighborIndex).getPosition()), smoothingRadius)
-    / getRestDensity();
+                        / getRestDensity();
     
     return (-1.0f * gradientReturn);
 }
@@ -157,7 +157,7 @@ void ParticleSystem::update()
     
 }
 
-void ParticleSystem::findLambda(i){
+float ParticleSystem::findLambda(int index){
     // for all neighbours k gradientConstraintForNeighbor
     // +
     // gradientConstraintAtParticle
@@ -166,8 +166,19 @@ void ParticleSystem::findLambda(i){
 }
 
 
-void ParticleSystem::findDeltaPosition(i){
-    // deltaPosition(i) = eqn12
+glm::vec3 ParticleSystem::findDeltaPosition(int index)
+{
+    glm::vec3 deltaPi = glm::vec3(0,0,0);
+    std::vector<int> neighbors = getParticle(index).getNeighborIndices();
+    float lambda_i = findLambda(index);
+    
+    for(int i=0; i<neighbors.size(); i++)
+    {
+        deltaPi += (findLambda(neighbors[i]) + lambda_i) *
+                    gradientWSpikyKernel( (getParticle(index).getPosition() - getParticle(neighbors[i]).getPosition()), smoothingRadius);
+    }
+    
+    return (deltaPi/restDensity);
 }
 
 void ParticleSystem::applyForces()
