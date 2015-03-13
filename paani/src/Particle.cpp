@@ -16,17 +16,23 @@
 //Constructors
 Particle::Particle()
 {
+    this->position = glm::vec3(0,0,0);
+    this->velocity = glm::vec3(0,0,0);
+    this->predictedPosition = glm::vec3(0,0,0);
 }
 
 Particle::Particle(glm::vec3 pos)
 {
     this->position = pos;
+    this->velocity = glm::vec3(0,0,0);
+    this->predictedPosition = glm::vec3(0,0,0);
 }
 
 Particle::Particle(glm::vec3 pos, glm::vec3 vel)
 {
     this->position = pos;
     this->velocity = vel;
+    this->predictedPosition = glm::vec3(0,0,0);
 }
 
 //Getter functions
@@ -55,6 +61,17 @@ glm::vec3 Particle::getForces()
     return this->forces;
 }
 
+glm::vec3 Particle::getPredictedPosition()
+{
+    return this->predictedPosition;
+}
+
+
+std::vector<int> Particle::getNeighborIndices()
+{
+    return neighborIndices;
+}
+
 //Setter functions
 void Particle::setPosition(glm::vec3 pos)
 {
@@ -69,4 +86,14 @@ void Particle::setVelocity(glm::vec3 vel)
 void Particle::setForces(glm::vec3 netForce)
 {
     this->forces = netForce;
+}
+
+void Particle::setPredictedPosition(glm::vec3 pos)
+{
+    this->predictedPosition = pos;
+}
+
+void Particle::addNeighborIndex(int index)
+{
+    neighborIndices.push_back(index);
 }

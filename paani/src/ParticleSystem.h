@@ -54,8 +54,11 @@ public:
     float wPoly6Kernel(glm::vec3 distance, float smoothingRadius);
     glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius);
 
-    glm::vec3 gradientConstraint(int index, float distance);
-
+    glm::vec3 gradientConstraintAtParticle(int index, float smoothingRadius);
+    glm::vec3 gradientConstraintForNeighbor(int index, int neighborIndex, float smoothingRadius);
+        
+    //apply external forces (gravity)
+    void applyForces();
 };
 
 #endif
