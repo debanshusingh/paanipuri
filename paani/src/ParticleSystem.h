@@ -54,6 +54,9 @@ public:
     glm::vec3 gradientConstraintForNeighbor(int index, int neighborIndex, float smoothingRadius);
     
     float wPoly6Kernel(glm::vec3 distance, float smoothingRadius);
+    
+    //apply external forces (gravity)
+    void applyForces();
 };
 
 #endif

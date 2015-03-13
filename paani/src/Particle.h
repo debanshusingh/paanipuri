@@ -21,9 +21,13 @@ private:
     const float mass = 1.0f;    //Mass of all particles will be same
     const float radius = 1.0f;  //Radius of all particles will be same
     
+    //  Current values
     glm::vec3 position;     //Stores the current position of the particle
     glm::vec3 velocity;     //Stores the current velocity of the particle
     glm::vec3 forces;       //Stores the accumulated forces acting on the particle
+    
+    //predicted values
+    glm::vec3 predictedPosition;    //Predicted particle position
     
     std::vector <int> neighborIndices;    //stores the indices of all the neighbors
     
@@ -40,12 +44,17 @@ public:
     glm::vec3 getPosition();
     glm::vec3 getVelocity();
     glm::vec3 getForces();
+    
+    glm::vec3 getPredictedPosition();
+    
     std::vector<int> getNeighborIndices();
     
     //setter functions
     void setPosition(glm::vec3);
     void setVelocity(glm::vec3);
     void setForces(glm::vec3);
+    
+    void setPredictedPosition(glm::vec3);
     
     void addNeighborIndex(int index);
 };

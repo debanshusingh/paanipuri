@@ -7,6 +7,9 @@
 //
 
 #include "ParticleSystem.h"
+#include "scene.h"
+
+extern Scene scene;
 
 //Getter functions
 std::vector<Particle> ParticleSystem::getAllParticles()
@@ -43,7 +46,7 @@ Particle ParticleSystem::getParticle(int index)
 std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, float radius)
 {
     std::vector<Neighbor> neighborsList;
-    glm::vec3 particlePos = particles[index].getPosition();
+    glm::vec3 particlePredictedPos = particles[index].getPredictedPosition();
     
     Particle curParticle = getParticle(index);
     
@@ -53,7 +56,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
     
     for (i = 0; i<particles.size(); i++)
     {
-        distance = glm::distance(particlePos, particles[i].getPosition());
+        distance = glm::distance(particlePredictedPos, particles[i].getPredictedPosition());
 
         if(distance < radius + EPSILON)
         {
@@ -61,7 +64,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
             {
                 p.first = i;
                 curParticle.addNeighborIndex(i);
-                p.second = particlePos - particles[i].getPosition();
+                p.second = particlePredictedPos - particles[i].getPredictedPosition();
                 neighborsList.push_back(p);
             }
         }
@@ -131,6 +134,18 @@ glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborI
     return (-1.0f * gradientReturn);
 }
 
+void ParticleSystem::applyForces()
+{
+    std::vector<Particle> allParticles = this->getAllParticles();
+    
+    for(int i=0; i<getParticleCount(); i++)
+    {
+        Particle p = getParticle(i);
+        
+        p.setVelocity(p.getVelocity() + scene.timeStep * scene.gravity / p.getMass());
+        p.setPredictedPosition(p.getPosition() + scene.timeStep * p.getVelocity());
+    }
+}
 
 
 

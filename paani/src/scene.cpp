@@ -33,6 +33,8 @@ void sceneInit()
         position = utilityCore::randomVec3() * cube.getDimensions() - cube.getHalfDimensions();
         particleSystem.addParticle(Particle(position));
     }
+    
+    particleSystem.applyForces();
 }
 
 //Cube class functions
