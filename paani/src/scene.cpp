@@ -16,14 +16,14 @@ using namespace std;
 Scene scene;
 ParticleSystem particleSystem;
 
-void sceneInit()
+void Scene::init()
 {
     //need to add particles
     // create box
     
-    Cube cube(glm::vec3(0,0,0), glm::vec3(3,3,3));
+    Cube cube(glm::vec3(0,0,0), glm::vec3(2,2,2));
     
-    scene.numberOfParticles = 100;
+    scene.numberOfParticles = 1000;
     
     int i;
     glm::vec3 position;
@@ -34,7 +34,6 @@ void sceneInit()
         particleSystem.addParticle(Particle(position));
     }
     
-    particleSystem.applyForces();
 }
 
 //Cube class functions

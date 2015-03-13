@@ -153,7 +153,7 @@ void ParticleSystem::update()
     }
     
     for (int i; i<particles.size(); i++) {
-        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition() / scene.timeStep));
+        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition() / timeStep));
         particles[i].setPosition(particles[i].getPredictedPosition());
     }
     
@@ -207,8 +207,8 @@ void ParticleSystem::applyForces()
     {
         Particle p = getParticle(i);
         
-        p.setVelocity(p.getVelocity() + scene.timeStep * scene.gravity / p.getMass());
-        p.setPredictedPosition(p.getPosition() + scene.timeStep * p.getVelocity());
+        p.setVelocity(p.getVelocity() + timeStep * scene.gravity / p.getMass());
+        p.setPredictedPosition(p.getPosition() + timeStep * p.getVelocity());
     }
 }
 
@@ -238,11 +238,3 @@ void ParticleSystem::particleParticleCollision(int index)
         }
     }
 }
-
-
-
-
-
-
-
-

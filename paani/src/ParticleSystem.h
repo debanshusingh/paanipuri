@@ -30,6 +30,7 @@ private:
     const float smoothingRadius = 1.0f;
     const int solverIterations = 5;
     const float relaxation = 0.0001f;
+    float timeStep;
     
 public:
     
