@@ -214,7 +214,27 @@ void ParticleSystem::applyForces()
     }
 }
 
-
+void ParticleSystem::particleParticleCollision(int index)
+{
+    std::vector<int> neighbors = getParticle(index).getNeighborIndices();
+    
+    glm::vec3 currentParticlePosition = particles[index].getPredictedPosition(),
+                neighborPosition;
+    
+    float distance, radius = particles[index].getRadius();
+    
+    for(int i=0; i<neighbors.size(); i++)
+    {
+        neighborPosition = particles[neighbors[i]].getPredictedPosition();
+        distance = glm::distance(currentParticlePosition, neighborPosition);
+        
+        if(distance < 2 * radius + EPSILON)
+        {
+            //resolve collision
+            particles[i].setVelocity((currentParticlePosition-neighborPosition));
+        }
+    }
+}
 
 
 
