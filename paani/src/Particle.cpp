@@ -66,6 +66,10 @@ glm::vec3 Particle::getPredictedPosition()
     return this->predictedPosition;
 }
 
+float Particle::getLambda()
+{
+    return lambda;
+}
 
 std::vector<int> Particle::getNeighborIndices()
 {
@@ -97,3 +101,9 @@ void Particle::addNeighborIndex(int index)
 {
     neighborIndices.push_back(index);
 }
+
+void Particle::setLambda(float l)
+{
+    lambda = l;
+}
+

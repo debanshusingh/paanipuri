@@ -62,7 +62,7 @@ public:
     void applyForces();
     
     glm::vec3 findDeltaPosition(int index);
-    float findLambda(int index);
+    void findLambda(int index);
 };
 
 #endif
