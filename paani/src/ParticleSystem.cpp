@@ -72,7 +72,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
     return neighborsList;
 }
 
-float ParticleSystem::getDensity(int index, float smoothingRadius)
+float ParticleSystem::getDensity(int index)
 {
     float density = 0;
     int i;
@@ -105,7 +105,7 @@ glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothi
     return gradientW*distance;
 }
 
-glm::vec3 ParticleSystem::gradientConstraintAtParticle(int index, float smoothingRadius)
+glm::vec3 ParticleSystem::gradientConstraintAtParticle(int index)
 {
     glm::vec3 gradientReturn = glm::vec3(0,0,0);
     
@@ -123,7 +123,7 @@ glm::vec3 ParticleSystem::gradientConstraintAtParticle(int index, float smoothin
     return gradientReturn;
 }
 
-glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborIndex, float smoothingRadius)
+glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborIndex)
 {
     glm::vec3 gradientReturn;
     
@@ -157,7 +157,29 @@ void ParticleSystem::update()
     
 }
 
-void ParticleSystem::findLambda(i){
+void ParticleSystem::findLambda(int index){
+
+    std::vector<int> neighbours = particles[index].getNeighborIndices();
+    
+    int numNeighbours = static_cast<int>(neighbours.size());
+    
+    float sumGradientAtParticle = 0.0f;
+    float gradientNeighbour = 0.0f;
+    
+    for (int i=0; i<numNeighbours; i++) {
+        gradientNeighbour = glm::length(gradientConstraintForNeighbor(index, i));
+        sumGradientAtParticle += gradientNeighbour*gradientNeighbour;
+    }
+    
+    float gradientParticle = glm::length(gradientConstraintAtParticle(index));
+    sumGradientAtParticle += gradientParticle*gradientParticle;
+    
+    float currDensity = getDensity(index);
+    float densityContraint = (currDensity/restDensity) - 1.0f;
+    
+    float lambdaI = -1.0f * (densityContraint/(sumGradientAtParticle+relaxation));
+    
+    particles[index].setLambda(lambdaI);
     // for all neighbours k gradientConstraintForNeighbor
     // +
     // gradientConstraintAtParticle

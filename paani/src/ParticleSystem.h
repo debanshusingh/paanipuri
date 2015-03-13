@@ -29,6 +29,7 @@ private:
     const float restDensity = 1000; //1000kg/m3
     const float smoothingRadius = 1.0f;
     const int solverIterations = 5;
+    const float relaxation = 0.0001f;
     
 public:
     
@@ -49,13 +50,13 @@ public:
     std::vector<Neighbor> findNeighbors(int index, float radius);
     
     //function that returns the density of a particle
-    float getDensity(int index, float smoothingRadius);
+    float getDensity(int index);
     
     float wPoly6Kernel(glm::vec3 distance, float smoothingRadius);
     glm::vec3 gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius);
 
-    glm::vec3 gradientConstraintAtParticle(int index, float smoothingRadius);
-    glm::vec3 gradientConstraintForNeighbor(int index, int neighborIndex, float smoothingRadius);
+    glm::vec3 gradientConstraintAtParticle(int index);
+    glm::vec3 gradientConstraintForNeighbor(int index, int neighborIndex);
         
     //apply external forces (gravity)
     void applyForces();
