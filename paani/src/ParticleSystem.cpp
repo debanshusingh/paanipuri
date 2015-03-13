@@ -214,28 +214,76 @@ void ParticleSystem::applyForces()
     }
 }
 
+void ParticleSystem::particleCollision(int index)
+{
+    particleParticleCollision(index);
+    particleBoxCollision(index);
+}
+
 void ParticleSystem::particleParticleCollision(int index)
 {
+    //as per http://stackoverflow.com/questions/19189322/proper-sphere-collision-resolution-with-different-sizes-and-mass-using-xna-monog
+    
     std::vector<int> neighbors = getParticle(index).getNeighborIndices();
     
     glm::vec3 currentParticlePosition = particles[index].getPredictedPosition(),
-                neighborPosition;
+                neighborPosition,
+                particleVelocity,
+                neighborVelocity;
+
+    
+    glm::vec3 relativeVelocity,
+                collisionNormal,
+                collisionDirection,
+                vParallel, vPerpendicular;  //components of relative velocity about collision normal and direction
+    
     
     float distance, radius = particles[index].getRadius();
     
+    
     for(int i=0; i<neighbors.size(); i++)
     {
+        particleVelocity = particles[index].getVelocity();
+
         neighborPosition = particles[neighbors[i]].getPredictedPosition();
+        neighborVelocity = particles[neighbors[i]].getVelocity();
+        
         distance = glm::distance(currentParticlePosition, neighborPosition);
         
         if(distance < 2 * radius + EPSILON)
         {
             //resolve collision
-            particles[i].setVelocity((currentParticlePosition-neighborPosition));
+            relativeVelocity = particleVelocity - neighborVelocity;
+            
+            collisionNormal = glm::normalize(currentParticlePosition - neighborPosition);
+            collisionDirection = glm::vec3(-collisionNormal.y, collisionNormal.x, 0);
+            
+            vParallel = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
+            vPerpendicular = glm::dot(collisionDirection, relativeVelocity) * collisionDirection;
+            
+            particles[index].setVelocity(particleVelocity + vParallel);
+            particles[neighbors[i]].setVelocity(neighborVelocity + vPerpendicular);
         }
     }
 }
 
+void ParticleSystem::particleBoxCollision(int index)
+{
+    glm::vec3 particlePosition = particles[index].getPredictedPosition();
+    glm::vec3 upperBounds = scene.cube.getCenter() + scene.cube.getHalfDimensions();
+    glm::vec3 lowerBounds = scene.cube.getCenter() - scene.cube.getHalfDimensions();
+    
+    float radius = particles[index].getRadius();
+    
+    if(particlePosition.x - radius < lowerBounds.x - EPSILON || particlePosition.x + radius > upperBounds.x + EPSILON)
+        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(-1,0,0));
+    
+    if(particlePosition.y - radius < lowerBounds.y - EPSILON || particlePosition.y + radius > upperBounds.y + EPSILON)
+        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(0,-1,0));
+    
+    if(particlePosition.z - radius < lowerBounds.z - EPSILON || particlePosition.z + radius > upperBounds.z + EPSILON)
+        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(0,0,-1));
+}
 
 
 

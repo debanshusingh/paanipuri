@@ -43,6 +43,7 @@ public:
     float timeStep;
     glm::vec3 gravity;
     int numberOfParticles;
+    Cube cube;
 };
 
 #endif /* defined(__paani__scene__) */

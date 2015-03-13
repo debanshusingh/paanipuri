@@ -21,8 +21,8 @@ void sceneInit()
     //need to add particles
     // create box
     
-    Cube cube(glm::vec3(0,0,0), glm::vec3(3,3,3));
-    
+    scene.cube.setCenter(glm::vec3(0,0,0));
+    scene.cube.setDimension(glm::vec3(3,3,3));
     scene.numberOfParticles = 100;
     
     int i;
@@ -30,7 +30,7 @@ void sceneInit()
     
     for(i=0; i<scene.numberOfParticles; i++)
     {
-        position = utilityCore::randomVec3() * cube.getDimensions() - cube.getHalfDimensions();
+        position = utilityCore::randomVec3() * scene.cube.getDimensions() - scene.cube.getHalfDimensions();
         particleSystem.addParticle(Particle(position));
     }
     
