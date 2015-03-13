@@ -63,6 +63,11 @@ public:
     
     glm::vec3 findDeltaPosition(int index);
     void findLambda(int index);
+    
+    //collision detection and resolution
+    void particleCollision(int index);
+    void particleParticleCollision(int index);
+    void particleBoxCollision(int index);
 };
 
 #endif
