@@ -30,6 +30,7 @@ private:
     glm::vec3 predictedPosition;    //Predicted particle position
     
     std::vector <int> neighborIndices;    //stores the indices of all the neighbors
+    float lambda;
     
 public:
     
@@ -44,8 +45,8 @@ public:
     glm::vec3 getPosition();
     glm::vec3 getVelocity();
     glm::vec3 getForces();
-    
     glm::vec3 getPredictedPosition();
+    float getLambda();
     
     std::vector<int> getNeighborIndices();
     
@@ -53,10 +54,11 @@ public:
     void setPosition(glm::vec3);
     void setVelocity(glm::vec3);
     void setForces(glm::vec3);
-    
     void setPredictedPosition(glm::vec3);
+    void setLambda(float);
     
     void addNeighborIndex(int index);
+    
 };
 
 #endif

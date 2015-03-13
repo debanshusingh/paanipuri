@@ -143,7 +143,11 @@ void ParticleSystem::update()
     for (int k=0; k<solverIterations; k++) {
         
         for (int i; i<particles.size(); i++) {
-//            findLambda(i);
+            findLambda(i);
+        }
+        
+        for (int i; i<particles.size(); i++) {
+
 //            findDeltaPosition(i);
 //            updateCollisionResponse(i);
 //            updatePredictedPosition(i) += deltaPosition(i);
@@ -151,13 +155,13 @@ void ParticleSystem::update()
     }
     
     for (int i; i<particles.size(); i++) {
-//        updateVelocity(i); line 21
-//        updatePosition(i); line 23
+        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition() / scene.timeStep));
+            particles[i].setPosition(particles[i].getPredictedPosition());
     }
     
 }
 
-float ParticleSystem::findLambda(int index){
+void ParticleSystem::findLambda(int index){
     // for all neighbours k gradientConstraintForNeighbor
     // +
     // gradientConstraintAtParticle
@@ -170,11 +174,11 @@ glm::vec3 ParticleSystem::findDeltaPosition(int index)
 {
     glm::vec3 deltaPi = glm::vec3(0,0,0);
     std::vector<int> neighbors = getParticle(index).getNeighborIndices();
-    float lambda_i = findLambda(index);
+    float lambda_i = getParticle(index).getLambda();
     
     for(int i=0; i<neighbors.size(); i++)
     {
-        deltaPi += (findLambda(neighbors[i]) + lambda_i) *
+        deltaPi += (getParticle(neighbors[i]).getLambda() + lambda_i) *
                     gradientWSpikyKernel( (getParticle(index).getPosition() - getParticle(neighbors[i]).getPosition()), smoothingRadius);
     }
     
