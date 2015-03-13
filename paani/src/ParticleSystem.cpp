@@ -147,16 +147,13 @@ void ParticleSystem::update()
         }
         
         for (int i; i<particles.size(); i++) {
-
-//            findDeltaPosition(i);
-//            updateCollisionResponse(i);
-//            updatePredictedPosition(i) += deltaPosition(i);
+            particles[i].setPredictedPosition(particles[i].getPredictedPosition() + findDeltaPosition(i));
         }
     }
     
     for (int i; i<particles.size(); i++) {
         particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition() / scene.timeStep));
-            particles[i].setPosition(particles[i].getPredictedPosition());
+        particles[i].setPosition(particles[i].getPredictedPosition());
     }
     
 }
@@ -213,10 +210,6 @@ void ParticleSystem::applyForces()
         p.setPredictedPosition(p.getPosition() + scene.timeStep * p.getVelocity());
     }
 }
-
-
-
-
 
 
 

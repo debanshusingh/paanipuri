@@ -40,7 +40,7 @@ public:
     float getRestDensity();
     unsigned int getParticleCount();
     void update();
-
+    
     //Other functions
     void addParticle(Particle);               //Add a particle to the system
     Particle getParticle(int index);            //Returns a particlular add some index
