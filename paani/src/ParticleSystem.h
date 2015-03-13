@@ -60,6 +60,9 @@ public:
         
     //apply external forces (gravity)
     void applyForces();
+    
+    glm::vec3 findDeltaPosition(int index);
+    float findLambda(int index);
 };
 
 #endif
