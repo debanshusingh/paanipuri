@@ -29,7 +29,7 @@ int main(int argc, char * argv[]) {
     scene = new Scene();
     scene->init();
 
-    Image* image = loadBMP("/Users/sanchitgarg/Desktop/cggt/spring 2015/advanced cg/cis660pbf/code/paani/paani/src/back.bmp");
+    Image* image = loadBMP("/Users/debanshu/Dropbox/work/code/github/paani/paani/src/white.bmp");
 //        Image* image = loadBMP("./vtr.bmp");
     _textureId = loadTexture(image);
     delete image;
@@ -73,12 +73,13 @@ void display() {
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0, 1.0, 0.1, 100.0);
+    gluPerspective(30.0, 1.0, 0.1, 100.0);
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glTranslatef(0,0,-60.0f);
+    glRotatef(10,1,0,0);
+    glTranslatef(0,-8,-50.0f);
     
     GLfloat ambientColor[] = {0.7f, 0.7f, 0.7f, 1.0f};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
@@ -145,7 +146,7 @@ void Scene::displayParticles()
             glTranslatef(position.x, position.y, position.z);
             glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffused);
 //            glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
-            glutSolidSphere(radius, 8, 8);
+            glutSolidSphere(radius, 16, 16);
 
         glPopMatrix();
     }
@@ -161,7 +162,7 @@ void Scene::displayBackground()
     //Bottom
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glColor3f(1.0f, 1.f, 1.f);
+    glColor3f(0.4f, 0.4f, 0.4f);
     glBegin(GL_QUADS);
     
     glNormal3f(0.0, 1.0f, 0.0f);
@@ -179,25 +180,25 @@ void Scene::displayBackground()
     //Back
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glColor3f(1.0f, 1.f, 1.f);
+    glColor3f(0.4f, 0.4f, 0.4f);
     glBegin(GL_QUADS);
     
     glNormal3f(0.0, 0.0f, 1.0f);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-dimensions.x, dimensions.y, -dimensions.z);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(dimensions.x, dimensions.y, -dimensions.z);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(dimensions.x, -dimensions.y, -dimensions.z);
-    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-dimensions.x, -dimensions.y, -dimensions.z);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(dimensions.x, -dimensions.y, -dimensions.z);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(dimensions.x, dimensions.y, -dimensions.z);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-dimensions.x, dimensions.y, -dimensions.z);
     
     glEnd();
 
     //Right
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glColor3f(1.0f, 1.f, 1.f);
+    glColor3f(0.4f, 0.4f, 0.4f);
     glBegin(GL_QUADS);
     
     glNormal3f(-1.0, 0.0f, 0.0f);
@@ -215,7 +216,7 @@ void Scene::displayBackground()
     //Left
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glColor3f(1.0f, 1.f, 1.f);
+    glColor3f(0.4f, 0.4f, 0.4f);
     glBegin(GL_QUADS);
     
     glNormal3f(1.0, 0.0f, 0.0f);
