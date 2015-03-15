@@ -87,11 +87,8 @@ void Scene::displayParticles()
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
         
-<<<<<<< HEAD
             glutSolidSphere(radius, 10, 10);
-=======
-            glutSolidSphere(0.5f, 10, 10);
->>>>>>> 150f2ba6fce9104568ea1b809fab21ab6d24c5f5
+
         glPopMatrix();
     }
 }
