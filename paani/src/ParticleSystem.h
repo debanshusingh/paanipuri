@@ -48,7 +48,7 @@ public:
     
     //Function to return a list of all the neighbors within the specified distance
     // Stored as a pair of index and vector to the neighboring particle
-    std::vector<Neighbor> findNeighbors(int index, float radius);
+    std::vector<Neighbor> findNeighbors(int index);
     
     //function that returns the density of a particle
     float getDensity(int index);

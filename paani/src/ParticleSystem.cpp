@@ -42,7 +42,7 @@ Particle ParticleSystem::getParticle(int index)
 // Improve the neighbors search later
 // Currently naive neighbor searching
 
-std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, float radius)
+std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index)
 {
     std::vector<Neighbor> neighborsList;
     glm::vec3 particlePredictedPos = particles[index].getPredictedPosition();
@@ -55,7 +55,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index, 
     {
         distance = glm::distance(particlePredictedPos, particles[i].getPredictedPosition());
 
-        if(distance < radius + EPSILON)
+        if(distance < smoothingRadius + EPSILON)
         {
             if(i!=index)
             {
@@ -75,7 +75,7 @@ float ParticleSystem::getDensity(int index)
     float density = 0;
     int i;
     
-    std::vector<Neighbor> neighbors = this->findNeighbors(index, smoothingRadius);
+    std::vector<int> neighbors = particles[index].getNeighborIndices();
     
     //Kernel function implementation
     //  Using poly6 kernel function
@@ -85,7 +85,7 @@ float ParticleSystem::getDensity(int index)
     //  If mass is changed, change the for loop to multiply by mass
     for(i=0; i<neighbors.size(); i++)
     {
-        density +=  wPoly6Kernel(neighbors[i].second, smoothingRadius);
+        density +=  wPoly6Kernel((particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius);
     }
     
     return density;
@@ -134,7 +134,7 @@ void ParticleSystem::update()
 {
     applyForces(); // apply forces and predict position
     for (int i=0; i<particles.size(); i++) {
-        findNeighbors(i, smoothingRadius);
+        findNeighbors(i);
     }
     
     for (int k=0; k<solverIterations; k++) {
@@ -207,7 +207,7 @@ void ParticleSystem::applyForces()
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-    particleParticleCollision(index);
+//    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)
