@@ -58,6 +58,7 @@ public:
     void setLambda(float);
     
     void addNeighborIndex(int index);
+    void clearNeighbors();
     
 };
 
