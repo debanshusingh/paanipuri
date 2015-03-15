@@ -17,10 +17,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "imageloader.h"
+
 void init(int argc, char* argv[]);
 void display();
 void displayParticles();
 void handleKeypress(unsigned char key, int x, int y);
+GLuint loadTexture(Image* image);
 
 int width=640;
 int height=480;

@@ -45,7 +45,9 @@ class Scene
 public:
     Scene();
     void init();
+    void display();
     void displayParticles();
+    void displayBackground();
     
     glm::vec3 gravity;
     int numberOfParticles;
