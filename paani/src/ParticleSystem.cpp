@@ -93,7 +93,13 @@ float ParticleSystem::getDensity(int index)
 
 float ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
-    return poly6Const * pow((pow(smoothingRadius, 2) - pow(glm::length(distance), 2)),3)/ pow(smoothingRadius, 9);
+    float x = (smoothingRadius*smoothingRadius) - (glm::length(distance)*glm::length(distance));
+    float x_3 = x*x*x;
+    float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius*
+                 smoothingRadius*smoothingRadius*smoothingRadius*
+                 smoothingRadius*smoothingRadius*smoothingRadius);
+    
+    return poly6Const * x_3/s_9;
 }
 
 glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
@@ -176,7 +182,7 @@ void ParticleSystem::findLambda(int index){
     float densityContraint = (currDensity/restDensity) - 1.0f;
     
     float lambdaI = -1.0f * (densityContraint/(sumGradientAtParticle+relaxation));
-    
+
     particles[index].setLambda(lambdaI);
 }
 
