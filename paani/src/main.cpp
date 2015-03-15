@@ -47,7 +47,7 @@ void display() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glTranslatef(0,0,-10.0f);
+    glTranslatef(0,0,-60.0f);
     //glutSolidSphere(0.5f, 10, 10);
     scene->particleSystem->update();
     scene->displayParticles();
@@ -77,15 +77,12 @@ void Scene::displayParticles()
         position = particleSystem->getParticle(i).getPosition();
         //color = utilityCore::randomVec3();
         
-        if(i==0)
-            glColor3f(1,0,0);
-        else
-            glColor3f(1,1,1);
+        glColor3f(1,1,1);
         
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
         
-            glutSolidSphere(0.05f, 10, 10);
+            glutSolidSphere(0.5f, 10, 10);
         glPopMatrix();
     }
 }

@@ -19,7 +19,7 @@ class Particle
 private:
     
     const float mass = 1.0f;    //Mass of all particles will be same
-    const float radius = 0.01f;  //Radius of all particles will be same
+    const float radius = 0.5f;  //Radius of all particles will be same
     
     //  Current values
     glm::vec3 position;     //Stores the current position of the particle

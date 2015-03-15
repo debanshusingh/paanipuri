@@ -234,8 +234,6 @@ void ParticleSystem::applyForces()
 {
     for(int i=0; i<getParticleCount(); i++)
     {
-        if(std::isnan(particles[i].getVelocity().z))
-            std::cout<<"true";
         particles[i].setVelocity(particles[i].getVelocity() + timeStep * scene->gravity);
         glm::vec3 currPosition = particles[i].getPosition();
         glm::vec3 predictedPosition = currPosition + timeStep * particles[i].getVelocity();
@@ -278,19 +276,17 @@ void ParticleSystem::particleParticleCollision(int index)
         
         distance = glm::distance(currentParticlePosition, neighborPosition);
         
-        if(distance < 2 * radius + EPSILON)
+        if(distance < 2 * radius)
         {
             //resolve collision
             relativeVelocity = particleVelocity - neighborVelocity;
             
             collisionNormal = glm::normalize(currentParticlePosition - neighborPosition);
-            collisionDirection = glm::vec3(-collisionNormal.y, collisionNormal.x, 0);
             
             vParallel = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
-            vPerpendicular = glm::dot(collisionDirection, relativeVelocity) * collisionDirection;
             
-            particles[index].setVelocity(particleVelocity + vParallel);
-            particles[neighbors[i]].setVelocity(neighborVelocity + vPerpendicular);
+            particles[index].setVelocity(particleVelocity - vParallel);
+            particles[neighbors[i]].setVelocity(neighborVelocity + vParallel);
         }
     }
 }
@@ -311,7 +307,7 @@ void ParticleSystem::particleBoxCollision(int index)
 
     if(particlePosition.y - radius < lowerBounds.y - EPSILON || particlePosition.y + radius > upperBounds.y + EPSILON)
     {
-        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,-1,1));
+        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,-0.5,1));
         particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
     }
     
