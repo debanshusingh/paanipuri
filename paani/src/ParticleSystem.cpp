@@ -96,9 +96,6 @@ float ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
     float x = (smoothingRadius*smoothingRadius) - (glm::length(distance)*glm::length(distance));
     float x_3 = x*x*x;
-    float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius*
-                 smoothingRadius*smoothingRadius*smoothingRadius*
-                 smoothingRadius*smoothingRadius*smoothingRadius);
 
     return poly6Const * x_3/s_9;
 }
@@ -107,8 +104,7 @@ glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothi
 {
     float distanceLength = glm::length(distance);
     
-    float s_6 = smoothingRadius*smoothingRadius*smoothingRadius*
-                smoothingRadius*smoothingRadius*smoothingRadius;
+
     float x = (smoothingRadius-distanceLength)*(smoothingRadius-distanceLength);
     
     float gradientW = spikyConst * (1.0f/s_6) * x * 1.0f/(distanceLength+EPSILON);

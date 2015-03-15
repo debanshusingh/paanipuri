@@ -31,6 +31,11 @@ private:
     const int solverIterations = 3;
     const float relaxation = 0.01f;
     const float timeStep = 0.016f;
+    float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius*
+                 smoothingRadius*smoothingRadius*smoothingRadius*
+                 smoothingRadius*smoothingRadius*smoothingRadius);
+    float s_6 = smoothingRadius*smoothingRadius*smoothingRadius*
+    smoothingRadius*smoothingRadius*smoothingRadius;
     
 public:
 

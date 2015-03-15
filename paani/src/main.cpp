@@ -17,6 +17,11 @@ int main(int argc, char * argv[]) {
     
     init(argc, argv);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING); //Enable lighting
+    glEnable(GL_LIGHT0); //Enable light #0
+//    glEnable(GL_LIGHT1); //Enable light #1
+    glShadeModel(GL_SMOOTH);
     scene = new Scene();
     scene->init();
 
@@ -48,6 +53,15 @@ void display() {
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glTranslatef(0,0,-60.0f);
+    
+    GLfloat ambientColor[] = {1.f, 1.f, 1.f, 1.0f}; //Color (0.2, 0.2, 0.2)
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+    
+    GLfloat lightColor0[] = {1.f, 1.f, 1.f, 1.0f} ;// Color (0.5, 0.5, 0.5)
+    GLfloat lightPos0[] = {0.0f, 10.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+    
     //glutSolidSphere(0.5f, 10, 10);
     scene->particleSystem->update();
     scene->displayParticles();
@@ -82,7 +96,7 @@ void Scene::displayParticles()
             std::cout<<" ";
         }
         
-        glColor3f(1,1,1);
+        glColor3f(0.39,0.57,1.0);
         
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);

@@ -18,7 +18,7 @@ Scene::Scene()
     
     cube.setCenter(glm::vec3(0,0,0));
     cube.setDimension(glm::vec3(30));
-    numberOfParticles = 300;
+    numberOfParticles = 500;
     gravity = glm::vec3(0.0,-10.0,0.0);
     
 }
@@ -31,8 +31,6 @@ void Scene::init(){
     for(i=0; i<numberOfParticles; i++)
     {
         position = 0.8f*(utilityCore::randomVec3() * cube.getDimensions() - cube.getHalfDimensions());
-        position.z = 0;
-       // velocity = utilityCore::randomVec3() - glm::vec3(0.5,0.5,0.5);
         particleSystem->addParticle(Particle(position, velocity));
     }
 }
