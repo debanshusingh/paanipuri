@@ -27,7 +27,7 @@ private:
     const float poly6Const = 315.0 / (64 * PI);
     const float spikyConst = 45.0 / (PI);
     const float restDensity = 1000.0; //1000kg/m3
-    const float smoothingRadius = 0.02f;
+    const float smoothingRadius = 1.f;
     const int solverIterations = 5;
     const float relaxation = 0.0001f;
     const float timeStep = 0.01f;

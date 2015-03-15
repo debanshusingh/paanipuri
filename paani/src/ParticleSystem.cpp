@@ -54,7 +54,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index)
     for (i = 0; i<particles.size(); i++)
     {
         distance = glm::distance(particlePredictedPos, particles[i].getPredictedPosition());
-
+        particles[index].clearNeighbors();
         if(distance < smoothingRadius + EPSILON)
         {
             if(i!=index)
@@ -143,6 +143,13 @@ void ParticleSystem::update()
         findNeighbors(i);
     }
     
+    for (int i=0; i<particles[0].getNeighborIndices().size(); i++)
+    {
+        std::cout<<particles[0].getNeighborIndices()[i]<<" ";
+    }
+    if(particles[0].getNeighborIndices().size() >0 )
+        std::cout<<std::endl;
+    
     for (int k=0; k<solverIterations; k++) {
 
         for (int i=0; i<particles.size(); i++) {
@@ -159,7 +166,6 @@ void ParticleSystem::update()
         particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
         particles[i].setPosition(particles[i].getPredictedPosition());
     }
-    
 }
 
 void ParticleSystem::findLambda(int index){
@@ -213,7 +219,7 @@ void ParticleSystem::applyForces()
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-//    particleParticleCollision(index);
+    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)

@@ -102,6 +102,11 @@ void Particle::addNeighborIndex(int index)
     neighborIndices.push_back(index);
 }
 
+void Particle::clearNeighbors()
+{
+    neighborIndices.clear();
+}
+
 void Particle::setLambda(float l)
 {
     lambda = l;
