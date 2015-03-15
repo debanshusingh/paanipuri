@@ -25,13 +25,14 @@ Scene::Scene()
 
 void Scene::init(){
     int i;
-    glm::vec3 position;
+    glm::vec3 position, velocity = glm::vec3(0,0,0);
     particleSystem = new ParticleSystem();
     
     for(i=0; i<numberOfParticles; i++)
     {
         position = utilityCore::randomVec3() * cube.getDimensions() - cube.getHalfDimensions();
-        particleSystem->addParticle(Particle(position));
+       // velocity = utilityCore::randomVec3() - glm::vec3(0.5,0.5,0.5);
+        particleSystem->addParticle(Particle(position, velocity));
     }
 }
 

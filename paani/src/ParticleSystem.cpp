@@ -149,7 +149,6 @@ void ParticleSystem::update()
         }
     }
 
-    utilityCore::printVec3((particles[0].getPredictedPosition() - particles[0].getPosition()) / timeStep);
     for (int i=0; i<particles.size(); i++) {
         particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
         particles[i].setPosition(particles[i].getPredictedPosition());
@@ -267,18 +266,20 @@ void ParticleSystem::particleBoxCollision(int index)
     float radius = particles[index].getRadius();
     
     if(particlePosition.x - radius < lowerBounds.x - EPSILON || particlePosition.x + radius > upperBounds.x + EPSILON)
+    {
         particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(-1,1,1));
-    
-//    if (index==0) {
-//        std::cout<<(particlePosition.y - radius < lowerBounds.y - EPSILON )<<std::endl;
-//    }
+        particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
+    }
+
     if(particlePosition.y - radius < lowerBounds.y - EPSILON || particlePosition.y + radius > upperBounds.y + EPSILON)
     {
         particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,-1,1));
-//        particles[index].setPredictedPosition(glm::vec3(particlePosition.x,lowerBounds.y+0.001f,particlePosition.z));
-//        what should predicted position be?
+        particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
     }
     
     if(particlePosition.z - radius < lowerBounds.z - EPSILON || particlePosition.z + radius > upperBounds.z + EPSILON)
+    {
         particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,1,-1));
+        particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
+    }
 }
