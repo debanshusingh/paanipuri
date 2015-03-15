@@ -9,29 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "paani/src/ParticleSystem.cpp"
-            timestampString = "448079926.066554"
+            filePath = "paani/src/main.cpp"
+            timestampString = "448084911.073226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
-            landmarkName = "ParticleSystem::applyForces()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "paani/src/ParticleSystem.cpp"
-            timestampString = "448079926.066554"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
-            landmarkName = "ParticleSystem::findDeltaPosition(int index)"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "Scene::displayParticles()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

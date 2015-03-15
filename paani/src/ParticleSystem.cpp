@@ -150,31 +150,26 @@ void ParticleSystem::update()
     for (int i=0; i<particles.size(); i++) {
         findNeighbors(i);
     }
-    
-//    for (int i=0; i<particles[0].getNeighborIndices().size(); i++)
-//    {
-//        std::cout<<particles[0].getNeighborIndices()[i]<<" ";
-//    }
-//    if(particles[0].getNeighborIndices().size() > 0 )
-//        std::cout<<std::endl;
-    
+
     for (int k=0; k<solverIterations; k++) {
 
         for (int i=0; i<particles.size(); i++) {
-            if (std::isnan(particles[i].getPredictedPosition().x) || std::isnan(particles[i].getPredictedPosition().y) ||std::isnan(particles[i].getPredictedPosition().z))
-                std::cout<<"stop";
+            
             findLambda(i);
         }
        
         for (int i=0; i<particles.size(); i++) {
-
-            glm::vec3 temp = findDeltaPosition(i);
-            particles[i].setPredictedPosition(particles[i].getPredictedPosition() + temp);
+            
+            particles[i].setDeltaPi(findDeltaPosition(i));
+            particles[i].setPredictedPosition(particles[i].getPredictedPosition() + particles[i].getDeltaPi());
             particleCollision(i);
         }
+        
+//        for (int i=0; i<particles.size(); i++) {
+//            
+//        }
+        
     }
-
-
     
     for (int i=0; i<particles.size(); i++) {
         particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
@@ -214,17 +209,8 @@ glm::vec3 ParticleSystem::findDeltaPosition(int index)
     
     for(int i=0; i<neighbors.size(); i++)
     {
-        if(std::isnan((particles[neighbors[i]].getPredictedPosition()).z))
-           {
-               utilityCore::printVec3(particles[neighbors[i]].getPredictedPosition());
-           }
-        
         deltaPi += (particles[neighbors[i]].getLambda() + lambda_i) *
-                    gradientWSpikyKernel(
-                                         (
-                                          particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()
-                                          ), smoothingRadius
-                                         );
+                    gradientWSpikyKernel((particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius);
     }
     
     return (deltaPi/restDensity);
@@ -234,8 +220,6 @@ void ParticleSystem::applyForces()
 {
     for(int i=0; i<getParticleCount(); i++)
     {
-        if(std::isnan(particles[i].getVelocity().z))
-            std::cout<<"true";
         particles[i].setVelocity(particles[i].getVelocity() + timeStep * scene->gravity);
         glm::vec3 currPosition = particles[i].getPosition();
         glm::vec3 predictedPosition = currPosition + timeStep * particles[i].getVelocity();
@@ -262,8 +246,7 @@ void ParticleSystem::particleParticleCollision(int index)
     
     glm::vec3 relativeVelocity,
                 collisionNormal,
-                collisionDirection,
-                vParallel, vPerpendicular;  //components of relative velocity about collision normal and direction
+                vCollision;  //components of relative velocity about collision normal and direction
     
     
     float distance, radius = particles[index].getRadius();
@@ -284,13 +267,10 @@ void ParticleSystem::particleParticleCollision(int index)
             relativeVelocity = particleVelocity - neighborVelocity;
             
             collisionNormal = glm::normalize(currentParticlePosition - neighborPosition);
-            collisionDirection = glm::vec3(-collisionNormal.y, collisionNormal.x, 0);
+            vCollision = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
             
-            vParallel = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
-            vPerpendicular = glm::dot(collisionDirection, relativeVelocity) * collisionDirection;
-            
-            particles[index].setVelocity(particleVelocity + vParallel);
-            particles[neighbors[i]].setVelocity(neighborVelocity + vPerpendicular);
+            particles[index].setVelocity(particleVelocity - vCollision);
+            particles[neighbors[i]].setVelocity(neighborVelocity + vCollision);
         }
     }
 }
@@ -305,19 +285,19 @@ void ParticleSystem::particleBoxCollision(int index)
     
     if(particlePosition.x - radius < lowerBounds.x - EPSILON || particlePosition.x + radius > upperBounds.x + EPSILON)
     {
-        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(-1,1,1));
+        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(-0.5,1,1));
         particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
     }
 
     if(particlePosition.y - radius < lowerBounds.y - EPSILON || particlePosition.y + radius > upperBounds.y + EPSILON)
     {
-        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,-1,1));
+        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,-0.5,1));
         particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
     }
     
     if(particlePosition.z - radius < lowerBounds.z - EPSILON || particlePosition.z + radius > upperBounds.z + EPSILON)
     {
-        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,1,-1));
+        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,1,-0.5));
         particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
     }
 }

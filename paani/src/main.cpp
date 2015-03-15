@@ -47,7 +47,7 @@ void display() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glTranslatef(0,0,-10.0f);
+    glTranslatef(0,0,-60.0f);
     //glutSolidSphere(0.5f, 10, 10);
     scene->particleSystem->update();
     scene->displayParticles();
@@ -69,6 +69,7 @@ void handleKeypress(unsigned char key, int x, int y)
 void Scene::displayParticles()
 {    
     unsigned int i;
+    float radius = particleSystem->getParticle(0).getRadius();
     
     glm::vec3 position, color;
 
@@ -76,6 +77,10 @@ void Scene::displayParticles()
     {
         position = particleSystem->getParticle(i).getPosition();
         //color = utilityCore::randomVec3();
+        if(std::isnan(position.x) || std::isnan(position.y) || std::isnan(position.z))
+        {
+            std::cout<<" ";
+        }
         
         if(i==0)
             glColor3f(1,0,0);
@@ -85,7 +90,7 @@ void Scene::displayParticles()
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
         
-            glutSolidSphere(0.05f, 10, 10);
+            glutSolidSphere(radius, 10, 10);
         glPopMatrix();
     }
 }

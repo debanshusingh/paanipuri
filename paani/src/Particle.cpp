@@ -19,6 +19,7 @@ Particle::Particle()
     this->position = glm::vec3(0,0,0);
     this->velocity = glm::vec3(0,0,0);
     this->predictedPosition = glm::vec3(0,0,0);
+    this->deltaPi = glm::vec3(0,0,0);
 }
 
 Particle::Particle(glm::vec3 pos)
@@ -26,6 +27,7 @@ Particle::Particle(glm::vec3 pos)
     this->position = pos;
     this->velocity = glm::vec3(0,0,0);
     this->predictedPosition = glm::vec3(0,0,0);
+    this->deltaPi = glm::vec3(0,0,0);
 }
 
 Particle::Particle(glm::vec3 pos, glm::vec3 vel)
@@ -33,6 +35,7 @@ Particle::Particle(glm::vec3 pos, glm::vec3 vel)
     this->position = pos;
     this->velocity = vel;
     this->predictedPosition = glm::vec3(0,0,0);
+    this->deltaPi = glm::vec3(0,0,0);
 }
 
 //Getter functions
@@ -69,6 +72,11 @@ glm::vec3 Particle::getPredictedPosition()
 float Particle::getLambda()
 {
     return lambda;
+}
+
+glm::vec3 Particle::getDeltaPi()
+{
+    return deltaPi;
 }
 
 std::vector<int> Particle::getNeighborIndices()
@@ -112,3 +120,7 @@ void Particle::setLambda(float l)
     lambda = l;
 }
 
+void Particle::setDeltaPi(glm::vec3 p)
+{
+    deltaPi = p;
+}
