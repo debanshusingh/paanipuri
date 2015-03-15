@@ -261,12 +261,13 @@ void ParticleSystem::particleParticleCollision(int index)
         
         distance = glm::distance(currentParticlePosition, neighborPosition);
         
-        if(distance < 2 * radius + EPSILON)
+        if(distance < 2 * radius)
         {
             //resolve collision
             relativeVelocity = particleVelocity - neighborVelocity;
             
             collisionNormal = glm::normalize(currentParticlePosition - neighborPosition);
+            
             vCollision = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
             
             particles[index].setVelocity(particleVelocity - vCollision);

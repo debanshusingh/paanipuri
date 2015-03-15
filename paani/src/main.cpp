@@ -82,15 +82,16 @@ void Scene::displayParticles()
             std::cout<<" ";
         }
         
-        if(i==0)
-            glColor3f(1,0,0);
-        else
-            glColor3f(1,1,1);
+        glColor3f(1,1,1);
         
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
         
+<<<<<<< HEAD
             glutSolidSphere(radius, 10, 10);
+=======
+            glutSolidSphere(0.5f, 10, 10);
+>>>>>>> 150f2ba6fce9104568ea1b809fab21ab6d24c5f5
         glPopMatrix();
     }
 }
