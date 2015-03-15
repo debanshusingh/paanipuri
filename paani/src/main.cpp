@@ -72,7 +72,7 @@ void Scene::displayParticles()
     
     glm::vec3 position, color;
 
-    for(i=0; i<particleSystem->getParticleCount(); i++)
+    for(i=0; i<numberOfParticles; i++)
     {
         position = particleSystem->getParticle(i).getPosition();
         //color = utilityCore::randomVec3();
@@ -85,7 +85,7 @@ void Scene::displayParticles()
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
         
-            glutSolidSphere(0.03f, 10, 10);
+            glutSolidSphere(0.05f, 10, 10);
         glPopMatrix();
     }
 }

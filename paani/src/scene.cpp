@@ -17,7 +17,7 @@ Scene::Scene()
     // create box
     
     cube.setCenter(glm::vec3(0,0,0));
-    cube.setDimension(glm::vec3(2));
+    cube.setDimension(glm::vec3(3));
     numberOfParticles = 100;
     gravity = glm::vec3(0.0,-0.1,0.0);
     

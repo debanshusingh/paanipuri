@@ -51,13 +51,14 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index)
     int i;
     Neighbor p;
     
+    particles[index].clearNeighbors();
+        
     for (i = 0; i<particles.size(); i++)
     {
-        distance = glm::distance(particlePredictedPos, particles[i].getPredictedPosition());
-        particles[index].clearNeighbors();
-        if(distance < smoothingRadius + EPSILON)
+        if(i!=index)
         {
-            if(i!=index)
+            distance = glm::distance(particlePredictedPos, particles[i].getPredictedPosition());
+            if(distance < smoothingRadius + EPSILON)
             {
                 p.first = i;
                 particles[index].addNeighborIndex(i);
@@ -79,7 +80,7 @@ float ParticleSystem::getDensity(int index)
     
     //Kernel function implementation
     //  Using poly6 kernel function
-    
+
     //TODO
     //  Currently mass is 1 for all particles
     //  If mass is changed, change the for loop to multiply by mass
@@ -98,14 +99,20 @@ float ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
     float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius*
                  smoothingRadius*smoothingRadius*smoothingRadius*
                  smoothingRadius*smoothingRadius*smoothingRadius);
-    
+
     return poly6Const * x_3/s_9;
 }
 
 glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
 {
     float distanceLength = glm::length(distance);
-    float gradientW = spikyConst * (1/pow(smoothingRadius,6)) * pow(smoothingRadius-distanceLength, 2) * 1.0f/(distanceLength+EPSILON);
+    
+    float s_6 = smoothingRadius*smoothingRadius*smoothingRadius*
+                smoothingRadius*smoothingRadius*smoothingRadius;
+    float x = (smoothingRadius-distanceLength)*(smoothingRadius-distanceLength);
+    
+    float gradientW = spikyConst * (1.0f/s_6) * x * 1.0f/(distanceLength+EPSILON);
+
     return gradientW*distance;
 }
 
@@ -139,29 +146,36 @@ glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborI
 void ParticleSystem::update()
 {
     applyForces(); // apply forces and predict position
+    
     for (int i=0; i<particles.size(); i++) {
         findNeighbors(i);
     }
     
-    for (int i=0; i<particles[0].getNeighborIndices().size(); i++)
-    {
-        std::cout<<particles[0].getNeighborIndices()[i]<<" ";
-    }
-    if(particles[0].getNeighborIndices().size() >0 )
-        std::cout<<std::endl;
+//    for (int i=0; i<particles[0].getNeighborIndices().size(); i++)
+//    {
+//        std::cout<<particles[0].getNeighborIndices()[i]<<" ";
+//    }
+//    if(particles[0].getNeighborIndices().size() > 0 )
+//        std::cout<<std::endl;
     
     for (int k=0; k<solverIterations; k++) {
 
         for (int i=0; i<particles.size(); i++) {
-            particleCollision(i);
+            if (std::isnan(particles[i].getPredictedPosition().x) || std::isnan(particles[i].getPredictedPosition().y) ||std::isnan(particles[i].getPredictedPosition().z))
+                std::cout<<"stop";
             findLambda(i);
         }
-
+       
         for (int i=0; i<particles.size(); i++) {
-            particles[i].setPredictedPosition(particles[i].getPredictedPosition() + findDeltaPosition(i));
+
+            glm::vec3 temp = findDeltaPosition(i);
+            particles[i].setPredictedPosition(particles[i].getPredictedPosition() + temp);
+            particleCollision(i);
         }
     }
 
+
+    
     for (int i=0; i<particles.size(); i++) {
         particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
         particles[i].setPosition(particles[i].getPredictedPosition());
@@ -188,7 +202,6 @@ void ParticleSystem::findLambda(int index){
     float densityContraint = (currDensity/restDensity) - 1.0f;
     
     float lambdaI = -1.0f * (densityContraint/(sumGradientAtParticle+relaxation));
-
     particles[index].setLambda(lambdaI);
 }
 
@@ -201,8 +214,17 @@ glm::vec3 ParticleSystem::findDeltaPosition(int index)
     
     for(int i=0; i<neighbors.size(); i++)
     {
+        if(std::isnan((particles[neighbors[i]].getPredictedPosition()).z))
+           {
+               utilityCore::printVec3(particles[neighbors[i]].getPredictedPosition());
+           }
+        
         deltaPi += (particles[neighbors[i]].getLambda() + lambda_i) *
-                    gradientWSpikyKernel( (particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius);
+                    gradientWSpikyKernel(
+                                         (
+                                          particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()
+                                          ), smoothingRadius
+                                         );
     }
     
     return (deltaPi/restDensity);
@@ -212,8 +234,12 @@ void ParticleSystem::applyForces()
 {
     for(int i=0; i<getParticleCount(); i++)
     {
-        particles[i].setVelocity(particles[i].getVelocity() + timeStep * scene->gravity / particles[i].getMass());
-        particles[i].setPredictedPosition(particles[i].getPosition() + timeStep * particles[i].getVelocity());
+        if(std::isnan(particles[i].getVelocity().z))
+            std::cout<<"true";
+        particles[i].setVelocity(particles[i].getVelocity() + timeStep * scene->gravity);
+        glm::vec3 currPosition = particles[i].getPosition();
+        glm::vec3 predictedPosition = currPosition + timeStep * particles[i].getVelocity();
+        particles[i].setPredictedPosition(predictedPosition);
     }
 }
 
