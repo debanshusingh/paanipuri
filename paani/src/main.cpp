@@ -99,7 +99,7 @@ void display() {
     glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor2);
     glLightfv(GL_LIGHT2, GL_POSITION, lightPos2);
     
-    scene->particleSystem->update();
+    scene->update();
     scene->display();
     
     glutPostRedisplay();

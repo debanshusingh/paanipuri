@@ -57,15 +57,18 @@ Scene::Scene()
 }
 
 void Scene::init(){
-    int i;
     glm::vec3 position, velocity = glm::vec3(0,0,0);
     
-    for(i=0; i<numberOfParticles; i++)
+    for(int i=0; i<numberOfParticles; i++)
     {
         position = 0.8f*(utilityCore::randomVec3() * cube->getDimensions() - cube->getHalfDimensions());
         particleSystem->addParticle(Particle(position, velocity));
     }
+}
+
+void Scene::update(){
     particleSystem->setForces(gravity);
     particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
     particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
+    particleSystem->update();
 }

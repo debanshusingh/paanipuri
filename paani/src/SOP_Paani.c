@@ -21,7 +21,7 @@
 #include <GEO/GEO_PrimType.h>
 
 using namespace HDK_Sample;
-
+Scene* scene;
 //
 // Help is stored in a "wiki" style text file.  This text file should be copied
 // to $HOUDINI_PATH/help/nodes/sop/star.txt
@@ -114,6 +114,9 @@ SOP_Paani::SOP_Paani(OP_Network *net, const char *name, OP_Operator *op)
     // depending on what parameters changed.
     mySopFlags.setManagesDataIDs(true);
 
+    scene = new Scene();
+    scene->init();
+
     myCurrPoint = -1; // To prevent garbage values from being returned
 }
 
@@ -122,16 +125,14 @@ SOP_Paani::~SOP_Paani() {}
 OP_ERROR
 SOP_Paani::cookMySop(OP_Context &context)
 {
+    flags().setTimeDep(1);
     fpreal now = context.getTime();
     
     // Since we don't have inputs, we don't need to lock them.
-    
-    int particleCount = COUNT(now);
-    Scene* scene = new Scene();
+//    int particleCount = COUNT(now);
 
-    scene->numberOfParticles = particleCount;
-    scene->init();
-    scene->particleSystem->update();
+//    scene->numberOfParticles = particleCount;
+    scene->update();
     // now the updated particles should be in vector<Particle> scene->getAllParticles()
     
     int divisions  = DIVISIONS(now)*2;  // We need twice our divisions of points
@@ -168,34 +169,31 @@ SOP_Paani::cookMySop(OP_Context &context)
 
 //    float tinc = M_PI*2 / (float)divisions;
     
-//    GU_PrimSphereParms sphereparms;
-//    sphereparms.gdp		= gdp;		// geo detail to append to
-//    sphereparms.xform.scale(0.1, 0.1, 0.1);	// set the radii
+    GU_PrimSphereParms sphereparms;
+    sphereparms.gdp		= gdp;		// geo detail to append to
+    sphereparms.xform.scale(0.5, 0.5, 0.5);	// set the radii
     //    sphereparms.xform.translate(1, 1, 1);	// set the center
     
-//    std::vector<Particle> particles = scene->particleSystem->getAllParticles();
-//    // Now, set all the points of the polygon
-//    for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
-//    {
-//        // Check to see if the user has interrupted us...
-//        if (boss.wasInterrupted())
-//            break;
-//        
-////        myCurrPoint = i;
-//        
-//        // Build a sphere instead of this poly
-//        Particle particle = *it;
-//        glm::vec3 newPos = particle.getPosition();
-//        sphereparms.xform.translate(newPos[0],newPos[1],newPos[2]);
-//        
-//        GEO_Primitive *sphere;
-//        sphere = GU_PrimSphere::build(sphereparms, GEO_PRIMSPHERE);
-//
-//        
-////        GA_Offset ptoff = poly->getPointOffset(i);
-////        gdp->setPos3(ptoff, pos);
-//    }
-//
+    std::vector<Particle> particles = scene->particleSystem->getAllParticles();
+    for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
+    {
+        // Check to see if the user has interrupted us...
+        if (boss.wasInterrupted())
+            break;
+        
+        // Build a sphere instead of this poly
+        Particle particle = *it;
+        glm::vec3 newPos = particle.getPosition();
+        sphereparms.xform.translate(newPos[0],newPos[1],newPos[2]);
+        
+        GEO_Primitive *sphere;
+        sphere = GU_PrimSphere::build(sphereparms, GEO_PRIMSPHERE);
+
+        
+//        GA_Offset ptoff = poly->getPointOffset(i);
+//        gdp->setPos3(ptoff, pos);
+    }
+
     // Highlight the star which we have just generated.  This routine
     // call clears any currently highlighted geometry, and then it
     // highlights every primitive for this SOP.

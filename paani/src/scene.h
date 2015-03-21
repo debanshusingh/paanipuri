@@ -46,6 +46,7 @@ public:
     void display();
     void displayParticles();
     void displayBackground();
+    void update();
     
     glm::vec3 gravity;
     int numberOfParticles;
