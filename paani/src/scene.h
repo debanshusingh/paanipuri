@@ -49,7 +49,7 @@ public:
     
     glm::vec3 gravity;
     int numberOfParticles;
-    Cube cube;
+    Cube* cube;
     ParticleSystem* particleSystem;
 };
 

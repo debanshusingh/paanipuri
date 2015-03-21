@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Debanshu. All rights reserved.
 //
 
-#include "scene.h"
+#include "ParticleSystem.h"
 #include <iostream>
 
 //Getter functions
@@ -185,12 +185,8 @@ void ParticleSystem::update()
             
             particles[i].setDeltaPi(findDeltaPosition(i));
             particles[i].setPredictedPosition(particles[i].getPredictedPosition() + particles[i].getDeltaPi());
-//            particleCollision(i);
+            particleCollision(i);
         }
-        
-//        for (int i=0; i<particles.size(); i++) {
-//            
-//        }
         
     }
     

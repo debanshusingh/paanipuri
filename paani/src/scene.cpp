@@ -11,33 +11,6 @@
 
 using namespace std;
 
-Scene::Scene()
-{
-    //need to add particles
-    // create box
-    
-    cube.setCenter(glm::vec3(0,0,0));
-    cube.setDimension(glm::vec3(20));
-    numberOfParticles = 750;
-    gravity = glm::vec3(0.0,-10.0,0.0);
-    
-}
-
-void Scene::init(){
-    int i;
-    glm::vec3 position, velocity = glm::vec3(0,0,0);
-    particleSystem = new ParticleSystem();
-    
-    for(i=0; i<numberOfParticles; i++)
-    {
-        position = 0.8f*(utilityCore::randomVec3() * cube.getDimensions() - cube.getHalfDimensions());
-        particleSystem->addParticle(Particle(position, velocity));
-    }
-    particleSystem->setForces(gravity);
-    particleSystem->setUpperBounds(scene->cube.getCenter() + scene->cube.getHalfDimensions());
-    particleSystem->setLowerBounds(scene->cube.getCenter() - scene->cube.getHalfDimensions());
-}
-
 //Cube class functions
 Cube::Cube(glm::vec3 c, glm::vec3 d)
 {
@@ -68,4 +41,31 @@ void Cube::setCenter(glm::vec3 c)
 void Cube::setDimension(glm::vec3 d)
 {
     dimensions = d;
+}
+
+Scene::Scene()
+{
+    //need to add particles
+    // create box
+    cube = new Cube();
+    cube->setCenter(glm::vec3(0,0,0));
+    cube->setDimension(glm::vec3(20));
+    numberOfParticles = 750;
+    gravity = glm::vec3(0.0,-10.0,0.0);
+    particleSystem = new ParticleSystem();
+    
+}
+
+void Scene::init(){
+    int i;
+    glm::vec3 position, velocity = glm::vec3(0,0,0);
+    
+    for(i=0; i<numberOfParticles; i++)
+    {
+        position = 0.8f*(utilityCore::randomVec3() * cube->getDimensions() - cube->getHalfDimensions());
+        particleSystem->addParticle(Particle(position, velocity));
+    }
+    particleSystem->setForces(gravity);
+    particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
+    particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
 }

@@ -154,7 +154,7 @@ void Scene::displayParticles()
 
 void Scene::displayBackground()
 {
-    glm::vec3 dimensions = cube.getHalfDimensions();
+    glm::vec3 dimensions = cube->getHalfDimensions();
     
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, _textureId);
