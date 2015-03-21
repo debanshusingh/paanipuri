@@ -194,7 +194,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd /Library/Frameworks/Houdini.framework/Versions/14.0.258/Resources/; source houdini_setup; cd -;hcustom paani/src/SOP_Paani.C;";
+			shellScript = "cd /Library/Frameworks/Houdini.framework/Versions/14.0.258/Resources/; source houdini_setup; cd -;hcustom -I./paani/thirdparty/osx/glm/ paani/src/SOP_Paani.C;";
 		};
 /* End PBXShellScriptBuildPhase section */
 

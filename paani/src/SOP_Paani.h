@@ -10,9 +10,10 @@
 #define __paani__SOP_Paani__
 
 #include <SOP/SOP_Node.h>
+#include "ParticleSystem.h"
 
 namespace HDK_Sample {
-    class SOP_Star : public SOP_Node
+    class SOP_Paani : public SOP_Node
     {
     public:
         static OP_Node		*myConstructor(OP_Network*, const char *,
@@ -26,8 +27,8 @@ namespace HDK_Sample {
         static CH_LocalVariable	 myVariables[];
         
     protected:
-        SOP_Star(OP_Network *net, const char *name, OP_Operator *op);
-        virtual ~SOP_Star();
+        SOP_Paani(OP_Network *net, const char *name, OP_Operator *op);
+        virtual ~SOP_Paani();
         
         
         /// cookMySop does the actual work of the SOP computing, in this

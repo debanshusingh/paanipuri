@@ -9,7 +9,7 @@
 #ifndef paani_Particle_h
 #define paani_Particle_h
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 #include <vector>
 
 //This class stores the properties of individual particles
