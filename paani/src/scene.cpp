@@ -33,6 +33,9 @@ void Scene::init(){
         position = 0.8f*(utilityCore::randomVec3() * cube.getDimensions() - cube.getHalfDimensions());
         particleSystem->addParticle(Particle(position, velocity));
     }
+    particleSystem->setForces(gravity);
+    particleSystem->setUpperBounds(scene->cube.getCenter() + scene->cube.getHalfDimensions());
+    particleSystem->setLowerBounds(scene->cube.getCenter() - scene->cube.getHalfDimensions());
 }
 
 //Cube class functions

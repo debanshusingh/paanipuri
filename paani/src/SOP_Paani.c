@@ -129,9 +129,9 @@ SOP_Paani::cookMySop(OP_Context &context)
     int particleCount = COUNT(now);
     Scene* scene = new Scene();
 
-//    scene->numberOfParticles = particleCount;
+    scene->numberOfParticles = particleCount;
     scene->init();
-//    scene->particleSystem->update();
+    scene->particleSystem->update();
     // now the updated particles should be in vector<Particle> scene->getAllParticles()
     
     int divisions  = DIVISIONS(now)*2;  // We need twice our divisions of points

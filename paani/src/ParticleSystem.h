@@ -35,6 +35,10 @@ private:
     float s_6 = smoothingRadius*smoothingRadius*smoothingRadius*
     smoothingRadius*smoothingRadius*smoothingRadius;
     
+    glm::vec3 forces;
+    glm::vec3 lowerBounds;
+    glm::vec3 upperBounds;
+    
 public:
 
     typedef std::pair<int, glm::vec3> Neighbor;
@@ -44,6 +48,14 @@ public:
     float getRestDensity();
     unsigned int getParticleCount();
     void update();
+    glm::vec3 getForces();
+    glm::vec3 getLowerBounds();
+    glm::vec3 getUpperBounds();
+    
+    //setter
+    void setForces(glm::vec3 f);
+    void setLowerBounds(glm::vec3);
+    void setUpperBounds(glm::vec3);
     
     //Other functions
     void addParticle(Particle);               //Add a particle to the system

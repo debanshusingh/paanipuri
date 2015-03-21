@@ -35,6 +35,35 @@ Particle ParticleSystem::getParticle(int index)
     return particles[index];
 }
 
+glm::vec3 ParticleSystem::getForces()
+{
+    return forces;
+}
+
+void ParticleSystem::setForces(glm::vec3 f)
+{
+    forces = f;
+}
+
+glm::vec3 ParticleSystem::getLowerBounds()
+{
+    return lowerBounds;
+}
+
+glm::vec3 ParticleSystem::getUpperBounds()
+{
+    return upperBounds;
+}
+
+void ParticleSystem::setLowerBounds(glm::vec3 l)
+{
+    lowerBounds = l;
+}
+
+void ParticleSystem::setUpperBounds(glm::vec3 u)
+{
+    upperBounds = u;
+}
 
 //TODO
 // Improve the neighbors search later
@@ -214,7 +243,7 @@ void ParticleSystem::applyForces()
 {
     for(int i=0; i<getParticleCount(); i++)
     {
-        particles[i].setVelocity(particles[i].getVelocity() + timeStep * glm::vec3(0,-10,0));
+        particles[i].setVelocity(particles[i].getVelocity() + timeStep * forces);
         glm::vec3 currPosition = particles[i].getPosition();
         glm::vec3 predictedPosition = currPosition + timeStep * particles[i].getVelocity();
         particles[i].setPredictedPosition(predictedPosition);
@@ -273,8 +302,6 @@ void ParticleSystem::particleParticleCollision(int index)
 void ParticleSystem::particleBoxCollision(int index)
 {
     glm::vec3 particlePosition = particles[index].getPredictedPosition();
-    glm::vec3 upperBounds = scene->cube.getCenter() + scene->cube.getHalfDimensions();
-    glm::vec3 lowerBounds = scene->cube.getCenter() - scene->cube.getHalfDimensions();
     
     float radius = particles[index].getRadius();
     
