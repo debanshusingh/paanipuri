@@ -9,9 +9,7 @@
 #ifndef __paani__ParticleSystem__
 #define __paani__ParticleSystem__
 
-#include <stdio.h>
 #include "Particle.h"
-#include <vector>
 #include <utility>
 #include "utilities.h"
 

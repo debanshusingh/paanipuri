@@ -9,7 +9,7 @@
 #include "SOP_Paani.h"
 
 #include <GU/GU_Detail.h>
-#include <GEO/GEO_PrimPoly.h>
+#include <GU/GU_PrimSphere.h>
 #include <OP/OP_Operator.h>
 #include <OP/OP_OperatorTable.h>
 #include <PRM/PRM_Include.h>
@@ -18,6 +18,7 @@
 #include <UT/UT_Interrupt.h>
 #include <SYS/SYS_Math.h>
 #include <limits.h>
+#include <GEO/GEO_PrimType.h>
 
 using namespace HDK_Sample;
 
@@ -38,41 +39,24 @@ void
 newSopOperator(OP_OperatorTable *table)
 {
     table->addOperator(new OP_Operator(
-                                       "hdk_star",                 // Internal name
-                                       "Star",                     // UI name
-                                       SOP_Star::myConstructor,    // How to build the SOP
-                                       SOP_Star::myTemplateList,   // My parameters
+                                       "hdk_paani",                 // Internal name
+                                       "Paani",                     // UI name
+                                       SOP_Paani::myConstructor,    // How to build the SOP
+                                       SOP_Paani::myTemplateList,   // My parameters
                                        0,                          // Min # of sources
                                        0,                          // Max # of sources
-                                       SOP_Star::myVariables,      // Local variables
+                                       SOP_Paani::myVariables,      // Local variables
                                        OP_FLAG_GENERATOR));        // Flag it as generator
 }
 
-static PRM_Name		negativeName("nradius", "Negative Radius");
-//				     ^^^^^^^^    ^^^^^^^^^^^^^^^
-//				     internal    descriptive version
-
-static PRM_Default	fiveDefault(5);		// Default to 5 divisions
-static PRM_Default	radiiDefaults[] = {
-    PRM_Default(1),		// Outside radius
-    PRM_Default(0.3)		// Inside radius
-};
+static PRM_Name		particleCountName("particleCount", "ParticleCount");
+static PRM_Default	particleCountDefault(50);
 
 PRM_Template
-SOP_Star::myTemplateList[] = {
-    PRM_Template(PRM_INT,			// Integer parameter.
-                 PRM_Template::PRM_EXPORT_TBX,	// Export to top of viewer
-                 // when user selects this node
-                 1, 		// One integer in this row/parameter
-                 &PRMdivName,   // Name of this parameter - must be static
-                 &fiveDefault,  // Default for this parameter - ditto
-                 0,		// Menu for this parameter
-                 &PRMdivision2Range // Valid range
-                 ),
-    PRM_Template(PRM_XYZ,	2, &PRMradiusName, radiiDefaults),
-    PRM_Template(PRM_TOGGLE,	1, &negativeName),
-    PRM_Template(PRM_XYZ,       3, &PRMcenterName),
-    PRM_Template(PRM_ORD,	1, &PRMorientName, 0, &PRMplaneMenu),
+SOP_Paani::myTemplateList[] = {
+    PRM_Template(PRM_INT,	PRM_Template::PRM_EXPORT_MIN, 1, &particleCountName, &particleCountDefault, 0),
+//    PRM_Template(PRM_STRING,	PRM_Template::PRM_EXPORT_MIN, 1, &grammar, &grammarDefault, 0),
+//        PRM_Template(PRM_FLT,	PRM_Template::PRM_EXPORT_MIN, 1, &stepName, &stepDefault, 0),
     PRM_Template()
 };
 
@@ -84,14 +68,14 @@ enum {
 };
 
 CH_LocalVariable
-SOP_Star::myVariables[] = {
+SOP_Paani::myVariables[] = {
     { "PT",	VAR_PT, 0 },		// The table provides a mapping
     { "NPT",	VAR_NPT, 0 },		// from text string to integer token
     { 0, 0, 0 },
 };
 
 bool
-SOP_Star::evalVariableValue(fpreal &val, int index, int thread)
+SOP_Paani::evalVariableValue(fpreal &val, int index, int thread)
 {
     // myCurrPoint will be negative when we're not cooking so only try to
     // handle the local variables when we have a valid myCurrPoint index.
@@ -116,12 +100,12 @@ SOP_Star::evalVariableValue(fpreal &val, int index, int thread)
 }
 
 OP_Node *
-SOP_Star::myConstructor(OP_Network *net, const char *name, OP_Operator *op)
+SOP_Paani::myConstructor(OP_Network *net, const char *name, OP_Operator *op)
 {
-    return new SOP_Star(net, name, op);
+    return new SOP_Paani(net, name, op);
 }
 
-SOP_Star::SOP_Star(OP_Network *net, const char *name, OP_Operator *op)
+SOP_Paani::SOP_Paani(OP_Network *net, const char *name, OP_Operator *op)
 : SOP_Node(net, name, op)
 {
     // This SOP always generates fresh geometry, so setting this flag
@@ -129,48 +113,28 @@ SOP_Star::SOP_Star(OP_Network *net, const char *name, OP_Operator *op)
     // star and only bump relevant data IDs, (P and the primitive list),
     // depending on what parameters changed.
     mySopFlags.setManagesDataIDs(true);
-    
+
     myCurrPoint = -1; // To prevent garbage values from being returned
 }
 
-SOP_Star::~SOP_Star() {}
+SOP_Paani::~SOP_Paani() {}
 
 OP_ERROR
-SOP_Star::cookMySop(OP_Context &context)
+SOP_Paani::cookMySop(OP_Context &context)
 {
     fpreal now = context.getTime();
     
     // Since we don't have inputs, we don't need to lock them.
     
+    int particleCount = COUNT(now);
+    Scene* scene = new Scene();
+
+//    scene->numberOfParticles = particleCount;
+    scene->init();
+//    scene->particleSystem->update();
+    // now the updated particles should be in vector<Particle> scene->getAllParticles()
+    
     int divisions  = DIVISIONS(now)*2;  // We need twice our divisions of points
-    myTotalPoints = divisions;          // Set the NPT local variable value
-    myCurrPoint   = 0;                  // Initialize the PT local variable
-    
-    int plane     = ORIENT();
-    int negradius = NEGRADIUS();
-    float tx      = CENTERX(now);
-    float ty      = CENTERY(now);
-    float tz      = CENTERZ(now);
-    
-    int xcoord, ycoord, zcoord;
-    switch (plane)
-    {
-        case 0:         // XY Plane
-            xcoord = 0;
-            ycoord = 1;
-            zcoord = 2;
-            break;
-        case 1:         // YZ Plane
-            xcoord = 1;
-            ycoord = 2;
-            zcoord = 0;
-            break;
-        case 2:         // XZ Plane
-            xcoord = 0;
-            ycoord = 2;
-            zcoord = 1;
-            break;
-    }
     
     // Check to see that there hasn't been a critical error in cooking the SOP.
     if (error() >= UT_ERROR_ABORT)
@@ -195,44 +159,43 @@ SOP_Star::cookMySop(OP_Context &context)
     gdp->clearAndDestroy();
     
     // Start the interrupt server
-    UT_AutoInterrupt boss("Building Star");
+    UT_AutoInterrupt boss("Building Paani");
     if (boss.wasInterrupted())
     {
         myCurrPoint = -1;
         return error();
     }
+
+//    float tinc = M_PI*2 / (float)divisions;
     
-    // Build a polygon
-    GEO_PrimPoly *poly = GEO_PrimPoly::build(gdp, divisions, GU_POLY_CLOSED);
-    float tinc = M_PI*2 / (float)divisions;
+//    GU_PrimSphereParms sphereparms;
+//    sphereparms.gdp		= gdp;		// geo detail to append to
+//    sphereparms.xform.scale(0.1, 0.1, 0.1);	// set the radii
+    //    sphereparms.xform.translate(1, 1, 1);	// set the center
     
-    // Now, set all the points of the polygon
-    for (int i = 0; i < divisions; i++)
-    {
-        // Check to see if the user has interrupted us...
-        if (boss.wasInterrupted())
-            break;
-        
-        myCurrPoint = i;
-        
-        // Since we expect the local variables to be used in specifying
-        // the radii, we have to evaluate the channels INSIDE the loop
-        // through the points...
-        
-        float tmp = (float)i * tinc;
-        float rad = (i & 1) ? XRADIUS(now) : YRADIUS(now);
-        if (!negradius && rad < 0)
-            rad = 0;
-        
-        UT_Vector3 pos;
-        pos(xcoord) = SYScos(tmp) * rad + tx;
-        pos(ycoord) = SYSsin(tmp) * rad + ty;
-        pos(zcoord) = 0 + tz;
-        
-        GA_Offset ptoff = poly->getPointOffset(i);
-        gdp->setPos3(ptoff, pos);
-    }
-    
+//    std::vector<Particle> particles = scene->particleSystem->getAllParticles();
+//    // Now, set all the points of the polygon
+//    for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
+//    {
+//        // Check to see if the user has interrupted us...
+//        if (boss.wasInterrupted())
+//            break;
+//        
+////        myCurrPoint = i;
+//        
+//        // Build a sphere instead of this poly
+//        Particle particle = *it;
+//        glm::vec3 newPos = particle.getPosition();
+//        sphereparms.xform.translate(newPos[0],newPos[1],newPos[2]);
+//        
+//        GEO_Primitive *sphere;
+//        sphere = GU_PrimSphere::build(sphereparms, GEO_PRIMSPHERE);
+//
+//        
+////        GA_Offset ptoff = poly->getPointOffset(i);
+////        gdp->setPos3(ptoff, pos);
+//    }
+//
     // Highlight the star which we have just generated.  This routine
     // call clears any currently highlighted geometry, and then it
     // highlights every primitive for this SOP.

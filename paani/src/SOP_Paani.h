@@ -10,7 +10,7 @@
 #define __paani__SOP_Paani__
 
 #include <SOP/SOP_Node.h>
-#include "ParticleSystem.h"
+#include "scene.h"
 
 namespace HDK_Sample {
     class SOP_Paani : public SOP_Node
@@ -55,13 +55,14 @@ namespace HDK_Sample {
         /// The following list of accessors simplify evaluating the parameters
         /// of the SOP.
         int		DIVISIONS(fpreal t)	{ return evalInt  ("divs", 0, t); }
-        fpreal	XRADIUS(fpreal t)	{ return evalFloat("rad", 0, t); }
-        fpreal	YRADIUS(fpreal t)	{ return evalFloat("rad", 1, t); }
-        int		NEGRADIUS()		{ return evalInt  ("nradius", 0, 0); }
-        fpreal	CENTERX(fpreal t) 	{ return evalFloat("t", 0, t); }
-        fpreal	CENTERY(fpreal t) 	{ return evalFloat("t", 1, t); }
-        fpreal	CENTERZ(fpreal t) 	{ return evalFloat("t", 2, t); }
-        int		ORIENT()		{ return evalInt  ("orient", 0, 0); }
+        int		COUNT(fpreal t)	{ return evalInt  ("particleCount", 0, t); }
+//        fpreal	XRADIUS(fpreal t)	{ return evalFloat("rad", 0, t); }
+//        fpreal	YRADIUS(fpreal t)	{ return evalFloat("rad", 1, t); }
+//        int		NEGRADIUS()		{ return evalInt  ("nradius", 0, 0); }
+//        fpreal	CENTERX(fpreal t) 	{ return evalFloat("t", 0, t); }
+//        fpreal	CENTERY(fpreal t) 	{ return evalFloat("t", 1, t); }
+//        fpreal	CENTERZ(fpreal t) 	{ return evalFloat("t", 2, t); }
+//        int		ORIENT()		{ return evalInt  ("orient", 0, 0); }
         
         /// Member variables are stored in the actual SOP, not with the geometry
         /// In this case these are just used to transfer data to the local 

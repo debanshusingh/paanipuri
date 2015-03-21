@@ -7,7 +7,6 @@
 //
 
 #include "scene.h"
-#include "ParticleSystem.h"
 #include <iostream>
 
 //Getter functions
@@ -26,7 +25,6 @@ unsigned int ParticleSystem::getParticleCount()
     return static_cast<int> (getAllParticles().size());
 }
 
-//Other functions
 void ParticleSystem::addParticle(Particle p)
 {
     particles.push_back(p);
@@ -158,7 +156,7 @@ void ParticleSystem::update()
             
             particles[i].setDeltaPi(findDeltaPosition(i));
             particles[i].setPredictedPosition(particles[i].getPredictedPosition() + particles[i].getDeltaPi());
-            particleCollision(i);
+//            particleCollision(i);
         }
         
 //        for (int i=0; i<particles.size(); i++) {
@@ -216,7 +214,7 @@ void ParticleSystem::applyForces()
 {
     for(int i=0; i<getParticleCount(); i++)
     {
-        particles[i].setVelocity(particles[i].getVelocity() + timeStep * scene->gravity);
+        particles[i].setVelocity(particles[i].getVelocity() + timeStep * glm::vec3(0,-10,0));
         glm::vec3 currPosition = particles[i].getPosition();
         glm::vec3 predictedPosition = currPosition + timeStep * particles[i].getVelocity();
         particles[i].setPredictedPosition(predictedPosition);

@@ -9,8 +9,6 @@
 #ifndef __paani__scene__
 #define __paani__scene__
 
-#include <stdio.h>
-#include <glm/glm.hpp>
 #include "ParticleSystem.h"
 
 class Cube;
