@@ -50,7 +50,7 @@ Scene::Scene()
     cube = new Cube();
     cube->setCenter(glm::vec3(0,0,0));
     cube->setDimension(glm::vec3(20));
-    numberOfParticles = 750;
+    numberOfParticles = 75;
     gravity = glm::vec3(0.0,-10.0,0.0);
     particleSystem = new ParticleSystem();
     
