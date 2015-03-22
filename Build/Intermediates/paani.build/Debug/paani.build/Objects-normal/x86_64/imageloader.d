@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/sanchitgarg/Desktop/cggt/spring\ 2015/advanced\ cg/cis660pbf/code/paani/paani/src/imageloader.cpp \
-  /Users/sanchitgarg/Desktop/cggt/spring\ 2015/advanced\ cg/cis660pbf/code/paani/paani/src/imageloader.h
+  /Users/debanshu/Dropbox/work/code/github/paani/paani/src/imageloader.cpp \
+  /Users/debanshu/Dropbox/work/code/github/paani/paani/src/imageloader.h
