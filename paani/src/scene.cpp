@@ -50,7 +50,7 @@ Scene::Scene()
     cube = new Cube();
     cube->setCenter(glm::vec3(0,0,0));
     cube->setDimension(glm::vec3(20));
-    numberOfParticles = 75;
+    numberOfParticles = 500;
     gravity = glm::vec3(0.0,-10.0,0.0);
     particleSystem = new ParticleSystem();
     
@@ -64,11 +64,13 @@ void Scene::init(){
         position = 0.8f*(utilityCore::randomVec3() * cube->getDimensions() - cube->getHalfDimensions());
         particleSystem->addParticle(Particle(position, velocity));
     }
-}
-
-void Scene::update(){
+    
     particleSystem->setForces(gravity);
     particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
     particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
+}
+
+void Scene::update(){
+
     particleSystem->update();
 }

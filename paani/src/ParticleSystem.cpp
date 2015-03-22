@@ -177,21 +177,22 @@ void ParticleSystem::update()
     for (int k=0; k<solverIterations; k++) {
 
         for (int i=0; i<particles.size(); i++) {
-            
+
             findLambda(i);
         }
        
         for (int i=0; i<particles.size(); i++) {
-            
+
             particles[i].setDeltaPi(findDeltaPosition(i));
             particles[i].setPredictedPosition(particles[i].getPredictedPosition() + particles[i].getDeltaPi());
             particleCollision(i);
         }
         
     }
-    
+
     for (int i=0; i<particles.size(); i++) {
         particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
+        particles[i].setPosition(glm::vec3(particles[i].getPredictedPosition()[0], 0, particles[i].getPredictedPosition()[2]));
         particles[i].setPosition(particles[i].getPredictedPosition());
     }
 }
@@ -248,7 +249,7 @@ void ParticleSystem::applyForces()
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-    particleParticleCollision(index);
+//    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)

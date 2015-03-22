@@ -50,7 +50,7 @@ newSopOperator(OP_OperatorTable *table)
 }
 
 static PRM_Name		particleCountName("particleCount", "ParticleCount");
-static PRM_Default	particleCountDefault(50);
+static PRM_Default	particleCountDefault(500);
 
 PRM_Template
 SOP_Paani::myTemplateList[] = {
@@ -166,13 +166,7 @@ SOP_Paani::cookMySop(OP_Context &context)
         myCurrPoint = -1;
         return error();
     }
-
-//    float tinc = M_PI*2 / (float)divisions;
     
-    GU_PrimSphereParms sphereparms;
-    sphereparms.gdp		= gdp;		// geo detail to append to
-    sphereparms.xform.scale(0.5, 0.5, 0.5);	// set the radii
-    //    sphereparms.xform.translate(1, 1, 1);	// set the center
     
     std::vector<Particle> particles = scene->particleSystem->getAllParticles();
     for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
@@ -181,6 +175,10 @@ SOP_Paani::cookMySop(OP_Context &context)
         if (boss.wasInterrupted())
             break;
         
+        GU_PrimSphereParms sphereparms;
+        sphereparms.gdp		= gdp;		// geo detail to append to
+        sphereparms.xform.scale(0.5, 0.5, 0.5);	// set the radii
+
         // Build a sphere instead of this poly
         Particle particle = *it;
         glm::vec3 newPos = particle.getPosition();

@@ -29,7 +29,7 @@ int main(int argc, char * argv[]) {
     scene = new Scene();
     scene->init();
 
-     Image* image = loadBMP("/Users/debanshu/Dropbox/work/code/github/paani/paani/src/white.bmp");
+     Image* image = loadBMP("/Users/sanchitgarg/Desktop/cggt/spring 2015/advanced cg/cis660pbf/code/paani/paani/src/white.bmp");
 //        Image* image = loadBMP("./vtr.bmp");
     _textureId = loadTexture(image);
     delete image;
