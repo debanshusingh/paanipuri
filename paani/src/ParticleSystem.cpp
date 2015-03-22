@@ -249,7 +249,7 @@ void ParticleSystem::applyForces()
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-//    particleParticleCollision(index);
+    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)

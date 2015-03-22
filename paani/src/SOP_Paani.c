@@ -19,6 +19,7 @@
 #include <SYS/SYS_Math.h>
 #include <limits.h>
 #include <GEO/GEO_PrimType.h>
+#include <GU/GU_PrimPart.h>
 
 using namespace HDK_Sample;
 Scene* scene;
@@ -167,30 +168,48 @@ SOP_Paani::cookMySop(OP_Context &context)
         return error();
     }
     
-    
+    GU_PrimParticle *part = GU_PrimParticle::build(gdp, 0);
     std::vector<Particle> particles = scene->particleSystem->getAllParticles();
+    
     for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
     {
         // Check to see if the user has interrupted us...
         if (boss.wasInterrupted())
             break;
-        
-        GU_PrimSphereParms sphereparms;
-        sphereparms.gdp		= gdp;		// geo detail to append to
-        sphereparms.xform.scale(0.5, 0.5, 0.5);	// set the radii
 
         // Build a sphere instead of this poly
         Particle particle = *it;
         glm::vec3 newPos = particle.getPosition();
-        sphereparms.xform.translate(newPos[0],newPos[1],newPos[2]);
+    
+        GA_Offset ptoff = gdp->appendPointOffset();
+        gdp->setPos3(ptoff, newPos[0],newPos[1],newPos[2]);
         
-        GEO_Primitive *sphere;
-        sphere = GU_PrimSphere::build(sphereparms, GEO_PRIMSPHERE);
-
-        
-//        GA_Offset ptoff = poly->getPointOffset(i);
-//        gdp->setPos3(ptoff, pos);
+        part->appendParticle(ptoff);
     }
+    
+//    std::vector<Particle> particles = scene->particleSystem->getAllParticles();
+//    for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
+//    {
+//        // Check to see if the user has interrupted us...
+//        if (boss.wasInterrupted())
+//            break;
+//        
+//        GU_PrimSphereParms sphereparms;
+//        sphereparms.gdp		= gdp;		// geo detail to append to
+//        sphereparms.xform.scale(0.5, 0.5, 0.5);	// set the radii
+//
+//        // Build a sphere instead of this poly
+//        Particle particle = *it;
+//        glm::vec3 newPos = particle.getPosition();
+//        sphereparms.xform.translate(newPos[0],newPos[1],newPos[2]);
+//        
+//        GEO_Primitive *sphere;
+//        sphere = GU_PrimSphere::build(sphereparms, GEO_PRIMSPHERE);
+//
+//        
+////        GA_Offset ptoff = poly->getPointOffset(i);
+////        gdp->setPos3(ptoff, pos);
+//    }
 
     // Highlight the star which we have just generated.  This routine
     // call clears any currently highlighted geometry, and then it
