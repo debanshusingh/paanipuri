@@ -84,6 +84,11 @@ std::vector<int> Particle::getNeighborIndices()
     return neighborIndices;
 }
 
+glm::ivec3 Particle::getHashPosition()
+{
+    return hashPosition;
+}
+
 //Setter functions
 void Particle::setPosition(glm::vec3 pos)
 {
@@ -124,3 +129,9 @@ void Particle::setDeltaPi(glm::vec3 p)
 {
     deltaPi = p;
 }
+
+void Particle::setHashPosition(glm::ivec3 p)
+{
+    hashPosition = p;
+}
+

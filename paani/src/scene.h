@@ -21,7 +21,8 @@ class Cube
 private:
     glm::vec3 dimensions;
     glm::vec3 center;
-
+    float cellSize;     //the size of each hash grid cell
+    
 public:
     
     //constructors
@@ -32,10 +33,12 @@ public:
     glm::vec3 getDimensions();
     glm::vec3 getHalfDimensions();
     glm::vec3 getCenter();
+    float getCellSize();
     
     //Setters
     void setDimension(glm::vec3);
     void setCenter(glm::vec3);
+    void setCellSize(float);
 };
 
 class Scene

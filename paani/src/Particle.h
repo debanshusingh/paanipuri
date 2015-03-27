@@ -30,6 +30,7 @@ private:
     glm::vec3 predictedPosition;    //Predicted particle position
     glm::vec3 deltaPi;
     
+    glm::ivec3 hashPosition; //stores the grid index where the particle predicted position is
     std::vector <int> neighborIndices;    //stores the indices of all the neighbors
     float lambda;
     
@@ -49,6 +50,7 @@ public:
     glm::vec3 getPredictedPosition();
     float getLambda();
     glm::vec3 getDeltaPi();
+    glm::ivec3 getHashPosition();
     
     std::vector<int> getNeighborIndices();
     
@@ -59,6 +61,7 @@ public:
     void setPredictedPosition(glm::vec3);
     void setLambda(float);
     void setDeltaPi(glm::vec3);
+    void setHashPosition(glm::ivec3);
     
     void addNeighborIndex(int index);
     void clearNeighbors();

@@ -9,6 +9,8 @@
 #include "ParticleSystem.h"
 #include <iostream>
 
+int counter = 0;
+
 //Getter functions
 std::vector<Particle> ParticleSystem::getAllParticles()
 {
@@ -65,6 +67,18 @@ void ParticleSystem::setUpperBounds(glm::vec3 u)
     upperBounds = u;
 }
 
+float ParticleSystem::getCellSize()
+{
+    return cellSize;
+}
+
+void ParticleSystem::setCellSize(float size)
+{
+    cellSize = size;
+    gridDim = (upperBounds-lowerBounds) / cellSize;
+    hashGrid.resize(gridDim[0]*gridDim[1]*gridDim[2]);
+}
+
 //TODO
 // Improve the neighbors search later
 // Currently naive neighbor searching
@@ -74,28 +88,125 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index)
     std::vector<Neighbor> neighborsList;
     glm::vec3 particlePredictedPos = particles[index].getPredictedPosition();
     
+    glm::ivec3 particleHashPosition = particles[index].getHashPosition();
+    int gridLocation = particleHashPosition.x + gridDim.x * (particleHashPosition.y + gridDim.y * particleHashPosition.z);
+    
     float distance;
-    int i;
+    int i,k;
     Neighbor p;
     
     particles[index].clearNeighbors();
-        
-    for (i = 0; i<particles.size(); i++)
+    
+    //check neighbors in same cell
+    
+    for(i = 0; i<hashGrid[gridLocation].size(); i++)
     {
-        if(i!=index)
+        k = hashGrid[gridLocation][i];
+        if(k!=index)
         {
-            distance = glm::distance(particlePredictedPos, particles[i].getPredictedPosition());
+            distance = glm::distance(particlePredictedPos, particles[k].getPredictedPosition());
             if(distance < smoothingRadius + EPSILON)
             {
-                p.first = i;
-                particles[index].addNeighborIndex(i);
-                p.second = particlePredictedPos - particles[i].getPredictedPosition();
+                p.first = k;
+                particles[index].addNeighborIndex(k);
+                
+                p.second = particlePredictedPos - particles[k].getPredictedPosition();
                 neighborsList.push_back(p);
             }
         }
     }
     
     return neighborsList;
+}
+
+void ParticleSystem::initialiseHashPositions()
+{
+    glm::ivec3 hashPosition;
+    
+    hashGrid.clear();
+    hashGrid.resize(gridDim[0]*gridDim[1]*gridDim[2]);
+
+    for (int i=0; i<particles.size(); i++)
+    {
+        hashPosition = (particles[i].getPredictedPosition() + upperBounds)/ cellSize;
+        particles[i].setHashPosition(hashPosition);
+        
+        std::vector<glm::ivec3> neighborCells;
+        
+        //x
+        neighborCells.push_back(hashPosition);
+        neighborCells.push_back(glm::ivec3(0,1,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(0,-1,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(0,0,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(0,1,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(0,-1,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(0,0,-1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(0,1,-1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(0,-1,-1) + hashPosition);
+        
+        //x+1
+        neighborCells.push_back(glm::ivec3(1,0,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,1,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,-1,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,0,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,1,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,-1,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,0,-1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,1,-1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(1,-1,-1) + hashPosition);
+        
+        //x-1
+        neighborCells.push_back(glm::ivec3(-1,0,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,1,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,-1,0) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,0,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,1,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,-1,1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,0,-1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,1,-1) + hashPosition);
+        neighborCells.push_back(glm::ivec3(-1,-1,-1) + hashPosition);
+        
+        for(int j = 0; j < neighborCells.size(); j++)
+        {
+            if(isValidCell(neighborCells[j]))
+            {
+                hashGrid[neighborCells[j].x + gridDim.x * (neighborCells[j].y + gridDim.y * neighborCells[j].z)].push_back(i);
+            }
+        }
+    }
+}
+
+bool ParticleSystem::isValidCell(glm::ivec3 cellForCheck)
+{
+    if(cellForCheck.x >= 0 && cellForCheck.x < gridDim.x)
+    {
+        if(cellForCheck.y >= 0 && cellForCheck.y < gridDim.y)
+        {
+            if(cellForCheck.z >= 0 && cellForCheck.z < gridDim.z)
+            {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+bool ParticleSystem::isNeighborCell(glm::ivec3 cellForCheck, glm::ivec3 currentCell)
+{
+    if(cellForCheck.x <= currentCell.x+1 && cellForCheck.x >= currentCell.x-1)
+    {
+        if(cellForCheck.y <= currentCell.y+1 && cellForCheck.y >= currentCell.y-1)
+        {
+            if(cellForCheck.z <= currentCell.z+1 && cellForCheck.z >= currentCell.z-1)
+            {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+    
 }
 
 float ParticleSystem::getDensity(int index)
@@ -168,7 +279,11 @@ glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborI
 
 void ParticleSystem::update()
 {
+    counter ++;
+    
     applyForces(); // apply forces and predict position
+    
+    initialiseHashPositions();  //initialise hash positions to be used in neighbour search
     
     for (int i=0; i<particles.size(); i++) {
         findNeighbors(i);
@@ -191,8 +306,13 @@ void ParticleSystem::update()
     }
 
     for (int i=0; i<particles.size(); i++) {
-        particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
-        particles[i].setPosition(glm::vec3(particles[i].getPredictedPosition()[0], 0, particles[i].getPredictedPosition()[2]));
+        
+//        if(counter > 700) {
+//            particles[i].setVelocity(((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep) * 0.987654321f);
+        //}
+  //      else {
+            particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
+      //  }
         particles[i].setPosition(particles[i].getPredictedPosition());
     }
 }
@@ -281,7 +401,7 @@ void ParticleSystem::particleParticleCollision(int index)
         
         distance = glm::distance(currentParticlePosition, neighborPosition);
         
-        if(distance < 2 * radius)
+        if(distance < smoothingRadius + EPSILON)
         {
             //resolve collision
             relativeVelocity = particleVelocity - neighborVelocity;

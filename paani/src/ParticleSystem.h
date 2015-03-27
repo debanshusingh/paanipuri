@@ -28,7 +28,7 @@ private:
     const float smoothingRadius = 1.5f;
     const int solverIterations = 3;
     const float relaxation = 0.01f;
-    const float timeStep = 0.016f;
+    const float timeStep = 0.05f;
     float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius*
                  smoothingRadius*smoothingRadius*smoothingRadius*
                  smoothingRadius*smoothingRadius*smoothingRadius);
@@ -38,6 +38,10 @@ private:
     glm::vec3 forces;
     glm::vec3 lowerBounds;
     glm::vec3 upperBounds;
+    
+    float cellSize;
+    std::vector<std::vector<int> > hashGrid;
+    glm::ivec3 gridDim;
     
 public:
 
@@ -51,11 +55,13 @@ public:
     glm::vec3 getForces();
     glm::vec3 getLowerBounds();
     glm::vec3 getUpperBounds();
+    float getCellSize();
     
     //setter
     void setForces(glm::vec3 f);
     void setLowerBounds(glm::vec3);
     void setUpperBounds(glm::vec3);
+    void setCellSize(float size);
     
     //Other functions
     void addParticle(Particle);               //Add a particle to the system
@@ -84,6 +90,9 @@ public:
     void particleCollision(int index);
     void particleParticleCollision(int index);
     void particleBoxCollision(int index);
+    void initialiseHashPositions();         //function that initialises particles hash positions
+    bool isNeighborCell(glm::ivec3, glm::ivec3);
+    bool isValidCell(glm::ivec3);
 };
 
 #endif
