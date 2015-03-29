@@ -29,11 +29,9 @@ private:
     const int solverIterations = 1;
     const float relaxation = 0.01f;
     const float timeStep = 0.016f;
-    float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius*
-                 smoothingRadius*smoothingRadius*smoothingRadius*
-                 smoothingRadius*smoothingRadius*smoothingRadius);
     float s_6 = smoothingRadius*smoothingRadius*smoothingRadius*
-    smoothingRadius*smoothingRadius*smoothingRadius;
+                smoothingRadius*smoothingRadius*smoothingRadius;
+    float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius)*s_6;
     
     glm::vec3 forces;
     glm::vec3 lowerBounds;
@@ -48,7 +46,7 @@ public:
     typedef std::pair<int, glm::vec3> Neighbor;
     
     //Getter functions
-    std::vector<Particle> getAllParticles();   //Returns the list of all particles in the system
+    std::vector<Particle>& getAllParticles();   //Returns the list of all particles in the system
     float getRestDensity();
     
     void update();
