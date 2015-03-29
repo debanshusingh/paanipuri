@@ -136,7 +136,7 @@ SOP_Paani::cookMySop(OP_Context &context)
     scene->update();
     // now the updated particles should be in vector<Particle> scene->getAllParticles()
     
-    int divisions  = DIVISIONS(now)*2;  // We need twice our divisions of points
+//    int divisions  = DIVISIONS(now)*2;  // We need twice our divisions of points
     
     // Check to see that there hasn't been a critical error in cooking the SOP.
     if (error() >= UT_ERROR_ABORT)
@@ -145,14 +145,14 @@ SOP_Paani::cookMySop(OP_Context &context)
         return error();
     }
     
-    if (divisions < 4)
-    {
+//    if (divisions < 4)
+//    {
         // With the range restriction we have on the divisions, this
         // is actually impossible, but it shows how to add an error
         // message or warning to the SOP.
-        addWarning(SOP_MESSAGE, "Invalid divisions");
-        divisions = 4;
-    }
+//        addWarning(SOP_MESSAGE, "Invalid divisions");
+//        divisions = 4;
+//    }
     
     // In addition to destroying everything except the empty P
     // and topology attributes, this bumps the data IDs for

@@ -12,7 +12,7 @@
 #include "Particle.h"
 #include <utility>
 #include "utilities.h"
-
+#include <map>
 
 //This class stores the list of particles and handles their interactions
 
@@ -24,11 +24,11 @@ private:
 
     const float poly6Const = 315.0 / (64 * PI);
     const float spikyConst = 45.0 / (PI);
-    const float restDensity = 1000.0; //1000kg/m3
+    const float restDensity = 10000.0; //1000kg/m3
     const float smoothingRadius = 1.5f;
     const int solverIterations = 3;
     const float relaxation = 0.01f;
-    const float timeStep = 0.05f;
+    const float timeStep = 0.01f;
     float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius*
                  smoothingRadius*smoothingRadius*smoothingRadius*
                  smoothingRadius*smoothingRadius*smoothingRadius);
@@ -40,7 +40,7 @@ private:
     glm::vec3 upperBounds;
     
     float cellSize;
-    std::vector<std::vector<int> > hashGrid;
+    std::map<int, std::vector<int> > hashGrid;
     glm::ivec3 gridDim;
     
 public:
@@ -50,7 +50,7 @@ public:
     //Getter functions
     std::vector<Particle> getAllParticles();   //Returns the list of all particles in the system
     float getRestDensity();
-    unsigned int getParticleCount();
+    
     void update();
     glm::vec3 getForces();
     glm::vec3 getLowerBounds();
@@ -79,19 +79,21 @@ public:
 
     glm::vec3 gradientConstraintAtParticle(int index);
     glm::vec3 gradientConstraintForNeighbor(int index, int neighborIndex);
-        
+    
     //apply external forces (gravity)
     void applyForces();
     
     glm::vec3 findDeltaPosition(int index);
     void findLambda(int index);
+//    glm::vec3 sCorrection(int index);
     
     //collision detection and resolution
     void particleCollision(int index);
     void particleParticleCollision(int index);
     void particleBoxCollision(int index);
+    
     void initialiseHashPositions();         //function that initialises particles hash positions
-    bool isNeighborCell(glm::ivec3, glm::ivec3);
+   
     bool isValidCell(glm::ivec3);
 };
 

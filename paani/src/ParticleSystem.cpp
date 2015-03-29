@@ -22,11 +22,6 @@ float ParticleSystem::getRestDensity()
     return restDensity;
 }
 
-unsigned int ParticleSystem::getParticleCount()
-{
-    return static_cast<int> (getAllParticles().size());
-}
-
 void ParticleSystem::addParticle(Particle p)
 {
     particles.push_back(p);
@@ -76,7 +71,6 @@ void ParticleSystem::setCellSize(float size)
 {
     cellSize = size;
     gridDim = (upperBounds-lowerBounds) / cellSize;
-    hashGrid.resize(gridDim[0]*gridDim[1]*gridDim[2]);
 }
 
 //TODO
@@ -86,31 +80,39 @@ void ParticleSystem::setCellSize(float size)
 std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index)
 {
     std::vector<Neighbor> neighborsList;
-    glm::vec3 particlePredictedPos = particles[index].getPredictedPosition();
+    Particle & currParticle = particles[index];
     
-    glm::ivec3 particleHashPosition = particles[index].getHashPosition();
+    glm::vec3 particlePredictedPos = currParticle.getPredictedPosition();
+    
+    glm::ivec3 particleHashPosition = currParticle.getHashPosition();
     int gridLocation = particleHashPosition.x + gridDim.x * (particleHashPosition.y + gridDim.y * particleHashPosition.z);
     
-    float distance;
     int i,k;
     Neighbor p;
     
-    particles[index].clearNeighbors();
+    currParticle.clearNeighbors();
     
     //check neighbors in same cell
     
-    for(i = 0; i<hashGrid[gridLocation].size(); i++)
+    std::vector<int> & pointerToGrid = hashGrid[gridLocation];
+    glm::vec3 vectorToNeighbor;
+    if (pointerToGrid.size() ==0 ) {
+        std::cout<<pointerToGrid.size()<<std::endl;
+    }
+    for(i = 0; i<pointerToGrid.size(); i++)
     {
-        k = hashGrid[gridLocation][i];
+        k = pointerToGrid[i];
+        
         if(k!=index)
         {
-            distance = glm::distance(particlePredictedPos, particles[k].getPredictedPosition());
-            if(distance < smoothingRadius + EPSILON)
+            vectorToNeighbor = particlePredictedPos - particles[k].getPredictedPosition();
+            
+            if(glm::length(vectorToNeighbor) < smoothingRadius + EPSILON)
             {
                 p.first = k;
-                particles[index].addNeighborIndex(k);
+                currParticle.addNeighborIndex(k);
                 
-                p.second = particlePredictedPos - particles[k].getPredictedPosition();
+                p.second = vectorToNeighbor;
                 neighborsList.push_back(p);
             }
         }
@@ -124,16 +126,22 @@ void ParticleSystem::initialiseHashPositions()
     glm::ivec3 hashPosition;
     
     hashGrid.clear();
-    hashGrid.resize(gridDim[0]*gridDim[1]*gridDim[2]);
 
     for (int i=0; i<particles.size(); i++)
     {
-        hashPosition = (particles[i].getPredictedPosition() + upperBounds)/ cellSize;
+        hashPosition = (particles[i].getPredictedPosition() + upperBounds) / cellSize;
         particles[i].setHashPosition(hashPosition);
+        int position = hashPosition.x + gridDim.x * (hashPosition.y + gridDim.y * hashPosition.z);
+        
+        
+//        if(hashGrid[position].size() < 20)
+//        {
+//            hashGrid[position].push_back(i);
+//        }
         
         std::vector<glm::ivec3> neighborCells;
-        
-        //x
+//
+//        //x
         neighborCells.push_back(hashPosition);
         neighborCells.push_back(glm::ivec3(0,1,0) + hashPosition);
         neighborCells.push_back(glm::ivec3(0,-1,0) + hashPosition);
@@ -192,22 +200,6 @@ bool ParticleSystem::isValidCell(glm::ivec3 cellForCheck)
     return false;
 }
 
-bool ParticleSystem::isNeighborCell(glm::ivec3 cellForCheck, glm::ivec3 currentCell)
-{
-    if(cellForCheck.x <= currentCell.x+1 && cellForCheck.x >= currentCell.x-1)
-    {
-        if(cellForCheck.y <= currentCell.y+1 && cellForCheck.y >= currentCell.y-1)
-        {
-            if(cellForCheck.z <= currentCell.z+1 && cellForCheck.z >= currentCell.z-1)
-            {
-                return true;
-            }
-        }
-    }
-    
-    return false;
-    
-}
 
 float ParticleSystem::getDensity(int index)
 {
@@ -241,7 +233,6 @@ float ParticleSystem::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
 {
     float distanceLength = glm::length(distance);
-    
 
     float x = (smoothingRadius-distanceLength)*(smoothingRadius-distanceLength);
     
@@ -252,8 +243,7 @@ glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothi
 
 glm::vec3 ParticleSystem::gradientConstraintAtParticle(int index)
 {
-    glm::vec3 gradientReturn = glm::vec3(0,0,0);
-    
+    glm::vec3 gradientReturn(0,0,0);
     float restDensityInverse = 1.0/getRestDensity();
     
     std::vector<int> neighbors = particles[index].getNeighborIndices();
@@ -269,20 +259,20 @@ glm::vec3 ParticleSystem::gradientConstraintAtParticle(int index)
 
 glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborIndex)
 {
-    glm::vec3 gradientReturn;
+    glm::vec3 gradientReturn(0,0,0);
+    float restDensityInverse = 1.0/restDensity;
+
     
-    gradientReturn = gradientWSpikyKernel(particles[index].getPosition() - particles[neighborIndex].getPosition(), smoothingRadius)
-                        / getRestDensity();
+    gradientReturn = restDensityInverse * gradientWSpikyKernel(particles[index].getPosition() - particles[neighborIndex].getPosition(), smoothingRadius);
     
     return (-1.0f * gradientReturn);
 }
 
 void ParticleSystem::update()
 {
-    counter ++;
+//    counter ++;
     
     applyForces(); // apply forces and predict position
-    
     initialiseHashPositions();  //initialise hash positions to be used in neighbour search
     
     for (int i=0; i<particles.size(); i++) {
@@ -298,21 +288,21 @@ void ParticleSystem::update()
        
         for (int i=0; i<particles.size(); i++) {
 
-            particles[i].setDeltaPi(findDeltaPosition(i));
-            particles[i].setPredictedPosition(particles[i].getPredictedPosition() + particles[i].getDeltaPi());
+            Particle & currParticle = particles[i];
+            glm::vec3 deltaPi = findDeltaPosition(i);
+            currParticle.setDeltaPi(deltaPi);
+            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             particleCollision(i);
+
         }
         
     }
 
     for (int i=0; i<particles.size(); i++) {
         
-//        if(counter > 700) {
-//            particles[i].setVelocity(((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep) * 0.987654321f);
-        //}
-  //      else {
-            particles[i].setVelocity((particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep);
-      //  }
+
+        glm::vec3 newVelocity = (particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep;
+        particles[i].setVelocity(newVelocity);
         particles[i].setPosition(particles[i].getPredictedPosition());
     }
 }
@@ -337,19 +327,31 @@ void ParticleSystem::findLambda(int index){
     float densityContraint = (currDensity/restDensity) - 1.0f;
     
     float lambdaI = -1.0f * (densityContraint/(sumGradientAtParticle+relaxation));
+//    if (fabs(lambdaI)) std::cout<<lambdaI<<std::endl;
     particles[index].setLambda(lambdaI);
 }
 
-
 glm::vec3 ParticleSystem::findDeltaPosition(int index)
 {
-    glm::vec3 deltaPi = glm::vec3(0,0,0);
+    glm::vec3 deltaPi(0,0,0);
     std::vector<int> neighbors = particles[index].getNeighborIndices();
     float lambda_i = particles[index].getLambda();
+    float sCor = 0, k = 0.1, deltaQ = 0.1 * smoothingRadius;
+//    int n = 4;
+    float spikyTerm;
     
     for(int i=0; i<neighbors.size(); i++)
     {
-        deltaPi += (particles[neighbors[i]].getLambda() + lambda_i) *
+        float temp = wPoly6Kernel(glm::vec3(deltaQ, 0, 0), smoothingRadius);
+        if (fabs(temp) < EPSILON) k = 0;
+        else k = 0.1;
+        
+        spikyTerm = wPoly6Kernel( (particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius)*(1/temp);
+        
+       
+        sCor = -1.0 * k * spikyTerm * spikyTerm * spikyTerm * spikyTerm;
+        
+        deltaPi += (particles[neighbors[i]].getLambda() + lambda_i + sCor) *
                     gradientWSpikyKernel((particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius);
     }
     
@@ -358,18 +360,20 @@ glm::vec3 ParticleSystem::findDeltaPosition(int index)
 
 void ParticleSystem::applyForces()
 {
-    for(int i=0; i<getParticleCount(); i++)
+    for(int i=0; i<particles.size(); i++)
     {
-        particles[i].setVelocity(particles[i].getVelocity() + timeStep * forces);
-        glm::vec3 currPosition = particles[i].getPosition();
-        glm::vec3 predictedPosition = currPosition + timeStep * particles[i].getVelocity();
-        particles[i].setPredictedPosition(predictedPosition);
+        Particle & currParticle = particles[i];
+
+        currParticle.setVelocity(currParticle.getVelocity() + timeStep * forces);
+        glm::vec3 currPosition = currParticle.getPosition();
+        glm::vec3 predictedPosition = currPosition + timeStep * currParticle.getVelocity();
+        currParticle.setPredictedPosition(predictedPosition);
     }
 }
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-    particleParticleCollision(index);
+//    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)
@@ -391,7 +395,7 @@ void ParticleSystem::particleParticleCollision(int index)
     
     float distance, radius = particles[index].getRadius();
     
-    
+    radius= smoothingRadius;
     for(int i=0; i<neighbors.size(); i++)
     {
         particleVelocity = particles[index].getVelocity();
@@ -401,7 +405,7 @@ void ParticleSystem::particleParticleCollision(int index)
         
         distance = glm::distance(currentParticlePosition, neighborPosition);
         
-        if(distance < smoothingRadius + EPSILON)
+        if(distance < 2 * radius + EPSILON)
         {
             //resolve collision
             relativeVelocity = particleVelocity - neighborVelocity;
@@ -418,25 +422,33 @@ void ParticleSystem::particleParticleCollision(int index)
 
 void ParticleSystem::particleBoxCollision(int index)
 {
-    glm::vec3 particlePosition = particles[index].getPredictedPosition();
+    Particle & currParticle = particles[index];
+    glm::vec3 particlePosition = currParticle.getPredictedPosition();
+
+    float radius = currParticle.getRadius();
     
-    float radius = particles[index].getRadius();
-    
-    if(particlePosition.x - radius < lowerBounds.x - EPSILON || particlePosition.x + radius > upperBounds.x + EPSILON)
+    if(particlePosition.x - radius < lowerBounds.x + EPSILON || particlePosition.x + radius > upperBounds.x - EPSILON)
     {
-        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(-0.5,1,1));
-        particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(-0.5,1,1));
+        currParticle.setPredictedPosition(currParticle.getPosition() + timeStep * currParticle.getVelocity());
     }
 
-    if(particlePosition.y - radius < lowerBounds.y - EPSILON || particlePosition.y + radius > upperBounds.y + EPSILON)
+    if(particlePosition.y - radius < lowerBounds.y + EPSILON)
     {
-        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,-0.5,1));
-        particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,-0.5,1));
+        currParticle.setPredictedPosition(currParticle.getPosition() + timeStep * currParticle.getVelocity());
     }
-    
-    if(particlePosition.z - radius < lowerBounds.z - EPSILON || particlePosition.z + radius > upperBounds.z + EPSILON)
+
+    if(particlePosition.y + radius > upperBounds.y - EPSILON)
     {
-        particles[index].setVelocity(particles[index].getVelocity() * glm::vec3(1,1,-0.5));
-        particles[index].setPredictedPosition(particles[index].getPosition() + timeStep * particles[index].getVelocity());
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,-0.5,1));
+        glm::vec3 pos = currParticle.getPosition();
+        currParticle.setPredictedPosition(glm::vec3(pos.x, upperBounds.y - radius - EPSILON, pos.z));
+    }
+
+    if(particlePosition.z - radius < lowerBounds.z + EPSILON || particlePosition.z + radius > upperBounds.z - EPSILON)
+    {
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,1,-0.5));
+        currParticle.setPredictedPosition(currParticle.getPosition() + timeStep * currParticle.getVelocity());
     }
 }
