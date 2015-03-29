@@ -60,11 +60,11 @@ Scene::Scene()
     cube = new Cube();
     cube->setCenter(glm::vec3(0,0,0));
     
-    cube->setDimension(glm::vec3(20));
+    cube->setDimension(glm::vec3(100));
     
     cube->setCellSize(4.0f);       //depends on cube dimensions and particle radius
     
-    numberOfParticles = 1000;
+    numberOfParticles = 5000;
     gravity = glm::vec3(0.0,-10.0,0.0);
     particleSystem = new ParticleSystem();
     
@@ -76,7 +76,7 @@ void Scene::init(){
     for(int i=0; i<numberOfParticles; i++)
     {
         position = 0.5f*(utilityCore::randomVec3() * cube->getDimensions() - cube->getHalfDimensions());
-//        position.z= 0.0;
+        position.z= 0.0;
         particleSystem->addParticle(Particle(position, velocity));
     }
     

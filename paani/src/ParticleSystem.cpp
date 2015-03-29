@@ -96,9 +96,7 @@ std::vector <ParticleSystem::Neighbor> ParticleSystem::findNeighbors(int index)
     
     std::vector<int> & pointerToGrid = hashGrid[gridLocation];
     glm::vec3 vectorToNeighbor;
-    if (pointerToGrid.size() ==0 ) {
-        std::cout<<pointerToGrid.size()<<std::endl;
-    }
+
     for(i = 0; i<pointerToGrid.size(); i++)
     {
         k = pointerToGrid[i];
@@ -244,7 +242,7 @@ glm::vec3 ParticleSystem::gradientWSpikyKernel(glm::vec3 distance, float smoothi
 glm::vec3 ParticleSystem::gradientConstraintAtParticle(int index)
 {
     glm::vec3 gradientReturn(0,0,0);
-    float restDensityInverse = 1.0/getRestDensity();
+    float restDensityInverse = 1.0/restDensity;
     
     std::vector<int> neighbors = particles[index].getNeighborIndices();
     
@@ -300,10 +298,10 @@ void ParticleSystem::update()
 
     for (int i=0; i<particles.size(); i++) {
         
+        Particle & currParticle = particles[i];
 
-        glm::vec3 newVelocity = (particles[i].getPredictedPosition() - particles[i].getPosition()) / timeStep;
-        particles[i].setVelocity(newVelocity);
-        particles[i].setPosition(particles[i].getPredictedPosition());
+        currParticle.setVelocity((currParticle.getPredictedPosition() - currParticle.getPosition()) / timeStep);
+        currParticle.setPosition(currParticle.getPredictedPosition());
     }
 }
 
@@ -334,25 +332,28 @@ void ParticleSystem::findLambda(int index){
 glm::vec3 ParticleSystem::findDeltaPosition(int index)
 {
     glm::vec3 deltaPi(0,0,0);
-    std::vector<int> neighbors = particles[index].getNeighborIndices();
-    float lambda_i = particles[index].getLambda();
-    float sCor = 0, k = 0.1, deltaQ = 0.1 * smoothingRadius;
+    
+    Particle & currParticle = particles[index];
+    
+    std::vector<int> neighbors = currParticle.getNeighborIndices();
+    float lambda_i = currParticle.getLambda();
+    float sCor = 0, k = 0.001, deltaQ = 0.1 * smoothingRadius;
 //    int n = 4;
     float spikyTerm;
     
     for(int i=0; i<neighbors.size(); i++)
     {
         float temp = wPoly6Kernel(glm::vec3(deltaQ, 0, 0), smoothingRadius);
-        if (fabs(temp) < EPSILON) k = 0;
-        else k = 0.1;
+//        if (fabs(temp) < EPSILON) k = 0;
+//        else k = 0.1;
         
-        spikyTerm = wPoly6Kernel( (particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius)*(1/temp);
+        spikyTerm = wPoly6Kernel( (currParticle.getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius) / temp;
         
        
         sCor = -1.0 * k * spikyTerm * spikyTerm * spikyTerm * spikyTerm;
         
         deltaPi += (particles[neighbors[i]].getLambda() + lambda_i + sCor) *
-                    gradientWSpikyKernel((particles[index].getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius);
+                    gradientWSpikyKernel((currParticle.getPredictedPosition() - particles[neighbors[i]].getPredictedPosition()), smoothingRadius);
     }
     
     return (deltaPi/restDensity);
@@ -373,7 +374,7 @@ void ParticleSystem::applyForces()
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-//    particleParticleCollision(index);
+    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)
@@ -426,29 +427,30 @@ void ParticleSystem::particleBoxCollision(int index)
     glm::vec3 particlePosition = currParticle.getPredictedPosition();
 
     float radius = currParticle.getRadius();
+    float dampingFactor = 0.5f;
     
     if(particlePosition.x - radius < lowerBounds.x + EPSILON || particlePosition.x + radius > upperBounds.x - EPSILON)
     {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(-0.5,1,1));
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(-dampingFactor,1,1));
         currParticle.setPredictedPosition(currParticle.getPosition() + timeStep * currParticle.getVelocity());
     }
 
     if(particlePosition.y - radius < lowerBounds.y + EPSILON)
     {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,-0.5,1));
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,-dampingFactor,1));
         currParticle.setPredictedPosition(currParticle.getPosition() + timeStep * currParticle.getVelocity());
     }
 
     if(particlePosition.y + radius > upperBounds.y - EPSILON)
     {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,-0.5,1));
-        glm::vec3 pos = currParticle.getPosition();
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,-dampingFactor,1));
+        glm::vec3 pos = currParticle.getPredictedPosition();
         currParticle.setPredictedPosition(glm::vec3(pos.x, upperBounds.y - radius - EPSILON, pos.z));
     }
 
     if(particlePosition.z - radius < lowerBounds.z + EPSILON || particlePosition.z + radius > upperBounds.z - EPSILON)
     {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,1,-0.5));
+        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,1,-dampingFactor));
         currParticle.setPredictedPosition(currParticle.getPosition() + timeStep * currParticle.getVelocity());
     }
 }

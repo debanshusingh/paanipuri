@@ -73,13 +73,14 @@ void display() {
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(30.0, 1.0, 0.1, 100.0);
+    gluPerspective(30.0, 1.0, 0.1, 1000.0);
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     glRotatef(10,1,0,0);
-    glTranslatef(0,-8,-50.0f);
+    glTranslatef(0,-35,-250.0f);
     
     GLfloat ambientColor[] = {0.7f, 0.7f, 0.7f, 1.0f};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
@@ -129,7 +130,6 @@ void Scene::displayParticles()
     
     glm::vec3 position, color;
     GLfloat mat_diffused[] = {0.3,0.4,1.0};
-    GLfloat mat_spec[] = {1.0,1.0,1.0};
     
     for(i=0; i<numberOfParticles; i++)
     {
@@ -137,7 +137,7 @@ void Scene::displayParticles()
         //color = utilityCore::randomVec3();
         if(std::isnan(position.x) || std::isnan(position.y) || std::isnan(position.z))
         {
-            std::cout<<" ";
+            std::cout<<"ERROR";
         }
         
         glColor3f(0.3,0.4,1.0);
@@ -145,8 +145,8 @@ void Scene::displayParticles()
         glPushMatrix();
             glTranslatef(position.x, position.y, position.z);
             glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffused);
-//            glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
-            glutSolidSphere(radius, 16, 16);
+            glutSolidSphere(radius, 4, 4);
+//        glutWireCube(radius);
 
         glPopMatrix();
     }
