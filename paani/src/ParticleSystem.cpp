@@ -12,10 +12,6 @@
 int counter = 0;
 
 //Getter functions
-std::vector<Particle> ParticleSystem::getAllParticles()
-{
-    return particles;
-}
 
 float ParticleSystem::getRestDensity()
 {
