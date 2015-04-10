@@ -1,0 +1,355 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12CB7C431AA272990095666D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12CB7C421AA272990095666D /* main.cpp */; };
+		12CB7C461AA275E90095666D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C451AA275E90095666D /* OpenGL.framework */; };
+		12CB7C481AA276870095666D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C471AA276870095666D /* IOKit.framework */; };
+		12CB7C4A1AA276B30095666D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C491AA276B30095666D /* Cocoa.framework */; };
+		12F5EC961AA27E530055DEE6 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F5EC951AA27E530055DEE6 /* GLUT.framework */; };
+		12F5ECA01AA28E960055DEE6 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F5EC9F1AA28E960055DEE6 /* libGLEW.a */; };
+		12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12F5ECA11AA2900C0055DEE6 /* utilities.cpp */; };
+		8936A2861AB2244400B9C75D /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8936A2841AB2244400B9C75D /* scene.cpp */; };
+		896ABBFB1AA2985C001480C1 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 896ABBF71AA2985C001480C1 /* Particle.cpp */; };
+		896ABBFC1AA2985C001480C1 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 896ABBF91AA2985C001480C1 /* ParticleSystem.cpp */; };
+		89A663E11AB5432600B11963 /* imageloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A663DF1AB5432600B11963 /* imageloader.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		12E928A11AA26FF600D11B5B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		12CB7C421AA272990095666D /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		12CB7C441AA2757C0095666D /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		12CB7C451AA275E90095666D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		12CB7C471AA276870095666D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		12CB7C491AA276B30095666D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		12E928A31AA26FF600D11B5B /* paanipuri */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = paanipuri; sourceTree = BUILT_PRODUCTS_DIR; };
+		12F5EC951AA27E530055DEE6 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		12F5EC9F1AA28E960055DEE6 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = paani/thirdparty/osx/glew/lib/libGLEW.a; sourceTree = "<group>"; };
+		12F5ECA11AA2900C0055DEE6 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilities.cpp; sourceTree = "<group>"; };
+		12F5ECA21AA2900C0055DEE6 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
+		8936A2841AB2244400B9C75D /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
+		8936A2851AB2244400B9C75D /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
+		896ABBF71AA2985C001480C1 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
+		896ABBF81AA2985C001480C1 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		896ABBF91AA2985C001480C1 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
+		896ABBFA1AA2985C001480C1 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
+		89A663DF1AB5432600B11963 /* imageloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageloader.cpp; sourceTree = "<group>"; };
+		89A663E01AB5432600B11963 /* imageloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageloader.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		12E928A01AA26FF600D11B5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12F5ECA01AA28E960055DEE6 /* libGLEW.a in Frameworks */,
+				12F5EC961AA27E530055DEE6 /* GLUT.framework in Frameworks */,
+				12CB7C4A1AA276B30095666D /* Cocoa.framework in Frameworks */,
+				12CB7C481AA276870095666D /* IOKit.framework in Frameworks */,
+				12CB7C461AA275E90095666D /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		12CB7C411AA272990095666D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				89A663DF1AB5432600B11963 /* imageloader.cpp */,
+				89A663E01AB5432600B11963 /* imageloader.h */,
+				12F5ECA11AA2900C0055DEE6 /* utilities.cpp */,
+				12F5ECA21AA2900C0055DEE6 /* utilities.h */,
+				896ABBF71AA2985C001480C1 /* Particle.cpp */,
+				896ABBF81AA2985C001480C1 /* Particle.h */,
+				896ABBF91AA2985C001480C1 /* ParticleSystem.cpp */,
+				896ABBFA1AA2985C001480C1 /* ParticleSystem.h */,
+				8936A2841AB2244400B9C75D /* scene.cpp */,
+				8936A2851AB2244400B9C75D /* scene.h */,
+				12CB7C421AA272990095666D /* main.cpp */,
+				12CB7C441AA2757C0095666D /* main.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		12E9289A1AA26FF600D11B5B = {
+			isa = PBXGroup;
+			children = (
+				12F5EC9F1AA28E960055DEE6 /* libGLEW.a */,
+				12F5EC951AA27E530055DEE6 /* GLUT.framework */,
+				12CB7C491AA276B30095666D /* Cocoa.framework */,
+				12CB7C471AA276870095666D /* IOKit.framework */,
+				12CB7C451AA275E90095666D /* OpenGL.framework */,
+				12E928A51AA26FF600D11B5B /* paanipuri */,
+				12E928A41AA26FF600D11B5B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		12E928A41AA26FF600D11B5B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				12E928A31AA26FF600D11B5B /* paanipuri */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		12E928A51AA26FF600D11B5B /* paanipuri */ = {
+			isa = PBXGroup;
+			children = (
+				12F5EC9B1AA2870D0055DEE6 /* thirdparty */,
+				12CB7C411AA272990095666D /* src */,
+			);
+			name = paanipuri;
+			path = paani;
+			sourceTree = "<group>";
+		};
+		12F5EC9B1AA2870D0055DEE6 /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = thirdparty;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		12E928A21AA26FF600D11B5B /* paanipuri */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 12E928AA1AA26FF600D11B5B /* Build configuration list for PBXNativeTarget "paanipuri" */;
+			buildPhases = (
+				12E9289F1AA26FF600D11B5B /* Sources */,
+				125CDE8A1ABCE854000DE80C /* ShellScript */,
+				12E928A01AA26FF600D11B5B /* Frameworks */,
+				12E928A11AA26FF600D11B5B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = paanipuri;
+			productName = paani;
+			productReference = 12E928A31AA26FF600D11B5B /* paanipuri */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		12E9289B1AA26FF600D11B5B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = Debanshu;
+				TargetAttributes = {
+					12E928A21AA26FF600D11B5B = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 12E9289E1AA26FF600D11B5B /* Build configuration list for PBXProject "paanipuri" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 12E9289A1AA26FF600D11B5B;
+			productRefGroup = 12E928A41AA26FF600D11B5B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				12E928A21AA26FF600D11B5B /* paanipuri */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		125CDE8A1ABCE854000DE80C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd /Library/Frameworks/Houdini.framework/Versions/14.0.258/Resources/; source houdini_setup; cd -;\nhcustom -I./paani/thirdparty/osx/glm/ paani/src/SOP_Paani.C;\ncp Build/Intermediates/paani.build/Debug/paani.build/Objects-normal/x86_64/*.o paani/src;\n/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -bundle -flat_namespace -undefined suppress paani/src/utilities.o paani/src/Particle.o paani/src/ParticleSystem.o paani/src/scene.o paani/src/SOP_Paani.o -arch x86_64 -fobjc-gc -I./../thirdparty/osx/glm -framework OpenGL -framework Cocoa -stdlib=libstdc++ -o $HOME/Library/Preferences/houdini/14.0/dso/SOP_Paani.dylib";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		12E9289F1AA26FF600D11B5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8936A2861AB2244400B9C75D /* scene.cpp in Sources */,
+				896ABBFC1AA2985C001480C1 /* ParticleSystem.cpp in Sources */,
+				89A663E11AB5432600B11963 /* imageloader.cpp in Sources */,
+				12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */,
+				896ABBFB1AA2985C001480C1 /* Particle.cpp in Sources */,
+				12CB7C431AA272990095666D /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		12E928A81AA26FF600D11B5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/Library/Frameworks/Houdini.framework/Versions/14.0.258/Resources/toolkit/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.9;
+			};
+			name = Debug;
+		};
+		12E928A91AA26FF600D11B5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/Library/Frameworks/Houdini.framework/Versions/14.0.258/Resources/toolkit/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx10.9;
+			};
+			name = Release;
+		};
+		12E928AB1AA26FF600D11B5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glm",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glew/include",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glfw/include",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glew/lib";
+				PRODUCT_NAME = paanipuri;
+			};
+			name = Debug;
+		};
+		12E928AC1AA26FF600D11B5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glm",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glew/include",
+					"$(PROJECT_DIR)/paani/thirdparty/osx/glfw/include",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/paani/thirdparty/osx/glew/lib";
+				PRODUCT_NAME = paanipuri;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		12E9289E1AA26FF600D11B5B /* Build configuration list for PBXProject "paanipuri" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12E928A81AA26FF600D11B5B /* Debug */,
+				12E928A91AA26FF600D11B5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		12E928AA1AA26FF600D11B5B /* Build configuration list for PBXNativeTarget "paanipuri" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12E928AB1AA26FF600D11B5B /* Debug */,
+				12E928AC1AA26FF600D11B5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 12E9289B1AA26FF600D11B5B /* Project object */;
+}
