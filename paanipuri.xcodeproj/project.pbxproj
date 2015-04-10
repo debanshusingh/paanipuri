@@ -7,17 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		12CB7C431AA272990095666D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12CB7C421AA272990095666D /* main.cpp */; };
+		12586FA91AD870620083C6C0 /* SOP_Paani.c in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA11AD870620083C6C0 /* SOP_Paani.c */; };
+		12586FAA1AD870620083C6C0 /* imageloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA21AD870620083C6C0 /* imageloader.cpp */; };
+		12586FAB1AD870620083C6C0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA31AD870620083C6C0 /* main.cpp */; };
+		12586FAC1AD870620083C6C0 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA41AD870620083C6C0 /* Particle.cpp */; };
+		12586FAD1AD870620083C6C0 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA51AD870620083C6C0 /* ParticleSystem.cpp */; };
+		12586FAE1AD870620083C6C0 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA61AD870620083C6C0 /* scene.cpp */; };
+		12586FAF1AD870620083C6C0 /* SOP_Star.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA71AD870620083C6C0 /* SOP_Star.cpp */; };
+		12586FB01AD870620083C6C0 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA81AD870620083C6C0 /* utilities.cpp */; };
 		12CB7C461AA275E90095666D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C451AA275E90095666D /* OpenGL.framework */; };
 		12CB7C481AA276870095666D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C471AA276870095666D /* IOKit.framework */; };
 		12CB7C4A1AA276B30095666D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C491AA276B30095666D /* Cocoa.framework */; };
 		12F5EC961AA27E530055DEE6 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F5EC951AA27E530055DEE6 /* GLUT.framework */; };
 		12F5ECA01AA28E960055DEE6 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F5EC9F1AA28E960055DEE6 /* libGLEW.a */; };
-		12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12F5ECA11AA2900C0055DEE6 /* utilities.cpp */; };
-		8936A2861AB2244400B9C75D /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8936A2841AB2244400B9C75D /* scene.cpp */; };
-		896ABBFB1AA2985C001480C1 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 896ABBF71AA2985C001480C1 /* Particle.cpp */; };
-		896ABBFC1AA2985C001480C1 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 896ABBF91AA2985C001480C1 /* ParticleSystem.cpp */; };
-		89A663E11AB5432600B11963 /* imageloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89A663DF1AB5432600B11963 /* imageloader.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,24 +35,28 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		12CB7C421AA272990095666D /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		12CB7C441AA2757C0095666D /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		12586F991AD870620083C6C0 /* imageloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imageloader.h; path = paanipuri/src/imageloader.h; sourceTree = SOURCE_ROOT; };
+		12586F9A1AD870620083C6C0 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = paanipuri/src/main.h; sourceTree = SOURCE_ROOT; };
+		12586F9B1AD870620083C6C0 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = paanipuri/src/Particle.h; sourceTree = SOURCE_ROOT; };
+		12586F9C1AD870620083C6C0 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSystem.h; path = paanipuri/src/ParticleSystem.h; sourceTree = SOURCE_ROOT; };
+		12586F9D1AD870620083C6C0 /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scene.h; path = paanipuri/src/scene.h; sourceTree = SOURCE_ROOT; };
+		12586F9E1AD870620083C6C0 /* SOP_Paani.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOP_Paani.h; path = paanipuri/src/SOP_Paani.h; sourceTree = SOURCE_ROOT; };
+		12586F9F1AD870620083C6C0 /* SOP_Star.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOP_Star.h; path = paanipuri/src/SOP_Star.h; sourceTree = SOURCE_ROOT; };
+		12586FA01AD870620083C6C0 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utilities.h; path = paanipuri/src/utilities.h; sourceTree = SOURCE_ROOT; };
+		12586FA11AD870620083C6C0 /* SOP_Paani.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SOP_Paani.c; path = paanipuri/src/SOP_Paani.c; sourceTree = SOURCE_ROOT; };
+		12586FA21AD870620083C6C0 /* imageloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imageloader.cpp; path = paanipuri/src/imageloader.cpp; sourceTree = SOURCE_ROOT; };
+		12586FA31AD870620083C6C0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = paanipuri/src/main.cpp; sourceTree = SOURCE_ROOT; };
+		12586FA41AD870620083C6C0 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = paanipuri/src/Particle.cpp; sourceTree = SOURCE_ROOT; };
+		12586FA51AD870620083C6C0 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleSystem.cpp; path = paanipuri/src/ParticleSystem.cpp; sourceTree = SOURCE_ROOT; };
+		12586FA61AD870620083C6C0 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scene.cpp; path = paanipuri/src/scene.cpp; sourceTree = SOURCE_ROOT; };
+		12586FA71AD870620083C6C0 /* SOP_Star.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOP_Star.cpp; path = paanipuri/src/SOP_Star.cpp; sourceTree = SOURCE_ROOT; };
+		12586FA81AD870620083C6C0 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utilities.cpp; path = paanipuri/src/utilities.cpp; sourceTree = SOURCE_ROOT; };
 		12CB7C451AA275E90095666D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		12CB7C471AA276870095666D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		12CB7C491AA276B30095666D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		12E928A31AA26FF600D11B5B /* paanipuri */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = paanipuri; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F5EC951AA27E530055DEE6 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
-		12F5EC9F1AA28E960055DEE6 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = paani/thirdparty/osx/glew/lib/libGLEW.a; sourceTree = "<group>"; };
-		12F5ECA11AA2900C0055DEE6 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilities.cpp; sourceTree = "<group>"; };
-		12F5ECA21AA2900C0055DEE6 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
-		8936A2841AB2244400B9C75D /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
-		8936A2851AB2244400B9C75D /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
-		896ABBF71AA2985C001480C1 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
-		896ABBF81AA2985C001480C1 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
-		896ABBF91AA2985C001480C1 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
-		896ABBFA1AA2985C001480C1 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
-		89A663DF1AB5432600B11963 /* imageloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageloader.cpp; sourceTree = "<group>"; };
-		89A663E01AB5432600B11963 /* imageloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageloader.h; sourceTree = "<group>"; };
+		12F5EC9F1AA28E960055DEE6 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = paanipuri/thirdparty/osx/glew/lib/libGLEW.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,18 +78,22 @@
 		12CB7C411AA272990095666D /* src */ = {
 			isa = PBXGroup;
 			children = (
-				89A663DF1AB5432600B11963 /* imageloader.cpp */,
-				89A663E01AB5432600B11963 /* imageloader.h */,
-				12F5ECA11AA2900C0055DEE6 /* utilities.cpp */,
-				12F5ECA21AA2900C0055DEE6 /* utilities.h */,
-				896ABBF71AA2985C001480C1 /* Particle.cpp */,
-				896ABBF81AA2985C001480C1 /* Particle.h */,
-				896ABBF91AA2985C001480C1 /* ParticleSystem.cpp */,
-				896ABBFA1AA2985C001480C1 /* ParticleSystem.h */,
-				8936A2841AB2244400B9C75D /* scene.cpp */,
-				8936A2851AB2244400B9C75D /* scene.h */,
-				12CB7C421AA272990095666D /* main.cpp */,
-				12CB7C441AA2757C0095666D /* main.h */,
+				12586F991AD870620083C6C0 /* imageloader.h */,
+				12586F9A1AD870620083C6C0 /* main.h */,
+				12586F9B1AD870620083C6C0 /* Particle.h */,
+				12586F9C1AD870620083C6C0 /* ParticleSystem.h */,
+				12586F9D1AD870620083C6C0 /* scene.h */,
+				12586F9E1AD870620083C6C0 /* SOP_Paani.h */,
+				12586F9F1AD870620083C6C0 /* SOP_Star.h */,
+				12586FA01AD870620083C6C0 /* utilities.h */,
+				12586FA11AD870620083C6C0 /* SOP_Paani.c */,
+				12586FA21AD870620083C6C0 /* imageloader.cpp */,
+				12586FA31AD870620083C6C0 /* main.cpp */,
+				12586FA41AD870620083C6C0 /* Particle.cpp */,
+				12586FA51AD870620083C6C0 /* ParticleSystem.cpp */,
+				12586FA61AD870620083C6C0 /* scene.cpp */,
+				12586FA71AD870620083C6C0 /* SOP_Star.cpp */,
+				12586FA81AD870620083C6C0 /* utilities.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -200,12 +210,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8936A2861AB2244400B9C75D /* scene.cpp in Sources */,
-				896ABBFC1AA2985C001480C1 /* ParticleSystem.cpp in Sources */,
-				89A663E11AB5432600B11963 /* imageloader.cpp in Sources */,
-				12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */,
-				896ABBFB1AA2985C001480C1 /* Particle.cpp in Sources */,
-				12CB7C431AA272990095666D /* main.cpp in Sources */,
+				12586FAA1AD870620083C6C0 /* imageloader.cpp in Sources */,
+				12586FAC1AD870620083C6C0 /* Particle.cpp in Sources */,
+				12586FB01AD870620083C6C0 /* utilities.cpp in Sources */,
+				12586FA91AD870620083C6C0 /* SOP_Paani.c in Sources */,
+				12586FAD1AD870620083C6C0 /* ParticleSystem.cpp in Sources */,
+				12586FAF1AD870620083C6C0 /* SOP_Star.cpp in Sources */,
+				12586FAE1AD870620083C6C0 /* scene.cpp in Sources */,
+				12586FAB1AD870620083C6C0 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
