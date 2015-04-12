@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		12586FA91AD870620083C6C0 /* SOP_Paani.c in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA11AD870620083C6C0 /* SOP_Paani.c */; };
 		12586FAA1AD870620083C6C0 /* imageloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA21AD870620083C6C0 /* imageloader.cpp */; };
 		12586FAB1AD870620083C6C0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA31AD870620083C6C0 /* main.cpp */; };
 		12586FAC1AD870620083C6C0 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA41AD870620083C6C0 /* Particle.cpp */; };
 		12586FAD1AD870620083C6C0 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA51AD870620083C6C0 /* ParticleSystem.cpp */; };
 		12586FAE1AD870620083C6C0 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA61AD870620083C6C0 /* scene.cpp */; };
-		12586FAF1AD870620083C6C0 /* SOP_Star.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA71AD870620083C6C0 /* SOP_Star.cpp */; };
 		12586FB01AD870620083C6C0 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12586FA81AD870620083C6C0 /* utilities.cpp */; };
 		12CB7C461AA275E90095666D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C451AA275E90095666D /* OpenGL.framework */; };
 		12CB7C481AA276870095666D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C471AA276870095666D /* IOKit.framework */; };
@@ -40,16 +38,12 @@
 		12586F9B1AD870620083C6C0 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = paanipuri/src/Particle.h; sourceTree = SOURCE_ROOT; };
 		12586F9C1AD870620083C6C0 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSystem.h; path = paanipuri/src/ParticleSystem.h; sourceTree = SOURCE_ROOT; };
 		12586F9D1AD870620083C6C0 /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scene.h; path = paanipuri/src/scene.h; sourceTree = SOURCE_ROOT; };
-		12586F9E1AD870620083C6C0 /* SOP_Paani.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOP_Paani.h; path = paanipuri/src/SOP_Paani.h; sourceTree = SOURCE_ROOT; };
-		12586F9F1AD870620083C6C0 /* SOP_Star.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOP_Star.h; path = paanipuri/src/SOP_Star.h; sourceTree = SOURCE_ROOT; };
 		12586FA01AD870620083C6C0 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utilities.h; path = paanipuri/src/utilities.h; sourceTree = SOURCE_ROOT; };
-		12586FA11AD870620083C6C0 /* SOP_Paani.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SOP_Paani.c; path = paanipuri/src/SOP_Paani.c; sourceTree = SOURCE_ROOT; };
 		12586FA21AD870620083C6C0 /* imageloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imageloader.cpp; path = paanipuri/src/imageloader.cpp; sourceTree = SOURCE_ROOT; };
 		12586FA31AD870620083C6C0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = paanipuri/src/main.cpp; sourceTree = SOURCE_ROOT; };
 		12586FA41AD870620083C6C0 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = paanipuri/src/Particle.cpp; sourceTree = SOURCE_ROOT; };
 		12586FA51AD870620083C6C0 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleSystem.cpp; path = paanipuri/src/ParticleSystem.cpp; sourceTree = SOURCE_ROOT; };
 		12586FA61AD870620083C6C0 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scene.cpp; path = paanipuri/src/scene.cpp; sourceTree = SOURCE_ROOT; };
-		12586FA71AD870620083C6C0 /* SOP_Star.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOP_Star.cpp; path = paanipuri/src/SOP_Star.cpp; sourceTree = SOURCE_ROOT; };
 		12586FA81AD870620083C6C0 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utilities.cpp; path = paanipuri/src/utilities.cpp; sourceTree = SOURCE_ROOT; };
 		12CB7C451AA275E90095666D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		12CB7C471AA276870095666D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -83,16 +77,12 @@
 				12586F9B1AD870620083C6C0 /* Particle.h */,
 				12586F9C1AD870620083C6C0 /* ParticleSystem.h */,
 				12586F9D1AD870620083C6C0 /* scene.h */,
-				12586F9E1AD870620083C6C0 /* SOP_Paani.h */,
-				12586F9F1AD870620083C6C0 /* SOP_Star.h */,
 				12586FA01AD870620083C6C0 /* utilities.h */,
-				12586FA11AD870620083C6C0 /* SOP_Paani.c */,
 				12586FA21AD870620083C6C0 /* imageloader.cpp */,
 				12586FA31AD870620083C6C0 /* main.cpp */,
 				12586FA41AD870620083C6C0 /* Particle.cpp */,
 				12586FA51AD870620083C6C0 /* ParticleSystem.cpp */,
 				12586FA61AD870620083C6C0 /* scene.cpp */,
-				12586FA71AD870620083C6C0 /* SOP_Star.cpp */,
 				12586FA81AD870620083C6C0 /* utilities.cpp */,
 			);
 			path = src;
@@ -144,7 +134,6 @@
 			buildConfigurationList = 12E928AA1AA26FF600D11B5B /* Build configuration list for PBXNativeTarget "paanipuri" */;
 			buildPhases = (
 				12E9289F1AA26FF600D11B5B /* Sources */,
-				125CDE8A1ABCE854000DE80C /* ShellScript */,
 				12E928A01AA26FF600D11B5B /* Frameworks */,
 				12E928A11AA26FF600D11B5B /* CopyFiles */,
 			);
@@ -188,23 +177,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		125CDE8A1ABCE854000DE80C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd /Library/Frameworks/Houdini.framework/Versions/14.0.258/Resources/; source houdini_setup; cd -;\nhcustom -I./paani/thirdparty/osx/glm/ paani/src/SOP_Paani.C;\ncp Build/Intermediates/paani.build/Debug/paani.build/Objects-normal/x86_64/*.o paani/src;\n/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -bundle -flat_namespace -undefined suppress paani/src/utilities.o paani/src/Particle.o paani/src/ParticleSystem.o paani/src/scene.o paani/src/SOP_Paani.o -arch x86_64 -fobjc-gc -I./../thirdparty/osx/glm -framework OpenGL -framework Cocoa -stdlib=libstdc++ -o $HOME/Library/Preferences/houdini/14.0/dso/SOP_Paani.dylib";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		12E9289F1AA26FF600D11B5B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -213,9 +185,7 @@
 				12586FAA1AD870620083C6C0 /* imageloader.cpp in Sources */,
 				12586FAC1AD870620083C6C0 /* Particle.cpp in Sources */,
 				12586FB01AD870620083C6C0 /* utilities.cpp in Sources */,
-				12586FA91AD870620083C6C0 /* SOP_Paani.c in Sources */,
 				12586FAD1AD870620083C6C0 /* ParticleSystem.cpp in Sources */,
-				12586FAF1AD870620083C6C0 /* SOP_Star.cpp in Sources */,
 				12586FAE1AD870620083C6C0 /* scene.cpp in Sources */,
 				12586FAB1AD870620083C6C0 /* main.cpp in Sources */,
 			);
