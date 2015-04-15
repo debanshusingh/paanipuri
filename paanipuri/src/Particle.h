@@ -21,6 +21,8 @@ private:
     float mass = 1.0f;    //Mass of all particles will be same
     float radius = 0.5f;  //Radius of all particles will be same
     float density = 0.0f;
+    int phase;
+    float invMass, predictedMass;
     
     //  Current values
     glm::vec3 position;     //Stores the current position of the particle
@@ -67,6 +69,15 @@ public:
     
     void addNeighborIndex(int index);
     void clearNeighbors();
+    
+    float getPredictedMass();
+    void setPredictedMass(float predictedMass);
+    
+    int getPhase();
+    void setPhase(int phase);
+    
+    float getInvMass();
+    void setInvMass(float invMass);
     
 };
 
