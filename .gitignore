@@ -2,3 +2,5 @@
 *.o
 *.d
 *.hmap
+Build
+DerivedData
