@@ -37,8 +37,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		125CDE8D1ABCECA8000DE80C /* SOP_paanipuri.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOP_paanipuri.h; sourceTree = "<group>"; };
-		125CDE8F1ABCECC9000DE80C /* SOP_paanipuri.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SOP_paanipuri.c; sourceTree = "<group>"; };
 		12730EA31ADB355800F13D4C /* frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = frag.glsl; path = shaders/frag.glsl; sourceTree = "<group>"; };
 		12730EA41ADB355800F13D4C /* vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vert.glsl; path = shaders/vert.glsl; sourceTree = "<group>"; };
 		1281BD961ADE352100A51AE3 /* libassimp.3.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.3.1.1.dylib; path = "paanipuri/thirdparty/assimp-3.1.1/lib/libassimp.3.1.1.dylib"; sourceTree = "<group>"; };
@@ -105,8 +103,6 @@
 				896ABBFA1AA2985C001480C1 /* ParticleSystem.h */,
 				896ABBF71AA2985C001480C1 /* Particle.cpp */,
 				896ABBF81AA2985C001480C1 /* Particle.h */,
-				125CDE8F1ABCECC9000DE80C /* SOP_paanipuri.c */,
-				125CDE8D1ABCECA8000DE80C /* SOP_paanipuri.h */,
 				89A663DF1AB5432600B11963 /* imageloader.cpp */,
 				89A663E01AB5432600B11963 /* imageloader.h */,
 				12F5ECA11AA2900C0055DEE6 /* utilities.cpp */,
