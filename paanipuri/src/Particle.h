@@ -20,6 +20,7 @@ private:
     
     float mass = 1.0f;    //Mass of all particles will be same
     float radius = 0.5f;  //Radius of all particles will be same
+    float density = 0.0f;
     
     //  Current values
     glm::vec3 position;     //Stores the current position of the particle
@@ -51,7 +52,7 @@ public:
     float getLambda();
     glm::vec3 getDeltaPi();
     glm::ivec3 getHashPosition();
-    
+    float getDensity();
     std::vector<int> getNeighborIndices();
     
     //setter functions
@@ -62,6 +63,7 @@ public:
     void setLambda(float);
     void setDeltaPi(glm::vec3);
     void setHashPosition(glm::ivec3);
+    void setDensity(float d);
     
     void addNeighborIndex(int index);
     void clearNeighbors();

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "12E928A21AA26FF600D11B5B"
-               BuildableName = "paani"
-               BlueprintName = "paani"
-               ReferencedContainer = "container:paani.xcodeproj">
+               BuildableName = "paanipuri"
+               BlueprintName = "paanipuri"
+               ReferencedContainer = "container:paanipuri.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,18 +33,19 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "12E928A21AA26FF600D11B5B"
-            BuildableName = "paani"
-            BlueprintName = "paani"
-            ReferencedContainer = "container:paani.xcodeproj">
+            BuildableName = "paanipuri"
+            BlueprintName = "paanipuri"
+            ReferencedContainer = "container:paanipuri.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
-      useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      useCustomWorkingDirectory = "YES"
+      customWorkingDirectory = "$(PROJECT_DIR)"
+      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
@@ -53,9 +54,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "12E928A21AA26FF600D11B5B"
-            BuildableName = "paani"
-            BlueprintName = "paani"
-            ReferencedContainer = "container:paani.xcodeproj">
+            BuildableName = "paanipuri"
+            BlueprintName = "paanipuri"
+            ReferencedContainer = "container:paanipuri.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -72,9 +73,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "12E928A21AA26FF600D11B5B"
-            BuildableName = "paani"
-            BlueprintName = "paani"
-            ReferencedContainer = "container:paani.xcodeproj">
+            BuildableName = "paanipuri"
+            BlueprintName = "paanipuri"
+            ReferencedContainer = "container:paanipuri.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

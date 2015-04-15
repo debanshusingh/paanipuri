@@ -9,7 +9,25 @@
 #ifndef __paani__scene__
 #define __paani__scene__
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "imageloader.h"
 #include "ParticleSystem.h"
+
+void init(int argc, char* argv[]);
+void display();
+void displayParticles();
+void handleKeypress(unsigned char key, int x, int y);
+GLuint loadTexture(Image* image);
+
+// constants
+const glm::vec2 SCREEN_SIZE(800, 600);
 
 class Cube;
 class Scene;
@@ -46,15 +64,15 @@ class Scene
 public:
     Scene();
     void init();
-    void display();
-    void displayParticles();
-    void displayBackground();
     void update();
     
     glm::vec3 gravity;
     int numberOfParticles;
     Cube* cube;
     ParticleSystem* particleSystem;
+    
+    Mesh mesh;
+    
 };
 
 #endif /* defined(__paani__scene__) */

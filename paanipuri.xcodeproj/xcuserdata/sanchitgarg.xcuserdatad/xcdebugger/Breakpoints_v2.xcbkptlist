@@ -9,14 +9,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "paani/src/main.cpp"
+            filePath = "paanipuri/src/main.cpp"
             timestampString = "449290806.277692"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "139"
             endingLineNumber = "139"
-            landmarkName = "Scene::displayParticles()"
-            landmarkType = "5">
+            landmarkName = "printLinkInfoLog(int prog)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

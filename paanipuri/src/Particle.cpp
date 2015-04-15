@@ -79,6 +79,15 @@ glm::vec3 Particle::getDeltaPi()
     return deltaPi;
 }
 
+float Particle::getDensity(){
+    return density;
+}
+
+void Particle::setDensity(float density)
+{
+    this->density = density;
+}
+
 std::vector<int> Particle::getNeighborIndices()
 {
     return neighborIndices;

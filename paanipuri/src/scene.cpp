@@ -8,6 +8,7 @@
 
 #include "scene.h"
 #include <iostream>
+#include "Mesh.h"
 
 using namespace std;
 
@@ -57,36 +58,59 @@ Scene::Scene()
 {
     //need to add particles
     // create box
+    
+    gravity = glm::vec3(0.0,-10.0,0.0);
+    
+    //number of particles should be a cube (1,8,27...)
+    numberOfParticles = 10;
+    numberOfParticles *= (numberOfParticles*numberOfParticles);
+    
+    particleSystem = new ParticleSystem();
+    
     cube = new Cube();
     cube->setCenter(glm::vec3(0,0,0));
-    
-    cube->setDimension(glm::vec3(100));
-    
-    cube->setCellSize(4.0f);       //depends on cube dimensions and particle radius
-    
-    numberOfParticles = 5000;
-    gravity = glm::vec3(0.0,-10.0,0.0);
-    particleSystem = new ParticleSystem();
+    cube->setDimension(glm::vec3(30)*particleSystem->getSmoothingRadius());
+    cube->setCellSize(particleSystem->getSmoothingRadius());       //depends on cube dimensions and particle radius
     
 }
 
 void Scene::init(){
-    glm::vec3 position, velocity = glm::vec3(0,0,0);
+    glm::vec3 position, velocity = glm::vec3(utilityCore::randomFloat(),0,0);
     
-    for(int i=0; i<numberOfParticles; i++)
+    float smoothingRad = 1.0f;//particleSystem->getSmoothingRadius() * 1.f;
+    int damnDim = static_cast <int> (std::cbrt(numberOfParticles)),
+    //    int damnDim = static_cast <int> (std::sqrt(numberOfParticles)),
+    i,j,k=0;
+    
+    //set up dam break
+    
+    //  start with the highest y, and keep filling squares
+    
+    for(i=0; i<damnDim; i++)
     {
-        position = 0.5f*(utilityCore::randomVec3() * cube->getDimensions() - cube->getHalfDimensions());
-        position.z= 0.0;
-        particleSystem->addParticle(Particle(position, velocity));
+        for(j=0; j<damnDim; j++)
+        {
+            for(k=0; k<damnDim; k++)
+            {
+                position = (glm::vec3((i)*smoothingRad, j*smoothingRad, k*smoothingRad) - glm::vec3(float(damnDim) * smoothingRad/2.0f))*0.9f;
+                //                position.z = 0.0f;
+                particleSystem->addParticle(Particle(position, velocity));
+            }
+        }
     }
     
-    particleSystem->setForces(gravity);
     particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
     particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
     particleSystem->setCellSize(cube->getCellSize());
+    particleSystem->setForces(gravity);
+    
+    std::string objPath = "./paanipuri/objs/GlassBowl.obj";
+    mesh.LoadMesh(objPath);
+    
+    particleSystem->loadContainer(mesh);
 }
 
 void Scene::update(){
-
+    
     particleSystem->update();
 }
