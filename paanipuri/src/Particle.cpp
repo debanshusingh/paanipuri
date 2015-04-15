@@ -144,3 +144,26 @@ void Particle::setHashPosition(glm::ivec3 p)
     hashPosition = p;
 }
 
+float Particle::getInvMass() {
+    return invMass;
+}
+
+void Particle::setInvMass(float invMass) {
+    this->invMass = invMass;
+}
+
+float Particle::getPredictedMass() {
+    return predictedMass;
+}
+
+void Particle::setPredictedMass(float predictedMass) {
+    this->predictedMass = predictedMass;
+}
+
+int Particle::getPhase() {
+    return phase;
+}
+
+void Particle::setPhase(int phase) {
+    this->phase = phase;
+}
