@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/src/imageloader.cpp \
-  /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/src/imageloader.h
+  /Users/sanchitgarg/Desktop/cggt/spring\ 2015/phys\ based\ ani/cis563_FinalProject/code/paanipuri/paanipuri/src/imageloader.cpp \
+  /Users/sanchitgarg/Desktop/cggt/spring\ 2015/phys\ based\ ani/cis563_FinalProject/code/paanipuri/paanipuri/src/imageloader.h

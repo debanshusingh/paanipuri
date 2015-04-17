@@ -62,7 +62,7 @@ Scene::Scene()
     gravity = glm::vec3(0.0,-10.0,0.0);
     
     //number of particles should be a cube (1,8,27...)
-    numberOfParticles = 10;
+    numberOfParticles = 15;
     numberOfParticles *= (numberOfParticles*numberOfParticles);
     
     particleSystem = new ParticleSystem();
@@ -77,7 +77,7 @@ Scene::Scene()
 void Scene::init(){
     glm::vec3 position, velocity = glm::vec3(utilityCore::randomFloat(),0,0);
     
-    float smoothingRad = 1.0f;//particleSystem->getSmoothingRadius() * 1.f;
+    float smoothingRad = 0.5f;//particleSystem->getSmoothingRadius() * 1.f;
     int damnDim = static_cast <int> (std::cbrt(numberOfParticles)),
     //    int damnDim = static_cast <int> (std::sqrt(numberOfParticles)),
     i,j,k=0;
