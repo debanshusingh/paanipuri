@@ -56,6 +56,7 @@ public:
     glm::vec3 getDeltaPi();
     glm::ivec3 getHashPosition();
     float getDensity();
+    
     std::vector<int> getNeighborIndices();
     
     //setter functions
