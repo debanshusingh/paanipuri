@@ -62,7 +62,7 @@ Scene::Scene()
     gravity = glm::vec3(0.0,-10.0,0.0);
     
     //number of particles should be a cube (1,8,27...)
-    numberOfParticles = 15;
+    numberOfParticles = 2;
     numberOfParticles *= (numberOfParticles*numberOfParticles);
     
     particleSystem = new ParticleSystem();
