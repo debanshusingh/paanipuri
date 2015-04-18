@@ -299,7 +299,7 @@ void ParticleSystem::applyForces(const int i)
 }
 
 
-// TODO: CORRECT VISCOSITY move to constraint.cpp
+// TODO: move VISCOSITY to constraint.cpp
 //void ParticleSystem::viscosity(int index)
 //{
 //    Particle & currParticle = particles.at(index);
