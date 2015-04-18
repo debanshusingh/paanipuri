@@ -1,7 +1,7 @@
 #paanipuri
 
 CIS 563 Authoring Tool Project
-debanshu singh & sanchit garg
+debanshu singh, sanchit garg & bradley crusco
 
 Based on - Miles Macklin, Matthias Müller: Unified Particle Physics for Real-Time Applications - SIGGRAPH 2014
 
