@@ -259,39 +259,21 @@ void ParticleSystem::update()
              densityConstraints.at(j)->findLambda(particles);
         });
 
-//        for(int j = 0; j<densityConstraints.size(); j++)
         parallel_for<size_t>(0, densityConstraints.size(), 1, [=](int j)
         {
             //find constraintDelta*lambda and set in deltaPi
             densityConstraints.at(j)->Solve(particles); // 1 density constraint contains index of particle it acts on
             
+            for (int i=0; i<particles.size(); i++) {
+                particleCollision(i);
+            }
             
             //update delta atomically
             for (int i=0; i<particles.size(); i++) {
-                particleCollision(i);
                 Particle& currParticle = particles.at(i);
                 currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             }
         });
-        
-//        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
-//        {
-//            findLambda(i); //setup density constraint to find lambda
-//        });
-//
-//        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
-//        {
-//            Particle& currParticle = particles.at(i);
-//            glm::vec3 deltaPi = findDeltaPosition(i); //constraintDelta*lambda
-//            currParticle.setDeltaPi(deltaPi);
-//            particleCollision(i);
-//        });
-        
-//        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
-//        {
-//            Particle& currParticle = particles.at(i);
-//            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
-//        });
         
     }
     
