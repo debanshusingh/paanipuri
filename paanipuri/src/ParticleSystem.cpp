@@ -248,27 +248,19 @@ void ParticleSystem::update()
 //        findSolidContacts(i) //resolve contact constraints for stable init. config -> update original & predicted pos
     });
     
-    for(int i=0; i<particles.size();++i)
-    {
-        if(glm::any(glm::isnan(particles.at(i).getPredictedPosition())))
-        {
-            std::cout<<"sdbfjkbsd";
-        }
-    }
-    
     for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
     {
         
         //constraint-centric approach
         
         //solve densityConstraint group
-//        parallel_for<size_t>(0, densityConstraints.size(), 1, [=](int j)
-        for(int j = 0; j<densityConstraints.size(); j++)
+        parallel_for<size_t>(0, densityConstraints.size(), 1, [=](int j)
         {
              densityConstraints.at(j)->findLambda(particles);
-        }
+        });
 
-        for(int j = 0; j<densityConstraints.size(); j++)
+//        for(int j = 0; j<densityConstraints.size(); j++)
+        parallel_for<size_t>(0, densityConstraints.size(), 1, [=](int j)
         {
             //find constraintDelta*lambda and set in deltaPi
             densityConstraints.at(j)->Solve(particles); // 1 density constraint contains index of particle it acts on
@@ -280,7 +272,7 @@ void ParticleSystem::update()
                 Particle& currParticle = particles.at(i);
                 currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             }
-        }//);
+        });
         
 //        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
 //        {
