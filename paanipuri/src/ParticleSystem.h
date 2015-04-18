@@ -104,7 +104,7 @@ public:
     glm::vec3 gradientConstraintForNeighbor(int index, int neighborIndex);
     
     //apply external forces (gravity)
-    void applyForces();
+    void applyForces(const int index);
     void viscosity(int index);
     
     glm::vec3 findDeltaPosition(int index);

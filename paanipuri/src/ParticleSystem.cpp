@@ -84,7 +84,7 @@ void ParticleSystem::setCellSize(float size)
 void ParticleSystem::findNeighbors(int index)
 {
     std::vector<Neighbor> neighborsList;
-    Particle & currParticle = particles.at(index);
+    Particle& currParticle = particles.at(index);
     
     glm::vec3 particlePredictedPos = currParticle.getPredictedPosition();
     if (glm::any(glm::isnan(particlePredictedPos))) {
@@ -138,17 +138,10 @@ void ParticleSystem::initialiseHashPositions()
         glm::vec3 temp = particles.at(i).getPredictedPosition() + upperBounds;
         hashPosition = temp / cellSize;
         particles.at(i).setHashPosition(hashPosition);
-        //        int position = hashPosition.x + gridDim.x * (hashPosition.y + gridDim.y * hashPosition.z);
-        
-        
-        //        if(hashGrid[position].size() < 20)
-        //        {
-        //            hashGrid[position].push_back(i);
-        //        }
         
         std::vector<glm::ivec3> neighborCells;
-        //
-        //        //x
+        
+        //x
         neighborCells.push_back(hashPosition);
         neighborCells.push_back(glm::ivec3(0,1,0) + hashPosition);
         neighborCells.push_back(glm::ivec3(0,-1,0) + hashPosition);
@@ -275,18 +268,28 @@ glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborI
     return (-1.0f * gradientReturn);
 }
 
+//==========================
+// Main UPP solver algorithm
+//==========================
 void ParticleSystem::update()
 {
-    applyForces(); // apply forces and predict position
+    parallel_for<size_t>(0, particles.size()-1, 1, [=](int i)
+    {
+        applyForces(i); // apply forces and set predicted position
+//        applyMassScaling(i); //apply mass scaling
+    });
+
     initialiseHashPositions();  //initialise hash positions to be used in neighbour search
     
-    parallel_for<size_t>(0, particles.size()-1, 1, [=](int x)
+    parallel_for<size_t>(0, particles.size()-1, 1, [=](int i)
     {
-        findNeighbors(x);
+        findNeighbors(i);
+//        findSolidContacts(i) //resolve contact constraints for stable init. config
     });
     
-    for (int k=0; k<solverIterations; ++k)
+    for (int k=0; k<solverIterations; ++k) // outer loop can't be parallelized
     {
+        
         parallel_for<size_t>(0, particles.size(), 1, [=](int i)
         {
             findLambda(i);
@@ -294,7 +297,7 @@ void ParticleSystem::update()
 
         parallel_for<size_t>(0, particles.size(), 1, [=](int i)
         {
-            Particle & currParticle = particles.at(i);
+            Particle& currParticle = particles.at(i);
             glm::vec3 deltaPi = findDeltaPosition(i);
             currParticle.setDeltaPi(deltaPi);
             particleCollision(i);
@@ -302,14 +305,14 @@ void ParticleSystem::update()
         
         parallel_for<size_t>(0, particles.size(), 1, [=](int i)
         {
-            Particle & currParticle = particles.at(i);
+            Particle& currParticle = particles.at(i);
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
         });
     }
     
     parallel_for<size_t>(0, particles.size(), 1, [=](int i)
     {
-        Particle & currParticle = particles.at(i);
+        Particle& currParticle = particles.at(i);
      
         currParticle.setVelocity((currParticle.getPredictedPosition() - currParticle.getPosition()) / timeStep);
         //        viscosity(i);
@@ -347,7 +350,7 @@ glm::vec3 ParticleSystem::findDeltaPosition(int index)
 {
     glm::vec3 deltaPi(0,0,0);
     
-    Particle & currParticle = particles.at(index);
+    Particle& currParticle = particles.at(index);
     
     std::vector<int> neighbors = currParticle.getNeighborIndices();
     float lambda_i = currParticle.getLambda();
@@ -370,22 +373,19 @@ glm::vec3 ParticleSystem::findDeltaPosition(int index)
     return (deltaPi/restDensity);
 }
 
-void ParticleSystem::applyForces()
+void ParticleSystem::applyForces(const int i)
 {
-    for(int i=0; i<particles.size(); i++)
-    {
-        Particle & currParticle = particles.at(i);
-        
-        currParticle.setVelocity(currParticle.getVelocity() + timeStep * forces);
-        glm::vec3 currPosition = currParticle.getPosition();
-        glm::vec3 predictedPosition = currPosition + timeStep * currParticle.getVelocity();
-        currParticle.setPredictedPosition(predictedPosition);
-    }
+    Particle& currParticle = particles.at(i);
+    
+    currParticle.setVelocity(currParticle.getVelocity() + timeStep * forces);
+    glm::vec3 currPosition = currParticle.getPosition();
+    glm::vec3 predictedPosition = currPosition + timeStep * currParticle.getVelocity();
+    currParticle.setPredictedPosition(predictedPosition);
 }
 
 void ParticleSystem::viscosity(int index)
 {
-    Particle & currParticle = particles.at(index);
+    Particle& currParticle = particles.at(index);
     std::vector<int> neighbors = currParticle.getNeighborIndices();
     
     glm::vec3 newVelocity = currParticle.getVelocity();
@@ -540,7 +540,7 @@ void ParticleSystem::createContainerGrid()
 
 void ParticleSystem::particleContainerCollision(int index)
 {
-    Particle & currParticle = particles[index];
+    Particle& currParticle = particles[index];
     glm::vec3 particlePredictedPos = currParticle.getPredictedPosition();
     glm::vec3 particlePos = currParticle.getPosition();
     
@@ -585,7 +585,7 @@ void ParticleSystem::particleContainerCollision(int index)
 
 void ParticleSystem::particleBoxCollision(int index)
 {
-    Particle & currParticle = particles.at(index);
+    Particle& currParticle = particles.at(index);
     glm::vec3 particlePosition = currParticle.getPredictedPosition();
     
     float radius = currParticle.getRadius();

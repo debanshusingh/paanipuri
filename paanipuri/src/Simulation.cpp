@@ -47,7 +47,7 @@ void Simulation::setCellSize(float size) {
 
 void Simulation::applyForces() {
 	for(int i = 0; i < particles.size(); i++) {
-		Particle &currentParticle = particles[i];
+		Particle&currentParticle = particles[i];
 		currentParticle.setVelocity(currentParticle.getVelocity() + deltaT * _forces);
 	}
 }
@@ -234,7 +234,7 @@ void Simulation::addParticle(Particle particle) {
 //switch to plane collision!
 //this is temp
 void Simulation::particleBoxCollision(int index) {
-    Particle & currParticle = particles[index];
+    Particle& currParticle = particles[index];
 	glm::vec3 particlePosition = currParticle.getPredictedPosition();
 
     float radius = currParticle.getRadius();
