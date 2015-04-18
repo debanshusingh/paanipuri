@@ -273,7 +273,8 @@ glm::vec3 ParticleSystem::gradientConstraintForNeighbor(int index, int neighborI
 //==========================
 void ParticleSystem::update()
 {
-    parallel_for<size_t>(0, particles.size()-1, 1, [=](int i)
+    //run the parallel for from 0 to particles.size()
+    parallel_for<size_t>(0, particles.size(), 1, [=](int i)
     {
         applyForces(i); // apply forces and set predicted position
 //        applyMassScaling(i); //apply mass scaling
@@ -281,7 +282,7 @@ void ParticleSystem::update()
 
     initialiseHashPositions();  //initialise hash positions to be used in neighbour search
     
-    parallel_for<size_t>(0, particles.size()-1, 1, [=](int i)
+    parallel_for<size_t>(0, particles.size(), 1, [=](int i)
     {
         findNeighbors(i);
 //        findSolidContacts(i) //resolve contact constraints for stable init. config
@@ -315,7 +316,7 @@ void ParticleSystem::update()
         Particle& currParticle = particles.at(i);
      
         currParticle.setVelocity((currParticle.getPredictedPosition() - currParticle.getPosition()) / timeStep);
-        //        viscosity(i);
+//        viscosity(i);
         currParticle.setPosition(currParticle.getPredictedPosition());
     });
 }
@@ -385,22 +386,27 @@ void ParticleSystem::applyForces(const int i)
 
 void ParticleSystem::viscosity(int index)
 {
-    Particle& currParticle = particles.at(index);
+    Particle & currParticle = particles.at(index);
     std::vector<int> neighbors = currParticle.getNeighborIndices();
     
-    glm::vec3 newVelocity = currParticle.getVelocity();
+    glm::vec3 newVelocity(0.0,0.0,0.0);
+    glm::vec3 currVelocity = currParticle.getVelocity();
+    glm::vec3 currPosition = currParticle.getPredictedPosition();
     
     for(int i=0; i<neighbors.size(); i++)
     {
-        newVelocity += (1/particles.at(neighbors[i]).getDensity()) * (particles.at(neighbors[i]).getVelocity() - currParticle.getVelocity()) * wPoly6Kernel( (currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius);
+        if(particles.at(neighbors[i]).getDensity() > EPSILON)
+        {
+            newVelocity += (1.0f/particles.at(neighbors[i]).getDensity()) * (particles.at(neighbors[i]).getVelocity() - currVelocity) * wPoly6Kernel( (currPosition - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius);
+        }
     }
     
-    currParticle.setVelocity(newVelocity);
+    currParticle.setVelocity(currVelocity + 0.01f * newVelocity);
 }
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-    particleContainerCollision(index);
+//    particleContainerCollision(index);
 //    particleParticleCollision(index);
 }
 
@@ -535,7 +541,6 @@ void ParticleSystem::createContainerGrid()
             }
         }
     }
-    //    std::cout<<"gere";
 }
 
 void ParticleSystem::particleContainerCollision(int index)
@@ -546,7 +551,7 @@ void ParticleSystem::particleContainerCollision(int index)
     
     glm::vec3 v0, v1, v2, n;
     
-    float da, db;                                   //2D barycentric
+    float da, db;
     
     int triIndex;
     
