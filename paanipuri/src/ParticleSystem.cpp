@@ -250,7 +250,6 @@ void ParticleSystem::update()
     
     for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
     {
-        
         //constraint-centric approach
         
         //solve densityConstraint group
@@ -274,7 +273,6 @@ void ParticleSystem::update()
                 currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             }
         });
-        
     }
     
     parallel_for<size_t>(0, particles.size(), 1, [=](int i)

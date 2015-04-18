@@ -20,6 +20,8 @@ Particle::Particle()
     this->velocity = glm::vec3(0,0,0);
     this->predictedPosition = glm::vec3(0,0,0);
     this->deltaPi = glm::vec3(0,0,0);
+    this->phase = 0;
+    this->mass = 1;
 }
 
 Particle::Particle(glm::vec3 pos)
@@ -28,6 +30,8 @@ Particle::Particle(glm::vec3 pos)
     this->velocity = glm::vec3(0,0,0);
     this->predictedPosition = glm::vec3(0,0,0);
     this->deltaPi = glm::vec3(0,0,0);
+    this->phase = 0;
+    this->mass = 1;
 }
 
 Particle::Particle(glm::vec3 pos, glm::vec3 vel)
@@ -36,6 +40,18 @@ Particle::Particle(glm::vec3 pos, glm::vec3 vel)
     this->velocity = vel;
     this->predictedPosition = glm::vec3(0,0,0);
     this->deltaPi = glm::vec3(0,0,0);
+    this->phase = 0;
+    this->mass = 1;
+}
+
+Particle::Particle(glm::vec3 pos, glm::vec3 vel, int p, float m = 1.0f)
+{
+    this->position = pos;
+    this->velocity = vel;
+    this->predictedPosition = glm::vec3(0,0,0);
+    this->deltaPi = glm::vec3(0,0,0);
+    this->phase = p;
+    this->mass = m;
 }
 
 //Getter functions
