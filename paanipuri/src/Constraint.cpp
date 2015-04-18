@@ -1,5 +1,10 @@
 #include "Constraint.h"
+#include <iostream>
+#include <tbb/tbb.h>
+#include <tbb/parallel_for.h>
+#include <tbb/blocked_range.h>
 
+using namespace tbb;
 
 Constraint::Constraint() {
 }
@@ -50,13 +55,18 @@ void DensityConstraint::Solve(glm::vec3& position, const float& invMass) {
 
 //TODO: setup density constraint to find lambda
 void DensityConstraint::Solve(std::vector<Particle>& particles) {
-    findLambda(_particleIndex, particles);
-    glm::vec3 deltaPi = findDeltaPosition(_particleIndex, particles); //constraintDelta*lambda
-    Particle& currParticle = particles.at(_particleIndex);
-    currParticle.setDeltaPi(deltaPi);
+    
+    for(int i=0; i<particles.size(); i++)
+    {
+        glm::vec3 deltaPi = findDeltaPosition(i, particles); //constraintDelta*lambda
+        Particle& currParticle = particles.at(i);
+        currParticle.setDeltaPi(deltaPi);
+//        particleCollision(i);
+    }
 }
 
-void DensityConstraint::findLambda(int index, std::vector<Particle>& particles){
+void DensityConstraint::findLambda(std::vector<Particle>& particles){
+    int index = _particleIndex;
     std::vector<int> neighbors = particles.at(index).getNeighborIndices();
     
     int numNeighbors = static_cast<int>(neighbors.size());
@@ -77,6 +87,10 @@ void DensityConstraint::findLambda(int index, std::vector<Particle>& particles){
     
     float lambdaI = -1.0f * (densityContraint/(sumGradientAtParticle+relaxation)); //findLambda using density constraint
     
+    if(std::isnan(lambdaI)||std::isinf(fabs(lambdaI)))
+    {
+        std::cout<<"[ERROR] findLambda";
+    }
     // do these have to be atomic?
     particles.at(index).setDensity(currDensity);
     particles.at(index).setLambda(lambdaI);
@@ -97,7 +111,27 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
     //  If mass is changed, change the for loop to multiply by mass
     for(i=0; i<neighbors.size(); i++)
     {
-        density +=  wPoly6Kernel((particles.at(index).getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius);
+        glm::vec3 temp = (particles.at(index).getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition());
+        if(glm::any(glm::isnan(particles.at(index).getPredictedPosition())))
+        {
+            std::cout<<"[ERROR] getDensity at Particles";
+        }
+        if(glm::any(glm::isnan(particles.at(neighbors.at(i)).getPredictedPosition())) || glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition())))
+        {
+            utilityCore::printVec3(particles.at(neighbors.at(i)).getPredictedPosition());
+            std::cout<<"[ERROR] getDensity at Neighbours";
+        }
+        
+        density +=  wPoly6Kernel(temp, smoothingRadius);
+    }
+    
+    if(density < EPSILON)
+    {
+        density = EPSILON;
+    }
+    else if(density > restDensity-1)
+    {
+        density = restDensity - 1;
     }
     
     return density;
@@ -105,10 +139,22 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
 
 float DensityConstraint::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
-    float x = (smoothingRadius*smoothingRadius) - (glm::length(distance)*glm::length(distance));
+    if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
+    {
+        std::cout<<"[ERROR] wPoly6Kernel";
+    }
+    
+    float d = glm::length(distance);
+    float x = (smoothingRadius*smoothingRadius) - d*d;
     float x_3 = x*x*x;
     
-    return poly6Const * x_3/s_9;
+    float t = poly6Const * x_3/s_9;
+    
+    if(isinf(fabs(t)) || isnan(t))
+    {
+        t = EPSILON;
+    }
+    return t;
 }
 
 glm::vec3 DensityConstraint::gradientWSpikyKernel(glm::vec3 distance, float smoothingRadius)
@@ -119,7 +165,14 @@ glm::vec3 DensityConstraint::gradientWSpikyKernel(glm::vec3 distance, float smoo
     
     float gradientW = spikyConst * (1.0f/s_6) * x * 1.0f/(distanceLength+EPSILON);
     
-    return gradientW*distance;
+    glm::vec3 retVal = gradientW*distance;
+    
+    if(glm::any(glm::isinf(retVal)) || glm::any(glm::isnan(retVal)))
+    {
+        retVal = glm::vec3(EPSILON);
+    }
+    
+    return retVal;
 }
 
 glm::vec3 DensityConstraint::gradientConstraintAtParticle(int index, std::vector<Particle>& particles)

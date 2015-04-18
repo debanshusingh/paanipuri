@@ -54,7 +54,7 @@ public:
     float getDensity(int index, std::vector<Particle>& particles);
 
     glm::vec3 findDeltaPosition(int index, std::vector<Particle>& particles);
-    void findLambda(int index, std::vector<Particle>& particles);
+    void findLambda(std::vector<Particle>& particles);
     void viscosity(int index, std::vector<Particle>& particles);
     
     float wPoly6Kernel(glm::vec3 distance, float smoothingRadius);

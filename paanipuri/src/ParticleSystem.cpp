@@ -12,6 +12,8 @@
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
 
+int counter = 0;
+
 using namespace tbb;
 
 //Getter functions
@@ -87,6 +89,7 @@ void ParticleSystem::findNeighbors(int index)
     Particle& currParticle = particles.at(index);
     
     glm::vec3 particlePredictedPos = currParticle.getPredictedPosition();
+    
     if (glm::any(glm::isnan(particlePredictedPos))) {
         std::cout<<"error";
     }
@@ -123,7 +126,6 @@ void ParticleSystem::findNeighbors(int index)
             }
         }
     }
-    
 }
 
 void ParticleSystem::initialiseHashPositions(int index)
@@ -207,10 +209,10 @@ void ParticleSystem::setupConstraints(){
 
 void ParticleSystem::clearConstraints()
 {
-    for (unsigned int i = 0; i < densityConstraints.size(); i++)
-    {
-        delete densityConstraints.at(i);
-    }
+//    for (unsigned int i = 0; i < densityConstraints.size(); i++)
+//    {
+//        delete densityConstraints.at(i);
+//    }
     densityConstraints.clear();
 }
 
@@ -219,6 +221,7 @@ void ParticleSystem::clearConstraints()
 //==========================
 void ParticleSystem::update()
 {
+    
     //run the parallel for from 0 to particles.size()
     parallel_for<size_t>(0, particles.size(), 1, [=](int i)
     {
@@ -227,7 +230,6 @@ void ParticleSystem::update()
     });
 
     hashGrid.clear();
-    
     // TODO: enable this when you have folly::AtomicHashMap which allows lock-free hash maps
 //    parallel_for<size_t>(0, particles.size()-1, 1, [=](int i)
 //    {
@@ -246,16 +248,31 @@ void ParticleSystem::update()
 //        findSolidContacts(i) //resolve contact constraints for stable init. config -> update original & predicted pos
     });
     
+    for(int i=0; i<particles.size();++i)
+    {
+        if(glm::any(glm::isnan(particles.at(i).getPredictedPosition())))
+        {
+            std::cout<<"sdbfjkbsd";
+        }
+    }
+    
     for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
     {
         
         //constraint-centric approach
         
         //solve densityConstraint group
-        parallel_for<size_t>(0, densityConstraints.size(), 1, [=](int j)
+//        parallel_for<size_t>(0, densityConstraints.size(), 1, [=](int j)
+        for(int j = 0; j<densityConstraints.size(); j++)
+        {
+             densityConstraints.at(j)->findLambda(particles);
+        }
+
+        for(int j = 0; j<densityConstraints.size(); j++)
         {
             //find constraintDelta*lambda and set in deltaPi
             densityConstraints.at(j)->Solve(particles); // 1 density constraint contains index of particle it acts on
+            
             
             //update delta atomically
             for (int i=0; i<particles.size(); i++) {
@@ -263,7 +280,7 @@ void ParticleSystem::update()
                 Particle& currParticle = particles.at(i);
                 currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             }
-        });
+        }//);
         
 //        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
 //        {
@@ -283,6 +300,7 @@ void ParticleSystem::update()
 //            Particle& currParticle = particles.at(i);
 //            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
 //        });
+        
     }
     
     parallel_for<size_t>(0, particles.size(), 1, [=](int i)
@@ -293,61 +311,8 @@ void ParticleSystem::update()
 //        viscosity(i);
         currParticle.setPosition(currParticle.getPredictedPosition());
     });
+    
 }
-
-//void ParticleSystem::findLambda(int index){
-//    std::vector<int> neighbors = particles.at(index).getNeighborIndices();
-//    
-//    int numNeighbors = static_cast<int>(neighbors.size());
-//    
-//    float sumGradientAtParticle = 0.0f;
-//    float gradientNeighbor = 0.0f;
-//    
-//    for (int i=0; i<numNeighbors; i++) {
-//        gradientNeighbor = glm::length(gradientConstraintForNeighbor(index, i));
-//        sumGradientAtParticle += gradientNeighbor*gradientNeighbor;
-//    }
-//    
-//    float gradientParticle = glm::length(gradientConstraintAtParticle(index));
-//    sumGradientAtParticle += gradientParticle*gradientParticle;
-//    
-//    float currDensity = this->getDensity(index);
-//    float densityContraint = (currDensity/restDensity) - 1.0f; //density constraint
-//    
-//    float lambdaI = -1.0f * (densityContraint/(sumGradientAtParticle+relaxation)); //findLambda using density constraint
-//
-//    // do these have to be atomic?
-//    particles.at(index).setDensity(currDensity);
-//    particles.at(index).setLambda(lambdaI);
-//}
-//
-//glm::vec3 ParticleSystem::findDeltaPosition(int index)
-//{
-//    glm::vec3 deltaPi(0,0,0);
-//    
-//    Particle& currParticle = particles.at(index);
-//    
-//    std::vector<int> neighbors = currParticle.getNeighborIndices();
-//    float lambda_i = currParticle.getLambda();
-//    float sCorr = 0, k = 0.1, deltaQ = 0.1 * smoothingRadius;
-//    //    int n = 4; //avoid using pow
-//    float artificialTerm;
-//    
-//    // constraintDelta * lambda
-//    for(int i=0; i<neighbors.size(); i++)
-//    {
-//        float temp = wPoly6Kernel(glm::vec3(deltaQ, 0, 0), smoothingRadius);
-//        
-//        artificialTerm = wPoly6Kernel((currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius) / (temp+EPSILON);
-//        
-//        sCorr = -1.0 * k * artificialTerm * artificialTerm * artificialTerm * artificialTerm;
-//        
-//        deltaPi += (particles.at(neighbors[i]).getLambda() + lambda_i + sCorr) *
-//                gradientWSpikyKernel((currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius);
-//    }
-//    
-//    return (deltaPi/restDensity);
-//}
 
 void ParticleSystem::applyForces(const int i)
 {
@@ -359,6 +324,8 @@ void ParticleSystem::applyForces(const int i)
     currParticle.setPredictedPosition(predictedPosition);
 }
 
+
+// TODO: CORRECT VISCOSITY move to constraint.cpp
 //void ParticleSystem::viscosity(int index)
 //{
 //    Particle & currParticle = particles.at(index);
