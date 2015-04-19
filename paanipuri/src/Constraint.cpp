@@ -151,7 +151,7 @@ float DensityConstraint::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 //    {
 //        std::cout<<"[ERROR] wPoly6Kernel";
 //    }
-     */
+     
     
     float d = glm::length(distance);
     float x = (smoothingRadius*smoothingRadius) - d*d;

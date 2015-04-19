@@ -257,7 +257,7 @@ void ParticleSystem::update()
             Particle& currParticle = particles.at(j);
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
                 
-                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(i, i) * currParticle.getDeltaPi()));
+                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
                 //currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
         });
     }
