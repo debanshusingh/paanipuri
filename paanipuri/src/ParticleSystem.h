@@ -15,6 +15,13 @@
 #include <map>
 #include "Mesh.h"
 #include "Constraint.h"
+#include <Core>
+#include <Dense>
+
+
+typedef Eigen::Matrix<float, 3, 1, 0, 3 ,1> EigenVector3;
+typedef Eigen::Matrix<float, Eigen::Dynamic, 1> VectorX;
+typedef Eigen::Triplet<float, int> SparseMatrixTriplet;
 
 //This class stores the list of particles and handles their interactions
 
@@ -62,6 +69,12 @@ private:
     
     //this saves whether the voxel has any triangle or not
     std::vector<bool> containerBool;
+    
+    SparseMatrix invMassMatrix;
+    
+    
+    glm::vec3 Eigen2GLM(const EigenVector3& eigen_vector);
+    EigenVector3 GLM2Eigen(const glm::vec3& glm_vector);
     
 public:
     
@@ -118,6 +131,8 @@ public:
     void initialiseHashPositions(int index);         //function that initialises particles hash positions
     
     bool isValidCell(glm::ivec3);
+    
+    void setupInvMassMatrix();
 };
 
 #endif

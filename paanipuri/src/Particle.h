@@ -11,7 +11,6 @@
 
 #include "glm/glm.hpp"
 #include <vector>
-
 //This class stores the properties of individual particles
 
 class Particle
@@ -22,7 +21,7 @@ private:
     float radius = 0.5f;  //Radius of all particles will be same
     float density = 0.0f;
     int phase;
-    float invMass, predictedMass;
+    float predictedMass;
     
     //  Current values
     glm::vec3 position;     //Stores the current position of the particle
@@ -46,6 +45,7 @@ public:
     
     //getter funcitons
     float getMass();
+    void setMass(float mass);
     float getRadius();
     glm::vec3 getPosition();
     glm::vec3 getVelocity();
@@ -75,9 +75,6 @@ public:
     
     int getPhase();
     void setPhase(int phase);
-    
-    float getInvMass();
-    void setInvMass(float invMass);
     
 };
 

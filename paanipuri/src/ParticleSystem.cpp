@@ -241,6 +241,8 @@ void ParticleSystem::update()
     }
 
     setupConstraints();
+    
+    setupInvMassMatrix();
 
     parallel_for<size_t>(0, particles.size(), 1, [=](int i)
     {
@@ -270,7 +272,10 @@ void ParticleSystem::update()
             for (int i=0; i<particles.size(); i++) {
                 particleCollision(i);
                 Particle& currParticle = particles.at(i);
-                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+                //attempt to multiply by inverse mass matrix
+                
+                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(i, i) * currParticle.getDeltaPi()));
+                //currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             }
         });
         
@@ -554,4 +559,38 @@ void ParticleSystem::particleBoxCollision(int index)
         currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1,1,-dampingFactor));
         currParticle.setPredictedPosition(currParticle.getPosition() + timeStep * currParticle.getVelocity());
     }
+}
+
+void ParticleSystem::setupInvMassMatrix() {
+    //make the correct dimensions of the  matrix
+    invMassMatrix.resize(particles.size(), particles.size());
+    
+    
+    std::vector<SparseMatrixTriplet> i_triplets;
+    std::vector<SparseMatrixTriplet> m_triplets;
+    std::vector<SparseMatrixTriplet> invTriplets;
+    i_triplets.clear();
+    m_triplets.clear();
+    for (int i = 0; i < particles.size(); i++)
+    {
+        float invMass = 1.0f / particles[i].getMass();
+        
+        i_triplets.push_back(SparseMatrixTriplet(i, i, 1));
+        m_triplets.push_back(SparseMatrixTriplet(i, i, particles[i].getMass()));
+        invTriplets.push_back(SparseMatrixTriplet(i, i, invMass));
+    }
+    
+    
+    invMassMatrix.setFromTriplets(invTriplets.begin(), invTriplets.end());
+    int debug = 1;
+}
+
+glm::vec3 ParticleSystem::Eigen2GLM(const EigenVector3& eigen_vector)
+{
+    return glm::vec3(eigen_vector[0], eigen_vector[1], eigen_vector[2]);
+}
+
+EigenVector3 ParticleSystem::GLM2Eigen(const glm::vec3& glm_vector)
+{
+    return EigenVector3(glm_vector[0], glm_vector[1], glm_vector[2]);
 }

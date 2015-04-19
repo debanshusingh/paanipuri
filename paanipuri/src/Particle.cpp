@@ -44,6 +44,10 @@ float Particle::getMass()
     return this->mass;
 }
 
+void Particle::setMass(float mass) {
+    this->mass = mass;
+}
+
 float Particle::getRadius()
 {
     return this->radius;
@@ -142,14 +146,6 @@ void Particle::setDeltaPi(glm::vec3 p)
 void Particle::setHashPosition(glm::ivec3 p)
 {
     hashPosition = p;
-}
-
-float Particle::getInvMass() {
-    return invMass;
-}
-
-void Particle::setInvMass(float invMass) {
-    this->invMass = invMass;
 }
 
 float Particle::getPredictedMass() {

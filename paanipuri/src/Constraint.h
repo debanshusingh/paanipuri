@@ -3,6 +3,9 @@
 #include <vector>
 #include "Particle.h"
 #include "utilities.h"
+#include <Sparse>
+
+typedef Eigen::SparseMatrix<float> SparseMatrix;
 
 class Constraint {
 protected:
@@ -12,7 +15,7 @@ public:
     Constraint();
 	virtual ~Constraint();
 
-	virtual void Solve(glm::vec3& position, const float& invMass);
+	virtual void Solve(glm::vec3& position, const SparseMatrix& invMass);
 };
 
 class ContactConstraint : public Constraint {
@@ -24,7 +27,7 @@ public:
 	ContactConstraint(int particleIndex);
 	virtual ~ContactConstraint();
 
-	virtual void Solve(glm::vec3& position, const float& invMass);
+	virtual void Solve(glm::vec3& position, const SparseMatrix& invMass);
 	int getParticleIndex();
 };
 
@@ -34,7 +37,7 @@ public:
 	ShapeMatchingConstraint();
 	virtual ~ShapeMatchingConstraint();
 
-	virtual void Solve(glm::vec3& position, const float& invMass);
+	virtual void Solve(glm::vec3& position, const SparseMatrix& invMass);
     virtual void Solve();
 };
 
@@ -47,7 +50,7 @@ public:
     DensityConstraint(int particleIndex);
 	virtual ~DensityConstraint();
 
-	virtual void Solve(glm::vec3& position, const float& invMass);
+	virtual void Solve(glm::vec3& position, const SparseMatrix& invMass);
     virtual void Solve(std::vector<Particle>& particles);
     
     //function that returns the density of a particle

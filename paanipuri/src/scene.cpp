@@ -63,7 +63,7 @@ Scene::Scene()
     
     //number of particles should be a cube (1,8,27...)
 
-    numberOfParticles = 5;
+    numberOfParticles = 10;
 
     numberOfParticles *= (numberOfParticles*numberOfParticles);
     

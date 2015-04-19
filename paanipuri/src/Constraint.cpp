@@ -14,7 +14,7 @@ Constraint::~Constraint() {
 
 }
 
-void Constraint::Solve(glm::vec3& position, const float& invMass) {
+void Constraint::Solve(glm::vec3& position, const SparseMatrix& invMass) {
     //so check if there is a contact on the particle. if so, resolve it
     
 }
@@ -32,7 +32,7 @@ ContactConstraint::~ContactConstraint() {
 }
 
 //TODO: Implement
-void ContactConstraint::Solve(glm::vec3& position, const float& invMass) {
+void ContactConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass) {
 	//so check if there is a contact on the particle. if so, resolve it
 
 }
@@ -49,7 +49,7 @@ DensityConstraint::~DensityConstraint() {
 	
 }
 
-void DensityConstraint::Solve(glm::vec3& position, const float& invMass) {
+void DensityConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass) {
 	
 }
 
@@ -139,10 +139,12 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
 
 float DensityConstraint::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
+    /*
     if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
     {
         std::cout<<"[ERROR] wPoly6Kernel";
     }
+     */
     
     float d = glm::length(distance);
     float x = (smoothingRadius*smoothingRadius) - d*d;
