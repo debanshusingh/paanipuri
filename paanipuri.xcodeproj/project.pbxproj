@@ -15,7 +15,6 @@
 		12F5ECA01AA28E960055DEE6 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F5EC9F1AA28E960055DEE6 /* libGLEW.a */; };
 		12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12F5ECA11AA2900C0055DEE6 /* utilities.cpp */; };
 		36B014BF1ADF096100A00FBA /* Constraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36B014BE1ADF096100A00FBA /* Constraint.cpp */; };
-		36B014C21ADF0A2400A00FBA /* Simulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36B014C11ADF0A2400A00FBA /* Simulation.cpp */; };
 		36B014C71ADF0BC800A00FBA /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36B014C51ADF0BC800A00FBA /* Collision.cpp */; };
 		8936A2861AB2244400B9C75D /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8936A2841AB2244400B9C75D /* scene.cpp */; };
 		896ABBFB1AA2985C001480C1 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 896ABBF71AA2985C001480C1 /* Particle.cpp */; };
@@ -53,9 +52,6 @@
 		12F5ECA21AA2900C0055DEE6 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
 		36B014BD1ADF095800A00FBA /* Constraint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constraint.h; sourceTree = "<group>"; };
 		36B014BE1ADF096100A00FBA /* Constraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Constraint.cpp; sourceTree = "<group>"; };
-		36B014C01ADF0A1C00A00FBA /* Simulation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Simulation.h; sourceTree = "<group>"; };
-		36B014C11ADF0A2400A00FBA /* Simulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Simulation.cpp; sourceTree = "<group>"; };
-		36B014C31ADF0B7A00A00FBA /* libassimp.3.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.3.1.1.dylib; path = /usr/local/lib/libassimp.3.1.1.dylib; sourceTree = "<absolute>"; };
 		36B014C51ADF0BC800A00FBA /* Collision.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Collision.cpp; sourceTree = "<group>"; };
 		36B014C61ADF0BC800A00FBA /* Collision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collision.h; sourceTree = "<group>"; };
 		8936A2841AB2244400B9C75D /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
@@ -106,8 +102,6 @@
 			children = (
 				36B014C51ADF0BC800A00FBA /* Collision.cpp */,
 				36B014C61ADF0BC800A00FBA /* Collision.h */,
-				36B014C11ADF0A2400A00FBA /* Simulation.cpp */,
-				36B014C01ADF0A1C00A00FBA /* Simulation.h */,
 				36B014BE1ADF096100A00FBA /* Constraint.cpp */,
 				36B014BD1ADF095800A00FBA /* Constraint.h */,
 				89FFCC531ADE2F74009CD205 /* Mesh.cpp */,
@@ -249,7 +243,6 @@
 				36B014C71ADF0BC800A00FBA /* Collision.cpp in Sources */,
 				36B014BF1ADF096100A00FBA /* Constraint.cpp in Sources */,
 				12F5ECA31AA2900C0055DEE6 /* utilities.cpp in Sources */,
-				36B014C21ADF0A2400A00FBA /* Simulation.cpp in Sources */,
 				896ABBFB1AA2985C001480C1 /* Particle.cpp in Sources */,
 				12CB7C431AA272990095666D /* main.cpp in Sources */,
 			);

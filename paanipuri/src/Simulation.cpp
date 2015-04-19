@@ -47,7 +47,7 @@ void Simulation::setCellSize(float size) {
 
 void Simulation::applyForces() {
 	for(int i = 0; i < particles.size(); i++) {
-		Particle&currentParticle = particles[i];
+		Particle*currentParticle = particles[i];
 		currentParticle.setVelocity(currentParticle.getVelocity() + deltaT * _forces);
 	}
 }
@@ -234,31 +234,31 @@ void Simulation::addParticle(Particle particle) {
 //switch to plane collision!
 //this is temp
 void Simulation::particleBoxCollision(int index) {
-    Particle& currParticle = particles[index];
-	glm::vec3 particlePosition = currParticle.getPredictedPosition();
+    Particle* currParticle = particles[index];
+	glm::vec3 particlePosition = currParticle->getPredictedPosition();
 
-    float radius = currParticle.getRadius();
+    float radius = currParticle->getRadius();
     float dampingFactor = 0.5f;
     
     if(particlePosition.x - radius < _lowerBounds.x + 1e-3 || particlePosition.x + radius > _upperBounds.x - 1e-3) {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(-dampingFactor, 1, 1));
-        currParticle.setPredictedPosition(currParticle.getPosition() + deltaT * currParticle.getVelocity());
+        currParticle->setVelocity(currParticle->getVelocity() * glm::vec3(-dampingFactor, 1, 1));
+        currParticle->setPredictedPosition(currParticle->getPosition() + deltaT * currParticle->getVelocity());
     }
 
     if(particlePosition.y - radius < _lowerBounds.y + 1e-3) {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1, -dampingFactor, 1));
-        currParticle.setPredictedPosition(currParticle.getPosition() + deltaT * currParticle.getVelocity());
+        currParticle->setVelocity(currParticle->getVelocity() * glm::vec3(1, -dampingFactor, 1));
+        currParticle->setPredictedPosition(currParticle->getPosition() + deltaT * currParticle->getVelocity());
     }
 
     if(particlePosition.y + radius > _upperBounds.y - 1e-3) {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1, -dampingFactor, 1));
-        glm::vec3 pos = currParticle.getPredictedPosition();
-        currParticle.setPredictedPosition(glm::vec3(pos.x, _upperBounds.y - radius - 1e-3, pos.z));
+        currParticle->setVelocity(currParticle->getVelocity() * glm::vec3(1, -dampingFactor, 1));
+        glm::vec3 pos = currParticle->getPredictedPosition();
+        currParticle->setPredictedPosition(glm::vec3(pos.x, _upperBounds.y - radius - 1e-3, pos.z));
     }
 
     if(particlePosition.z - radius < _lowerBounds.z + 1e-3 || particlePosition.z + radius > _upperBounds.z - 1e-3) {
-        currParticle.setVelocity(currParticle.getVelocity() * glm::vec3(1, 1, -dampingFactor));
-        currParticle.setPredictedPosition(currParticle.getPosition() + deltaT * currParticle.getVelocity());
+        currParticle->setVelocity(currParticle->getVelocity() * glm::vec3(1, 1, -dampingFactor));
+        currParticle->setPredictedPosition(currParticle->getPosition() + deltaT * currParticle->getVelocity());
     }
 }
 

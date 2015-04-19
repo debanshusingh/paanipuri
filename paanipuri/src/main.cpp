@@ -357,36 +357,22 @@ void displayBackground()
 void loadParticles() {
     
     // Put the three verticies into the VBO
-    std::vector<glm::vec3> particlePosData;
-    std::vector<glm::vec3> particleColData;
-    std::vector<Particle> particles = scene->particleSystem->getAllParticles();
-    for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
-    {
-        Particle particle = *it;
-        glm::vec3 partPos = particle.getPosition();
-        particlePosData.push_back(partPos);
-        
-        glm::vec3 partCol(1.0,1.0,1.0);
-        if (particle.getPhase() == 1){
-            partCol = glm::vec3(0.0,1.0,0.0);
-        }
-        particleColData.push_back(partCol);
-    }
-    
 
     glGenVertexArrays(1, &gVAO);
     glBindVertexArray(gVAO);
 
     glGenBuffers(1, &gBufPos);
     glBindBuffer(GL_ARRAY_BUFFER, gBufPos);
-    glBufferData(GL_ARRAY_BUFFER, particlePosData.size()*sizeof(glm::vec3), &particlePosData[0], GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, scene->particleSystem->particlePosData.size()*sizeof(glm::vec3),\
+                 &scene->particleSystem->particlePosData[0], GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(locationPos);
     glVertexAttribPointer(locationPos, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     glGenBuffers(1, &gBufCol);
     glBindBuffer(GL_ARRAY_BUFFER, gBufCol);
-    glBufferData(GL_ARRAY_BUFFER, particleColData.size()*sizeof(glm::vec3), &particleColData[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, scene->particleSystem->particleColData.size()*sizeof(glm::vec3), \
+                 &scene->particleSystem->particleColData[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(locationCol);
     glVertexAttribPointer(locationCol, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -1,4 +1,5 @@
 #include "Constraint.h"
+#include "scene.h"
 #include <iostream>
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
@@ -92,10 +93,10 @@ void DensityConstraint::findLambda(std::vector<Particle>& particles){
     
     float lambdaI = -1.0f * (densityContraint/(sumGradientAtParticle+relaxation)); //findLambda using density constraint
     
-    if(std::isnan(lambdaI)||std::isinf(fabs(lambdaI)))
-    {
-        std::cout<<"[ERROR] findLambda";
-    }
+//    if(std::isnan(lambdaI)||std::isinf(fabs(lambdaI)))
+//    {
+//        std::cout<<"[ERROR] findLambda";
+//    }
     // do these have to be atomic?
     currParticle.setDensity(currDensity);
     currParticle.setLambda(lambdaI);
@@ -119,15 +120,15 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
     {
         glm::vec3 temp = (currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition());
         
-        if(glm::any(glm::isnan(currParticle.getPredictedPosition())))
-        {
-            std::cout<<"[ERROR] getDensity at Particles";
-        }
-        if(glm::any(glm::isnan(particles.at(neighbors.at(i)).getPredictedPosition())) || glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition())))
-        {
-            utilityCore::printVec3(particles.at(neighbors.at(i)).getPredictedPosition());
-            std::cout<<"[ERROR] getDensity at Neighbours";
-        }
+//        if(glm::any(glm::isnan(currParticle.getPredictedPosition())))
+//        {
+//            std::cout<<"[ERROR] getDensity at Particles";
+//        }
+//        if(glm::any(glm::isnan(particles.at(neighbors.at(i)).getPredictedPosition())) || glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition())))
+//        {
+//            utilityCore::printVec3(particles.at(neighbors.at(i)).getPredictedPosition());
+//            std::cout<<"[ERROR] getDensity at Neighbours";
+//        }
         
         density +=  currParticle.getMass() * wPoly6Kernel(temp, smoothingRadius);
     }
@@ -146,10 +147,10 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
 
 float DensityConstraint::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
-    if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
-    {
-        std::cout<<"[ERROR] wPoly6Kernel";
-    }
+//    if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
+//    {
+//        std::cout<<"[ERROR] wPoly6Kernel";
+//    }
     
     float d = glm::length(distance);
     float x = (smoothingRadius*smoothingRadius) - d*d;
@@ -174,10 +175,10 @@ glm::vec3 DensityConstraint::gradientWSpikyKernel(glm::vec3 distance, float smoo
     
     glm::vec3 retVal = gradientW*distance;
     
-    if(glm::any(glm::isinf(retVal)) || glm::any(glm::isnan(retVal)))
-    {
-        retVal = glm::vec3(EPSILON);
-    }
+//    if(glm::any(glm::isinf(retVal)))
+//    {
+//        retVal = glm::vec3(EPSILON);
+//    }
     
     return retVal;
 }
@@ -224,9 +225,17 @@ glm::vec3 DensityConstraint::findDeltaPosition(int index, std::vector<Particle>&
     // constraintDelta * lambda
     for(int i=0; i<neighbors.size(); i++)
     {
+//        if (glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition()))){
+//            std::cout<<neighbors.at(i)<<std::endl;
+//        }
+
         float temp = wPoly6Kernel(glm::vec3(deltaQ, 0, 0), smoothingRadius);
         
         artificialTerm = wPoly6Kernel((currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius) / (temp+EPSILON);
+
+//        if (glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition()))){
+//            std::cout<<neighbors.at(i)<<std::endl;
+//        }
         
         sCorr = -1.0 * k * artificialTerm * artificialTerm * artificialTerm * artificialTerm;
         

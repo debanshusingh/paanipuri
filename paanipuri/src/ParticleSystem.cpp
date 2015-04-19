@@ -22,19 +22,9 @@ std::vector<Particle>& ParticleSystem::getAllParticles()
     return particles;
 }
 
-//float ParticleSystem::getRestDensity()
-//{
-//    return restDensity;
-//}
-
 void ParticleSystem::addParticle(Particle p)
 {
     particles.push_back(p);
-}
-
-Particle ParticleSystem::getParticle(int index)
-{
-    return particles.at(index);
 }
 
 glm::vec3 ParticleSystem::getForces()
@@ -89,11 +79,7 @@ void ParticleSystem::findNeighbors(int index)
     Particle& currParticle = particles.at(index);
     
     glm::vec3 particlePredictedPos = currParticle.getPredictedPosition();
-    
-    if (glm::any(glm::isnan(particlePredictedPos))) {
-        std::cout<<"error";
-    }
-    
+        
     glm::ivec3 particleHashPosition = currParticle.getHashPosition();
     int gridLocation = particleHashPosition.x + gridDim.x * (particleHashPosition.y + gridDim.y * particleHashPosition.z);
     
@@ -262,16 +248,12 @@ void ParticleSystem::update()
         {
             //find constraintDelta*lambda and set in deltaPi
             densityConstraints.at(j)->Solve(particles); // 1 density constraint contains index of particle it acts on
+            particleCollision(j);
             
-            for (int i=0; i<particles.size(); i++) {
-                particleCollision(i);
-            }
-            
+            // for particles in constraint
             //update delta atomically
-            for (int i=0; i<particles.size(); i++) {
-                Particle& currParticle = particles.at(i);
-                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
-            }
+            Particle& currParticle = particles.at(j);
+            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
         });
     }
     
@@ -284,6 +266,18 @@ void ParticleSystem::update()
         currParticle.setPosition(currParticle.getPredictedPosition());
     });
     
+    for (int i=0; i<particles.size(); i++)
+    {
+        Particle& currParticle = particles.at(i);
+        glm::vec3 partPos = currParticle.getPosition();
+        particlePosData.push_back(partPos);
+        
+        glm::vec3 partCol(1.0,1.0,1.0);
+        if (currParticle.getPhase() == 1){
+            partCol = glm::vec3(0.0,1.0,0.0);
+        }
+        particleColData.push_back(partCol);
+    }
 }
 
 void ParticleSystem::applyForces(const int i)
@@ -321,7 +315,6 @@ void ParticleSystem::applyForces(const int i)
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
 //    particleContainerCollision(index);
-//    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)
