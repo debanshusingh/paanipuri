@@ -42,6 +42,7 @@ public:
     Particle();             //Default
     Particle(glm::vec3);    //Construct a particle at a specific position
     Particle(glm::vec3, glm::vec3); //Construct the particle with pos and vel
+    Particle(glm::vec3, glm::vec3, int, float); //Construct the particle with pos, vel, phase, mass
     
     //getter funcitons
     float getMass();
@@ -55,6 +56,7 @@ public:
     glm::vec3 getDeltaPi();
     glm::ivec3 getHashPosition();
     float getDensity();
+    
     std::vector<int> getNeighborIndices();
     
     //setter functions

@@ -254,11 +254,19 @@ void ParticleSystem::update()
             
             // for particles in constraint
             //update delta atomically
-            Particle& currParticle = particles.at(j);
-            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+<<<<<<< HEAD
+            for (int i=0; i<particles.size(); i++) {
+                particleCollision(i);
+                Particle& currParticle = particles.at(i);
+                //attempt to multiply by inverse mass matrix
                 
                 currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(i, i) * currParticle.getDeltaPi()));
                 //currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+            }
+=======
+            Particle& currParticle = particles.at(j);
+            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+>>>>>>> dc6e778a2f588550f42d2a58fff9cd085daa8f6a
         });
     }
     

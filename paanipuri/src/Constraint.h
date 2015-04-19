@@ -65,6 +65,8 @@ public:
     
     glm::vec3 gradientConstraintAtParticle(int index, std::vector<Particle>& particles);
     glm::vec3 gradientConstraintForNeighbor(int index, int neighborIndex, std::vector<Particle>& particles);
+
+    
     const float poly6Const = 315.0 / (64 * PI);
     const float spikyConst = 45.0 / (PI);
     const float restDensity = 1000.0; //1000kg/m3

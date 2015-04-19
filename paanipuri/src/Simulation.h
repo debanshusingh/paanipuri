@@ -9,7 +9,7 @@ using namespace std;
 
 class Simulation {
 private:
-	vector<Particle> particles;
+	vector<Particle*> particles;
 	//vector<Collision> _collisions;
 
 	//various constraint groups

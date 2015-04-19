@@ -61,9 +61,16 @@ Scene::Scene()
     
     gravity = glm::vec3(0.0,-10.0,0.0);
     
+<<<<<<< HEAD
+    //number of particles should be a cube (1,8,27...)
+
+    numberOfParticles = 10;
+
+    numberOfParticles *= (numberOfParticles*numberOfParticles);
+=======
     //LIMITATION: number of particles should be a cube (1,8,27...)
     numberOfParticles = 1000;
-    numberOfParticles = 5;
+>>>>>>> dc6e778a2f588550f42d2a58fff9cd085daa8f6a
     
     particleSystem = new ParticleSystem();
     

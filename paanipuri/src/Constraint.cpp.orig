@@ -147,11 +147,19 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
 
 float DensityConstraint::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
+<<<<<<< HEAD
+    /*
+    if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
+    {
+        std::cout<<"[ERROR] wPoly6Kernel";
+    }
+     */
+=======
 //    if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
 //    {
 //        std::cout<<"[ERROR] wPoly6Kernel";
 //    }
-     */
+>>>>>>> dc6e778a2f588550f42d2a58fff9cd085daa8f6a
     
     float d = glm::length(distance);
     float x = (smoothingRadius*smoothingRadius) - d*d;
