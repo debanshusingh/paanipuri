@@ -63,15 +63,16 @@ Scene::Scene()
     
     //number of particles should be a cube (1,8,27...)
 
-    numberOfParticles = 6;
+    numberOfParticles = 10;
 
-    numberOfParticles *= (numberOfParticles*numberOfParticles)*2;
+//    numberOfParticles *= (numberOfParticles*numberOfParticles)*2;
+    numberOfParticles *= (numberOfParticles*numberOfParticles);
     
     particleSystem = new ParticleSystem();
     
     cube = new Cube();
     cube->setCenter(glm::vec3(0,0,0));
-    cube->setDimension(glm::vec3(30)*particleSystem->getSmoothingRadius());
+    cube->setDimension(glm::vec3(10)*particleSystem->getSmoothingRadius());
     cube->setCellSize(particleSystem->getSmoothingRadius());       //depends on cube dimensions and particle radius
     
 }
@@ -80,6 +81,7 @@ void Scene::init(){
     glm::vec3 position, velocity;
     
     float smoothingRad = particleSystem->getSmoothingRadius() * 1.f;
+//    int damnDim = static_cast <int> (std::cbrt(numberOfParticles/2)),
     int damnDim = static_cast <int> (std::cbrt(numberOfParticles/2)),
     //    int damnDim = static_cast <int> (std::sqrt(numberOfParticles)),
     i,j,k=0;
@@ -97,28 +99,38 @@ void Scene::init(){
             for(k=0; k<damnDim; k++)
             {
                 position = (glm::vec3((i)*smoothingRad, j*smoothingRad, k*smoothingRad) - glm::vec3(float(damnDim) * smoothingRad/2.0f))*0.9f;
-                position -= glm::vec3((float(damnDim) * smoothingRad/1.0f), 0, 0);
+//                position -= glm::vec3((float(damnDim) * smoothingRad/1.0f), 0, 0);
                 velocity = glm::vec3(utilityCore::randomFloat(),0,0);
+                if(i%2 == 0)
+                {
+                    phase = 0;
+                    mass = 1;
+                }
+                else
+                {
+                    phase = 1;
+                    mass = 10;
+                }
                 particleSystem->addParticle(Particle(position, velocity, phase, mass));
             }
         }
     }
     
-    phase = 1;
-    mass = 10000000000000000000000.0f;
-    for(i=0; i<damnDim; i++)
-    {
-        for(j=0; j<damnDim; j++)
-        {
-            for(k=0; k<damnDim; k++)
-            {
-                position = (glm::vec3((i)*smoothingRad, j*smoothingRad, k*smoothingRad) - glm::vec3(float(damnDim) * smoothingRad/2.0f))*0.9f;
-                position += glm::vec3((float(damnDim) * smoothingRad/1.0f), 0, 0);
-                velocity = glm::vec3(utilityCore::randomFloat(),0,0);
-                particleSystem->addParticle(Particle(position, velocity, phase, mass));
-            }
-        }
-    }
+//    phase = 1;
+//    mass = 10000000000000000000000.0f;
+//    for(i=0; i<damnDim; i++)
+//    {
+//        for(j=0; j<damnDim; j++)
+//        {
+//            for(k=0; k<damnDim; k++)
+//            {
+//                position = (glm::vec3((i)*smoothingRad, j*smoothingRad, k*smoothingRad) - glm::vec3(float(damnDim) * smoothingRad/2.0f))*0.9f;
+//                position += glm::vec3((float(damnDim) * smoothingRad/1.0f), 0, 0);
+//                velocity = glm::vec3(utilityCore::randomFloat(),0,0);
+//                particleSystem->addParticle(Particle(position, velocity, phase, mass));
+//            }
+//        }
+//    }
     
     particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
     particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
