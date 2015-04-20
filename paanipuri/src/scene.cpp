@@ -61,7 +61,7 @@ Scene::Scene()
     
     gravity = glm::vec3(0.0,-10.0,0.0);
     
-    numberOfParticles = 8000;
+    numberOfParticles = 1000;
     
     particleSystem = new ParticleSystem();
     
@@ -92,16 +92,6 @@ void Scene::init(){
             for(k=0; k<damDim; k++)
             {
                 position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.9f;
-                if(i%2 == 0)
-                {
-                    phase = 0;
-                    mass = 1;
-                }
-                else
-                {
-                    phase = 1;
-                    mass = 10;
-                }
                 particleSystem->addParticle(Particle(position, velocity, phase, mass));
             }
         }
@@ -116,6 +106,32 @@ void Scene::init(){
     mesh.LoadMesh(objPath);
     
     particleSystem->loadContainer(mesh);
+}
+
+void Scene::addParticlesToScene(int type)
+{
+    int particleCount = 125;
+    int damDim = static_cast <int> (std::cbrt(particleCount)),
+        i,j,k=0;
+    float smoothingRad = particleSystem->getSmoothingRadius() * 1.f;
+    glm::vec3 position, velocity;
+    
+    int phase = 1;
+    float mass = 10.f;
+    
+    for(i=0; i<damDim; i++)
+    {
+        for(j=0; j<damDim; j++)
+        {
+            for(k=0; k<damDim; k++)
+            {
+                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.9f;
+                particleSystem->addParticle(Particle(position, velocity, phase, mass));
+            }
+        }
+    }
+    
+    numberOfParticles += particleCount;
 }
 
 void Scene::update(){

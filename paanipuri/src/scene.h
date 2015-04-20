@@ -67,6 +67,7 @@ public:
     
     Mesh mesh;
     
+    void addParticlesToScene(int);
 };
 
 #endif /* defined(__paani__scene__) */
