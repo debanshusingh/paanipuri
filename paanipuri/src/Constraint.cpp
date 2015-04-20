@@ -57,13 +57,10 @@ void DensityConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass) 
 //TODO: setup density constraint to find lambda
 void DensityConstraint::Solve(std::vector<Particle>& particles) {
     
-    for(int i=0; i<particles.size(); i++)
-    {
-        glm::vec3 deltaPi = findDeltaPosition(i, particles); //constraintDelta*lambda
-        Particle& currParticle = particles.at(i);
-        currParticle.setDeltaPi(deltaPi);
+    glm::vec3 deltaPi = findDeltaPosition(_particleIndex, particles); //constraintDelta*lambda
+    Particle& currParticle = particles.at(_particleIndex);
+    currParticle.setDeltaPi(deltaPi);
 //        particleCollision(i);
-    }
 }
 
 void DensityConstraint::findLambda(std::vector<Particle>& particles){
