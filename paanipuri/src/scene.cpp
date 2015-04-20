@@ -61,13 +61,13 @@ Scene::Scene()
     
     gravity = glm::vec3(0.0,-10.0,0.0);
     
-    numberOfParticles = 125;
+    numberOfParticles = 8000;
     
     particleSystem = new ParticleSystem();
     
     cube = new Cube();
     cube->setCenter(glm::vec3(0,0,0));
-    cube->setDimension(glm::vec3(10)*particleSystem->getSmoothingRadius());
+    cube->setDimension(glm::vec3(20)*particleSystem->getSmoothingRadius());
     cube->setCellSize(particleSystem->getSmoothingRadius());       //depends on cube dimensions and particle radius
     
 }
@@ -100,7 +100,7 @@ void Scene::init(){
                 else
                 {
                     phase = 1;
-                    mass = 1;
+                    mass = 10;
                 }
                 particleSystem->addParticle(Particle(position, velocity, phase, mass));
             }
