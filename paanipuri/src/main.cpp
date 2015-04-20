@@ -31,6 +31,13 @@ GLuint unifLightPos;
 GLuint unifLightColor;
 GLuint unifCamPos;
 
+void init(int argc, char* argv[]);
+void display();
+void displayParticles();
+
+GLuint loadTexture(Image* image);
+
+
 GLuint loadTexture(Image* image) {
     GLuint textureId;
     glGenTextures(1, &textureId); //Make room for our texture
@@ -48,15 +55,15 @@ GLuint loadTexture(Image* image) {
     return textureId; //Returns the id of the texture
 }
 
-void handleKeypress(unsigned char key, int x, int y)
-{
-    switch(key)
-    {
-        case 'q' :
-        case 'Q' :
-            exit(0);
-    }
-}
+//void handleKeypress(unsigned char key, int x, int y)
+//{
+//    switch(key)
+//    {
+//        case 'q' :
+//        case 'Q' :
+//            exit(0);
+//    }
+//}
 
 std::string textFileRead(const char *filename)
 {
@@ -422,6 +429,7 @@ void initGLFW(int argc, char* argv[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
+    
 }
 
 int main(int argc, char * argv[]) {
@@ -446,6 +454,11 @@ int main(int argc, char * argv[]) {
         
         // draw one frame
         display();
+        
+        if(glfwGetKey(gWindow, GLFW_KEY_Q))
+            glfwSetWindowShouldClose(gWindow, GL_TRUE);
+//        else if(glfwGetKey(gWindow, GLFW_KEY_A))
+//            scene->addParticlesToScene(1);
     }
     
     // clean up and exit
