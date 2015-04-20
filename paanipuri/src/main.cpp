@@ -457,8 +457,8 @@ int main(int argc, char * argv[]) {
         
         if(glfwGetKey(gWindow, GLFW_KEY_Q))
             glfwSetWindowShouldClose(gWindow, GL_TRUE);
-//        else if(glfwGetKey(gWindow, GLFW_KEY_A))
-//            scene->addParticlesToScene(1);
+        else if(glfwGetKey(gWindow, GLFW_KEY_A))
+            scene->addParticlesToScene(1);
     }
     
     // clean up and exit
