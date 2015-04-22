@@ -188,12 +188,19 @@ bool ParticleSystem::isValidCell(glm::ivec3 cellForCheck)
 void ParticleSystem::setupConstraints(){
     
     clearConstraints();
+    
     for (int i=0; i<particles.size(); i++)
     {
         if(particles.at(i).getPhase() < 2)
         {
             DensityConstraint* dc = new DensityConstraint(i);
             densityConstraints.push_back(dc);
+        }
+        
+        else
+        {
+            ShapeMatchingConstraint* sc = new ShapeMatchingConstraint(i);
+            shapeConstraints.push_back(sc);
         }
     }
 }
@@ -205,6 +212,7 @@ void ParticleSystem::clearConstraints()
 //        delete densityConstraints.at(i);
 //    }
     densityConstraints.clear();
+    shapeConstraints.clear();
 }
 
 //==========================
@@ -266,6 +274,11 @@ void ParticleSystem::update()
 //                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (currParticle.getDeltaPi() / currParticle.getMass()));
                 //currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+        });
+        
+        parallel_for<size_t>(0, shapeConstraints.size(), 1, [=](int j)
+        {
+            particleCollision(j);
         });
     }
     

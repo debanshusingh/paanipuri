@@ -20,6 +20,7 @@ void Constraint::Solve(glm::vec3& position, const SparseMatrix& invMass) {
     
 }
 
+//Contact Constraint -------------------------------------------------------------
 ContactConstraint::ContactConstraint() {
 
 }
@@ -37,6 +38,34 @@ void ContactConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass) 
 	//so check if there is a contact on the particle. if so, resolve it
 
 }
+//---------------------------------------------------------------------------------
+
+
+//Shape Matching Constraint -------------------------------------------------------
+ShapeMatchingConstraint::ShapeMatchingConstraint() {
+    
+}
+
+ShapeMatchingConstraint::ShapeMatchingConstraint(int particleIndex) {
+    _particleIndex = particleIndex;
+}
+
+ShapeMatchingConstraint::~ShapeMatchingConstraint() {
+    
+}
+
+void ShapeMatchingConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass){
+
+}
+
+void ShapeMatchingConstraint::Solve(){
+    
+}
+
+//---------------------------------------------------------------------------------
+
+
+//Density Constraint --------------------------------------------------------------
 
 DensityConstraint::DensityConstraint() {
 

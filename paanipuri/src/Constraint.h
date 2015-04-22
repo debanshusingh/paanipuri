@@ -33,8 +33,12 @@ public:
 
 //shape matching constraint also needs stiffness, which by consequence gives it deformables (Which we do not need) but we might need it just in general
 class ShapeMatchingConstraint : public Constraint {
+protected:
+    int _particleIndex;
+
 public:
 	ShapeMatchingConstraint();
+    ShapeMatchingConstraint(int particleIndex);
 	virtual ~ShapeMatchingConstraint();
 
 	virtual void Solve(glm::vec3& position, const SparseMatrix& invMass);
