@@ -186,10 +186,15 @@ bool ParticleSystem::isValidCell(glm::ivec3 cellForCheck)
 }
 
 void ParticleSystem::setupConstraints(){
+    
     clearConstraints();
-    for (int i=0; i<particles.size(); i++) {
-        DensityConstraint* dc = new DensityConstraint(i);
-        densityConstraints.push_back(dc);
+    for (int i=0; i<particles.size(); i++)
+    {
+        if(particles.at(i).getPhase() < 2)
+        {
+            DensityConstraint* dc = new DensityConstraint(i);
+            densityConstraints.push_back(dc);
+        }
     }
 }
 
@@ -250,14 +255,16 @@ void ParticleSystem::update()
         {
             //find constraintDelta*lambda and set in deltaPi
             densityConstraints.at(j)->Solve(particles); // 1 density constraint contains index of particle it acts on
+         
             particleCollision(j);
             
             // for particles in constraint
             //update delta atomically
             Particle& currParticle = particles.at(j);
-            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
-                
-                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
+//            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+            
+//                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
+            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (currParticle.getDeltaPi() / currParticle.getMass()));
                 //currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
         });
     }
@@ -326,9 +333,11 @@ void ParticleSystem::particleParticleCollision(int index)
 {
     //as per http://stackoverflow.com/questions/19189322/proper-sphere-collision-resolution-with-different-sizes-and-mass-using-xna-monog
 
-    std::vector<int> neighbors = particles.at(index).getNeighborIndices();
+    Particle &currParticle = particles.at(index);
+    
+    std::vector<int> neighbors = currParticle.getNeighborIndices();
 
-    glm::vec3 currentParticlePosition = particles.at(index).getPredictedPosition(),
+    glm::vec3 currentParticlePosition = currParticle.getPredictedPosition(),
                 neighborPosition,
                 particleVelocity,
                 neighborVelocity;
@@ -339,12 +348,12 @@ void ParticleSystem::particleParticleCollision(int index)
                 vCollision;  //components of relative velocity about collision normal and direction
 
 
-    float distance, radius = particles.at(index).getRadius();
+    float distance, radius = currParticle.getRadius();
 
     radius= smoothingRadius;
     for(int i=0; i<neighbors.size(); i++)
     {
-        particleVelocity = particles.at(index).getVelocity();
+        particleVelocity = currParticle.getVelocity();
 
         neighborPosition = particles.at(neighbors.at(i)).getPredictedPosition();
         neighborVelocity = particles.at(neighbors.at(i)).getVelocity();
@@ -360,7 +369,7 @@ void ParticleSystem::particleParticleCollision(int index)
 
             vCollision = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
 
-            particles.at(index).setVelocity(particleVelocity - vCollision);
+            currParticle.setVelocity(particleVelocity - vCollision);
             particles.at(neighbors.at(i)).setVelocity(neighborVelocity + vCollision);
         }
     }
@@ -457,15 +466,9 @@ void ParticleSystem::createContainerGrid()
 
 void ParticleSystem::particleContainerCollision(int index)
 {
-    Particle& currParticle = particles[index];
+    Particle& currParticle = particles.at(index);
     glm::vec3 particlePredictedPos = currParticle.getPredictedPosition();
     glm::vec3 particlePos = currParticle.getPosition();
-    
-    glm::vec3 v0, v1, v2, n;
-    
-    float da, db;
-    
-    int triIndex;
     
     glm::ivec3 hashPosition = currParticle.getHashPosition();
     int gridPosition = hashPosition.x + gridDim.x * (hashPosition.y + gridDim.y * hashPosition.z);
@@ -474,8 +477,14 @@ void ParticleSystem::particleContainerCollision(int index)
     {
         if(containerBool.at(gridPosition))
         {
-            for(int i = 0; i<containerGrid.at(gridPosition).size(); ++i)
+//            for(int i = 0; i<containerGrid.at(gridPosition).size(); ++i)
+            parallel_for<size_t>(0, containerGrid.at(gridPosition).size(), 1, [=](int i)
             {
+                Particle& currParticle = particles.at(index);
+                glm::vec3 v0, v1, v2, n;
+                float da, db;
+                int triIndex;
+                
                 // triangle-particle collision
                 triIndex = containerGrid.at(gridPosition).at(i);
                 v0 = container.triangles.at(triIndex);
@@ -488,14 +497,14 @@ void ParticleSystem::particleContainerCollision(int index)
                 
                 if(da*db < ZERO_ABSORPTION_EPSILON)
                 {
-                    currParticle.setVelocity(glm::reflect(currParticle.getVelocity(), n) * 1.f);
+                    currParticle.setVelocity(glm::reflect(currParticle.getVelocity(), n) * 1.0f);
                     //                        currParticle.setPredictedPosition(particlePos + 1.f * timeStep * currParticle.getVelocity());
                     //                        currParticle.setPredictedPosition(particlePos);
                     
                     //if particle goes out of the mesh, increase the multiplying factor of timeStep*n
                     currParticle.setPredictedPosition(particlePos + 2.f * timeStep * n);
                 }
-            }
+            });
         }
     }
 }
@@ -503,7 +512,8 @@ void ParticleSystem::particleContainerCollision(int index)
 void ParticleSystem::particleBoxCollision(int index)
 {
     Particle& currParticle = particles.at(index);
-    glm::vec3 particlePosition = currParticle.getPredictedPosition();
+    
+    glm::vec3 particlePosition = (currParticle.getPredictedPosition() + currParticle.getDeltaPi());
     
     float radius = currParticle.getRadius();
     float dampingFactor = 0.5f;
@@ -536,6 +546,7 @@ void ParticleSystem::particleBoxCollision(int index)
 
 void ParticleSystem::setupInvMassMatrix() {
     //make the correct dimensions of the  matrix
+    
     invMassMatrix.resize(particles.size(), particles.size());
     
     

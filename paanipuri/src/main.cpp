@@ -239,6 +239,12 @@ void displayParticles()
         if (particle.getPhase() == 1){
             partCol = glm::vec3(0.0,1.0,0.0);
         }
+        else if(particle.getPhase() == 2){
+            partCol = glm::vec3(1.0,1.0,0.0);
+        }
+        else if(particle.getPhase() == 3){
+            partCol = glm::vec3(0.0,1.0,1.0);
+        }
         particleColData.push_back(partCol);
     }
     
@@ -457,8 +463,14 @@ int main(int argc, char * argv[]) {
         
         if(glfwGetKey(gWindow, GLFW_KEY_Q))
             glfwSetWindowShouldClose(gWindow, GL_TRUE);
-        else if(glfwGetKey(gWindow, GLFW_KEY_A))
+        else if(glfwGetKey(gWindow, GLFW_KEY_1))
             scene->addParticlesToScene(1);
+        else if(glfwGetKey(gWindow, GLFW_KEY_2))
+            scene->addParticlesToScene(2);
+        else if(glfwGetKey(gWindow, GLFW_KEY_3))
+            scene->addBallToScene();
+        else if(glfwGetKey(gWindow, GLFW_KEY_4))
+            scene->addCubeToScene();
     }
     
     // clean up and exit

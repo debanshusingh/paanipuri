@@ -77,13 +77,13 @@ void DensityConstraint::findLambda(std::vector<Particle>& particles){
     
     for (int i=0; i<numNeighbors; i++) {
         gradientNeighbor = glm::length(gradientConstraintForNeighbor(index, i, particles));
-        sumGradientAtParticle += gradientNeighbor*gradientNeighbor;
+        sumGradientAtParticle += gradientNeighbor * gradientNeighbor / currParticle.getMass();
     }
     
     float gradientParticle = glm::length(gradientConstraintAtParticle(index, particles));
     
     //Different Masses
-    sumGradientAtParticle += (gradientParticle * gradientParticle) / currParticle.getMass();
+    sumGradientAtParticle += (gradientParticle * gradientParticle);// / currParticle.getMass();
     
     float currDensity = this->getDensity(index, particles);
     float densityContraint = (currDensity/restDensity) - 1.0f; //density constraint
@@ -127,7 +127,7 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
 //            std::cout<<"[ERROR] getDensity at Neighbours";
 //        }
         
-        density +=  currParticle.getMass() * wPoly6Kernel(temp, smoothingRadius);
+        density +=  particles.at(neighbors.at(i)).getMass() * wPoly6Kernel(temp, smoothingRadius);
     }
     
     if(density < EPSILON)
