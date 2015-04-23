@@ -82,15 +82,14 @@ void ShapeMatchingConstraint::Solve(glm::vec3& position, const SparseMatrix& inv
     //now solve delta x for particle i. so this will be a loop over all particles in the group?
 void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
 {
-    glm::vec3 centerMassDeformed, centerMassRestPose;
+    glm::vec3 centerMassDeformed;
+    glm::vec3 x, y;
     
-    for(int i=0; i<particles.size(); i++)
-    {
-        centerMassDeformed += particles.at(i).getPredictedPosition();
-        centerMassRestPose += particles.at(i).getPosition();
+    for(int i = 0; i < particles.size(); i++) {
+        x += particles[i].getMass() + particles[i].getPosition();
+        y += particles[i].getMass();
     }
-    centerMassDeformed /= particles.size();
-    centerMassRestPose /= particles.size();
+    centerMassDeformed = x / y;
     
     glm::vec3 r, p;
     glm::mat3 A(0);
@@ -98,8 +97,8 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
     for(int i=0;i<particles.size(); i++)
     {
         p = particles.at(i).getPredictedPosition() - centerMassDeformed;
-        r = particles.at(i).getPosition() - centerMassDeformed;
-        A += p*r;
+        //r = particles.at(i).getPosition() - centerMassDeformed;
+        A += p * particles[i].getRestOffset();
     }
     
     Eigen::Matrix<float, 3, 3> Aeigen;
