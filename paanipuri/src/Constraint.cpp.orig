@@ -4,6 +4,9 @@
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
+#include <SVD>
+
+typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> Matrix;
 
 using namespace tbb;
 
@@ -20,6 +23,7 @@ void Constraint::Solve(glm::vec3& position, const SparseMatrix& invMass) {
     
 }
 
+//Contact Constraint -------------------------------------------------------------
 ContactConstraint::ContactConstraint() {
 
 }
@@ -29,7 +33,7 @@ ContactConstraint::ContactConstraint(int particleIndex) {
 }
 
 ContactConstraint::~ContactConstraint() {
-	
+    
 }
 
 //TODO: Implement
@@ -37,6 +41,97 @@ void ContactConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass) 
 	//so check if there is a contact on the particle. if so, resolve it
 
 }
+//---------------------------------------------------------------------------------
+
+
+//Shape Matching Constraint -------------------------------------------------------
+ShapeMatchingConstraint::ShapeMatchingConstraint() {
+    
+}
+
+ShapeMatchingConstraint::ShapeMatchingConstraint(int particleIndex) {
+    _particleIndex = particleIndex;
+}
+
+ShapeMatchingConstraint::~ShapeMatchingConstraint() {
+    
+}
+
+void ShapeMatchingConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass){
+    
+}
+
+<<<<<<< HEAD
+void ShapeMatchingConstraint::Solve(std::vector<Particle> particleGroup){
+    
+    //first we have to find the center of mass of the particles in the deformed configuration.
+    //that should just be the average position of all the particles?
+    glm::vec3 positionSum = glm::vec3(0.0f);
+    for(int i = 0; i < particleGroup.size(); i++) {
+        positionSum += particleGroup[i].getPredictedPosition(); //should be predicted position right? not position...
+    }
+    glm::vec3 c = positionSum / (float) particleGroup.size();
+    
+    //Imagine we have the matrix A already
+    Matrix A;
+    //Eigen::JacobiSVD<Eigen::MatrixXf> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    Eigen::JacobiSVD<Matrix> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    //solve for Q (rotation matrix
+    Matrix Q = svd.matrixU() * svd.matrixV().transpose();
+    
+    
+    //now solve delta x for particle i. so this will be a loop over all particles in the group?
+    for(int i = 0; i < particleGroup.size(); i++) {
+        //neet to convert from glm to euler to glm
+        particleGroup[i].predictedPosition = (Q * particleGroup[i].restOffset + c) - particleGroup[i].predictedPosition;
+    }
+=======
+void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
+{
+    glm::vec3 centerMassDeformed, centerMassRestPose;
+>>>>>>> master
+    
+    for(int i=0; i<particles.size(); i++)
+    {
+        centerMassDeformed += particles.at(i).getPredictedPosition();
+        centerMassRestPose += particles.at(i).getPosition();
+    }
+    centerMassDeformed /= particles.size();
+    centerMassRestPose /= particles.size();
+    
+    glm::vec3 r, p;
+    glm::mat3 A(0);
+    
+    for(int i=0;i<particles.size(); i++)
+    {
+        p = particles.at(i).getPredictedPosition() - centerMassDeformed;
+        r = particles.at(i).getPosition() - centerMassDeformed;
+        
+        A += p*r;
+    }
+    
+    Eigen::Matrix<float, 3, 3> Aeigen;
+    
+    for(int i=0; i<3; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            Aeigen(i,j) = A[i][j];
+        }
+    }
+    
+    
+}
+
+int ShapeMatchingConstraint::getParticleIndex()
+{
+    return _particleIndex;
+}
+
+//---------------------------------------------------------------------------------
+
+
+//Density Constraint --------------------------------------------------------------
 
 DensityConstraint::DensityConstraint() {
 
@@ -57,13 +152,10 @@ void DensityConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass) 
 //TODO: setup density constraint to find lambda
 void DensityConstraint::Solve(std::vector<Particle>& particles) {
     
-    for(int i=0; i<particles.size(); i++)
-    {
-        glm::vec3 deltaPi = findDeltaPosition(i, particles); //constraintDelta*lambda
-        Particle& currParticle = particles.at(i);
-        currParticle.setDeltaPi(deltaPi);
+    glm::vec3 deltaPi = findDeltaPosition(_particleIndex, particles); //constraintDelta*lambda
+    Particle& currParticle = particles.at(_particleIndex);
+    currParticle.setDeltaPi(deltaPi);
 //        particleCollision(i);
-    }
 }
 
 void DensityConstraint::findLambda(std::vector<Particle>& particles){
@@ -80,13 +172,13 @@ void DensityConstraint::findLambda(std::vector<Particle>& particles){
     
     for (int i=0; i<numNeighbors; i++) {
         gradientNeighbor = glm::length(gradientConstraintForNeighbor(index, i, particles));
-        sumGradientAtParticle += gradientNeighbor*gradientNeighbor;
+        sumGradientAtParticle += gradientNeighbor * gradientNeighbor / currParticle.getMass();
     }
     
     float gradientParticle = glm::length(gradientConstraintAtParticle(index, particles));
     
     //Different Masses
-    sumGradientAtParticle += (gradientParticle * gradientParticle) / currParticle.getMass();
+    sumGradientAtParticle += (gradientParticle * gradientParticle);// / currParticle.getMass();
     
     float currDensity = this->getDensity(index, particles);
     float densityContraint = (currDensity/restDensity) - 1.0f; //density constraint
@@ -130,7 +222,7 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
 //            std::cout<<"[ERROR] getDensity at Neighbours";
 //        }
         
-        density +=  currParticle.getMass() * wPoly6Kernel(temp, smoothingRadius);
+        density +=  particles.at(neighbors.at(i)).getMass() * wPoly6Kernel(temp, smoothingRadius);
     }
     
     if(density < EPSILON)
@@ -147,19 +239,11 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
 
 float DensityConstraint::wPoly6Kernel(glm::vec3 distance, float smoothingRadius)
 {
-<<<<<<< HEAD
-    /*
-    if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
-    {
-        std::cout<<"[ERROR] wPoly6Kernel";
-    }
-     */
-=======
 //    if(glm::any(glm::isnan(distance)) || glm::any(glm::isinf(distance)))
 //    {
 //        std::cout<<"[ERROR] wPoly6Kernel";
 //    }
->>>>>>> dc6e778a2f588550f42d2a58fff9cd085daa8f6a
+     
     
     float d = glm::length(distance);
     float x = (smoothingRadius*smoothingRadius) - d*d;

@@ -33,7 +33,7 @@ ContactConstraint::ContactConstraint(int particleIndex) {
 }
 
 ContactConstraint::~ContactConstraint() {
-	
+    
 }
 
 //TODO: Implement
@@ -58,7 +58,7 @@ ShapeMatchingConstraint::~ShapeMatchingConstraint() {
 }
 
 void ShapeMatchingConstraint::Solve(glm::vec3& position, const SparseMatrix& invMass){
-
+    
 }
 
 void ShapeMatchingConstraint::Solve(std::vector<Particle> particleGroup){
@@ -80,11 +80,49 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle> particleGroup){
     
     
     //now solve delta x for particle i. so this will be a loop over all particles in the group?
+void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
+{
+    glm::vec3 centerMassDeformed, centerMassRestPose;
+    
+    for(int i=0; i<particles.size(); i++)
+    {
+        centerMassDeformed += particles.at(i).getPredictedPosition();
+        centerMassRestPose += particles.at(i).getPosition();
+    }
+    centerMassDeformed /= particles.size();
+    centerMassRestPose /= particles.size();
+    
+    glm::vec3 r, p;
+    glm::mat3 A(0);
+    
+    for(int i=0;i<particles.size(); i++)
+    {
+        p = particles.at(i).getPredictedPosition() - centerMassDeformed;
+        r = particles.at(i).getPosition() - centerMassDeformed;
     for(int i = 0; i < particleGroup.size(); i++) {
         //neet to convert from glm to euler to glm
         particleGroup[i].predictedPosition = (Q * particleGroup[i].restOffset + c) - particleGroup[i].predictedPosition;
     }
+        
+        A += p*r;
+    }
     
+    Eigen::Matrix<float, 3, 3> Aeigen;
+    
+    for(int i=0; i<3; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            Aeigen(i,j) = A[i][j];
+        }
+    }
+    
+    
+}
+
+int ShapeMatchingConstraint::getParticleIndex()
+{
+    return _particleIndex;
 }
 
 //---------------------------------------------------------------------------------

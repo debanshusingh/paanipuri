@@ -66,7 +66,6 @@ private:
     
     SparseMatrix invMassMatrix;
     
-    
     glm::vec3 Eigen2GLM(const EigenVector3& eigen_vector);
     EigenVector3 GLM2Eigen(const glm::vec3& glm_vector);
     
