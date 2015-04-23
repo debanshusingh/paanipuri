@@ -81,4 +81,6 @@ public:
     smoothingRadius*smoothingRadius*smoothingRadius;
     float s_9 = (smoothingRadius*smoothingRadius*smoothingRadius)*s_6;
     const float relaxation = 0.1f;
+    
+    int getParticleIndex();
 };

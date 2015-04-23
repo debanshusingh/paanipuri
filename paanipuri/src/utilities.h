@@ -46,6 +46,7 @@ namespace utilityCore {
     //-------GLM Printers----------
     //-----------------------------
     extern void printMat4(glm::mat4);
+    extern void printMat3(glm::mat3);
     extern void printVec4(glm::vec4);
     extern void printVec3(glm::vec3);
     
