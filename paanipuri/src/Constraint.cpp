@@ -6,7 +6,7 @@
 #include <tbb/blocked_range.h>
 #include <SVD>
 
-typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> Matrix;
+typedef Eigen::Matrix<float, 3, 3> Matrix;
 
 using namespace tbb;
 
@@ -84,6 +84,11 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
 {
     glm::vec3 centerMassDeformed, centerMassRest;
     glm::vec3 x1, y1, x2, y2;
+    if(!particles.size())
+    {
+        return;
+    }
+    
     
     for(int i = 0; i < particles.size(); i++) {
         x1 += particles[i].getMass() + particles[i].getPredictedPosition();
@@ -95,16 +100,23 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
     centerMassDeformed = x1 / y1;
     centerMassRest = x2 / y2;
     
-    glm::vec3 r, p;
+  
+    glm::vec3 r(0), p(0);
     glm::mat3 A(0);
+//       utilityCore::printVec3(p);
     
     for(int i=0;i<particles.size(); i++)
     {
         p = particles.at(i).getPredictedPosition() - centerMassDeformed;
-        A += p * particles[i].getRestOffset();
+        r = particles.at(i).getPosition() - centerMassRestPose;
+        A += p * r;//particles.at(i).getRestOffset();
+        
+//        utilityCore::printVec3(p);
+//        utilityCore::printVec3(r);
+//        utilityCore::printMat3(A);
     }
     
-    Eigen::Matrix<float, 3, 3> Aeigen;
+    Matrix Aeigen;
     
     for(int i=0; i<3; i++)
     {
@@ -117,6 +129,14 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
     Eigen::JacobiSVD<Matrix> svd(Aeigen, Eigen::ComputeFullU | Eigen::ComputeFullV);
     Matrix Q = svd.matrixU() * svd.matrixV().transpose();
     
+    if(Q.determinant() == -1.0f)
+    {
+        Matrix correction = Matrix::Identity();
+        correction(2,2) = -1.f;
+        
+        Q *= correction;
+    }
+    
     for(int i=0; i<3; i++)
     {
         for(int j=0; j<3; j++)
@@ -127,7 +147,7 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
     
     for(int i = 0; i < particles.size(); i++) {
         //neet to convert from glm to euler to glm
-        particles.at(i).setDeltaPi((A * particles.at(i).getRestOffset() + centerMassDeformed) - particles.at(i).getPredictedPosition());
+        particles.at(i).setDeltaPi((A * r + centerMassDeformed) - particles.at(i).getPredictedPosition());
     }
 }
 
@@ -360,4 +380,9 @@ void DensityConstraint::viscosity(int index, std::vector<Particle>& particles)
     }
     
     currParticle.setVelocity(newVelocity);
+}
+
+int DensityConstraint::getParticleIndex()
+{
+    return _particleIndex;
 }

@@ -269,7 +269,7 @@ void ParticleSystem::update()
             
             // for particles in constraint
             //update delta atomically
-            Particle& currParticle = particles.at(j);
+            Particle& currParticle = particles.at(densityConstraints.at(j)->getParticleIndex());
 //            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             
 //            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
@@ -296,9 +296,9 @@ void ParticleSystem::update()
             
             shapeConstraints.at(j)->Solve(particleGroup);
             
-            Particle& currParticle2 = particles.at(j);
+//            Particle& currParticle2 = particles.at(j);
 
-            currParticle2.setPredictedPosition(currParticle2.getPredictedPosition() + (currParticle2.getDeltaPi() / currParticle2.getMass()));
+            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
         });
     }
     
