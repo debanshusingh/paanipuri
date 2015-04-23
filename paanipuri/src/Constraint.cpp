@@ -4,6 +4,9 @@
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
+#include <SVD>
+
+typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> Matrix;
 
 using namespace tbb;
 
@@ -58,7 +61,29 @@ void ShapeMatchingConstraint::Solve(glm::vec3& position, const SparseMatrix& inv
 
 }
 
-void ShapeMatchingConstraint::Solve(){
+void ShapeMatchingConstraint::Solve(std::vector<Particle> particleGroup){
+    
+    //first we have to find the center of mass of the particles in the deformed configuration.
+    //that should just be the average position of all the particles?
+    glm::vec3 positionSum = glm::vec3(0.0f);
+    for(int i = 0; i < particleGroup.size(); i++) {
+        positionSum += particleGroup[i].getPredictedPosition(); //should be predicted position right? not position...
+    }
+    glm::vec3 c = positionSum / (float) particleGroup.size();
+    
+    //Imagine we have the matrix A already
+    Matrix A;
+    //Eigen::JacobiSVD<Eigen::MatrixXf> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    Eigen::JacobiSVD<Matrix> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    //solve for Q (rotation matrix
+    Matrix Q = svd.matrixU() * svd.matrixV().transpose();
+    
+    
+    //now solve delta x for particle i. so this will be a loop over all particles in the group?
+    for(int i = 0; i < particleGroup.size(); i++) {
+        //neet to convert from glm to euler to glm
+        particleGroup[i].predictedPosition = (Q * particleGroup[i].restOffset + c) - particleGroup[i].predictedPosition;
+    }
     
 }
 

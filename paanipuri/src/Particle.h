@@ -36,6 +36,9 @@ private:
     std::vector <int> neighborIndices;    //stores the indices of all the neighbors
     float lambda;
     
+    //particle offset position vector from center of mass at rest configuration (will need to be calculated during set up. only used for rigid bodies)
+    glm::vec3 restOffset;
+    
 public:
     
     //Constructors
@@ -77,6 +80,9 @@ public:
     
     int getPhase();
     void setPhase(int phase);
+    
+    glm::vec3 getRestOffset();
+    void setRestOffset(glm::vec3 restOffset);
     
 };
 
