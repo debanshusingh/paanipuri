@@ -199,6 +199,7 @@ void ParticleSystem::setupConstraints(){
         
         else
         {
+            //we don't actually need to have the particle index as part of this do we?
             ShapeMatchingConstraint* sc = new ShapeMatchingConstraint(i);
             shapeConstraints.push_back(sc);
         }
