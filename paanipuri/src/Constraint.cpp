@@ -103,7 +103,7 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
     centerMassDeformed = x1 / y1;
     centerMassRest = x2 / y2;
     
-    glm::vec3 r(0), p(0);
+    glm::vec3 r(0), p(0), rParticle(0);
     glm::mat3 A(0);
 //       utilityCore::printVec3(p);
     
@@ -111,6 +111,12 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
     {
         p = particles.at(particleGroup.at(i)).getPredictedPosition() - centerMassDeformed;
         r = particles.at(particleGroup.at(i)).getPosition() - centerMassRest;
+
+        if(particleGroup.at(i) == _particleIndex)
+        {
+            rParticle = r;
+        }
+        
         A += mass * p * r;//particles.at(i).getRestOffset();
         
 //        utilityCore::printVec3(p);
@@ -157,8 +163,8 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
     
 //    for(int i = 0; i < particles.size(); i++) {
         //neet to convert from glm to euler to glm
-    glm::vec3 deltaPi = (A * r + centerMassDeformed) - particles.at(_particleIndex).getPredictedPosition();
-    utilityCore::printVec3(deltaPi);
+    glm::vec3 deltaPi = (A * rParticle + centerMassDeformed) - particles.at(_particleIndex).getPredictedPosition();
+//    utilityCore::printVec3(deltaPi);
     particles.at(_particleIndex).setDeltaPi(deltaPi);
 //    }
 }
