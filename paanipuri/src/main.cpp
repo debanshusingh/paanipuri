@@ -35,8 +35,19 @@ void init(int argc, char* argv[]);
 void display();
 void displayParticles();
 
-GLuint loadTexture(Image* image);
 
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){
+    if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q)  && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(gWindow, GL_TRUE);
+    else if(key == GLFW_KEY_1 && action == GLFW_PRESS)
+        scene->addParticlesToScene(1);
+    else if(key == GLFW_KEY_2 && action == GLFW_PRESS)
+        scene->addParticlesToScene(2);
+    else if(key == GLFW_KEY_3 && action == GLFW_PRESS)
+        scene->addBallToScene();
+    else if(key == GLFW_KEY_4 && action == GLFW_PRESS)
+        scene->addCubeToScene();
+}
 
 GLuint loadTexture(Image* image) {
     GLuint textureId;
@@ -435,7 +446,7 @@ void initGLFW(int argc, char* argv[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    
+    glfwSetKeyCallback(gWindow, keyCallback);
 }
 
 int main(int argc, char * argv[]) {
@@ -460,17 +471,6 @@ int main(int argc, char * argv[]) {
         
         // draw one frame
         display();
-        
-        if(glfwGetKey(gWindow, GLFW_KEY_Q))
-            glfwSetWindowShouldClose(gWindow, GL_TRUE);
-        else if(glfwGetKey(gWindow, GLFW_KEY_1))
-            scene->addParticlesToScene(1);
-        else if(glfwGetKey(gWindow, GLFW_KEY_2))
-            scene->addParticlesToScene(2);
-        else if(glfwGetKey(gWindow, GLFW_KEY_3))
-            scene->addBallToScene();
-        else if(glfwGetKey(gWindow, GLFW_KEY_4))
-            scene->addCubeToScene();
     }
     
     // clean up and exit
