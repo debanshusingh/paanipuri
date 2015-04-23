@@ -42,7 +42,7 @@ public:
 	virtual ~ShapeMatchingConstraint();
 
 	virtual void Solve(glm::vec3& position, const SparseMatrix& invMass);
-    virtual void Solve(std::vector<Particle>& particles);
+    virtual void Solve(std::vector<int>& particleGroup, std::vector<Particle>& particles);
     
     int getParticleIndex();
 };
