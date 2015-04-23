@@ -197,6 +197,6 @@ glm::vec3 Particle::getRestOffset() {
     return this->restOffset;
 }
 
-void setRestOffset(glm::vec3 restOffset) {
+void Particle::setRestOffset(glm::vec3 restOffset) {
     this->restOffset = restOffset;
 }

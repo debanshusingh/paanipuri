@@ -61,24 +61,24 @@ void ShapeMatchingConstraint::Solve(glm::vec3& position, const SparseMatrix& inv
     
 }
 
-void ShapeMatchingConstraint::Solve(std::vector<Particle> particleGroup){
-    
-    //first we have to find the center of mass of the particles in the deformed configuration.
-    //that should just be the average position of all the particles?
-    glm::vec3 positionSum = glm::vec3(0.0f);
-    for(int i = 0; i < particleGroup.size(); i++) {
-        positionSum += particleGroup[i].getPredictedPosition(); //should be predicted position right? not position...
-    }
-    glm::vec3 c = positionSum / (float) particleGroup.size();
-    
-    //Imagine we have the matrix A already
-    Matrix A;
-    //Eigen::JacobiSVD<Eigen::MatrixXf> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
-    Eigen::JacobiSVD<Matrix> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
-    //solve for Q (rotation matrix
-    Matrix Q = svd.matrixU() * svd.matrixV().transpose();
-    
-    
+//void ShapeMatchingConstraint::Solve(std::vector<Particle> particleGroup){
+//    
+//    //first we have to find the center of mass of the particles in the deformed configuration.
+//    //that should just be the average position of all the particles?
+//    glm::vec3 positionSum = glm::vec3(0.0f);
+//    for(int i = 0; i < particleGroup.size(); i++) {
+//        positionSum += particleGroup[i].getPredictedPosition(); //should be predicted position right? not position...
+//    }
+//    glm::vec3 c = positionSum / (float) particleGroup.size();
+//    
+//    //Imagine we have the matrix A already
+//    Matrix A;
+//    //Eigen::JacobiSVD<Eigen::MatrixXf> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+//    Eigen::JacobiSVD<Matrix> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+//    //solve for Q (rotation matrix
+//    Matrix Q = svd.matrixU() * svd.matrixV().transpose();
+//}
+
     //now solve delta x for particle i. so this will be a loop over all particles in the group?
 void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
 {
@@ -99,11 +99,6 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
     {
         p = particles.at(i).getPredictedPosition() - centerMassDeformed;
         r = particles.at(i).getPosition() - centerMassDeformed;
-    for(int i = 0; i < particleGroup.size(); i++) {
-        //neet to convert from glm to euler to glm
-        particleGroup[i].predictedPosition = (Q * particleGroup[i].restOffset + c) - particleGroup[i].predictedPosition;
-    }
-        
         A += p*r;
     }
     
@@ -117,7 +112,21 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
         }
     }
     
+    Eigen::JacobiSVD<Matrix> svd(Aeigen, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    Matrix Q = svd.matrixU() * svd.matrixV().transpose();
     
+    for(int i=0; i<3; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            A[i][j] = Q(i,j);
+        }
+    }
+    
+    for(int i = 0; i < particles.size(); i++) {
+        //neet to convert from glm to euler to glm
+        particles.at(i).setDeltaPi((A * particles.at(i).getRestOffset() + centerMassDeformed) - particles.at(i).getPredictedPosition());
+    }
 }
 
 int ShapeMatchingConstraint::getParticleIndex()

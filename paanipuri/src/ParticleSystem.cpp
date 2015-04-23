@@ -294,6 +294,10 @@ void ParticleSystem::update()
             //----------------------------------------
             
             shapeConstraints.at(j)->Solve(particleGroup);
+            
+            Particle& currParticle2 = particles.at(j);
+
+            currParticle2.setPredictedPosition(currParticle2.getPredictedPosition() + (currParticle2.getDeltaPi() / currParticle2.getMass()));
         });
     }
     
