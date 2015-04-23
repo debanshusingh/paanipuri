@@ -108,7 +108,7 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
     for(int i=0;i<particles.size(); i++)
     {
         p = particles.at(i).getPredictedPosition() - centerMassDeformed;
-        r = particles.at(i).getPosition() - centerMassRestPose;
+        r = particles.at(i).getPosition() - centerMassRest;
         A += p * r;//particles.at(i).getRestOffset();
         
 //        utilityCore::printVec3(p);
