@@ -91,6 +91,7 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
     
     
     for(int i=0; i<particleGroup.size(); i++)
+    {
         x1 += particles[i].getMass() + particles[i].getPredictedPosition();
         y1 += particles[i].getMass();
         
@@ -107,7 +108,7 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
     for(int i=0;i<particleGroup.size(); i++)
     {
         p = particles.at(particleGroup.at(i)).getPredictedPosition() - centerMassDeformed;
-        r = particles.at(particleGroup.at(i)).getPosition() - centerMassRestPose;
+        r = particles.at(particleGroup.at(i)).getPosition() - centerMassRest;
         A += p * r;//particles.at(i).getRestOffset();
         
 //        utilityCore::printVec3(p);
