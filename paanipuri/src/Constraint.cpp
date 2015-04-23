@@ -80,7 +80,7 @@ void ShapeMatchingConstraint::Solve(glm::vec3& position, const SparseMatrix& inv
 //}
 
     //now solve delta x for particle i. so this will be a loop over all particles in the group?
-void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
+void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector<Particle>& particles)
 {
     if(!particles.size())
     {
@@ -89,24 +89,23 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
     
     glm::vec3 centerMassDeformed, centerMassRestPose;
     
-    for(int i=0; i<particles.size(); i++)
+    for(int i=0; i<particleGroup.size(); i++)
     {
-        centerMassDeformed += particles.at(i).getPredictedPosition();
-        centerMassRestPose += particles.at(i).getPosition();
+        centerMassDeformed += particles.at(particleGroup.at(i)).getPredictedPosition();
+        centerMassRestPose += particles.at(particleGroup.at(i)).getPosition();
     }
     
-    centerMassDeformed /= particles.size();
-    centerMassRestPose /= particles.size();
+    centerMassDeformed /= particleGroup.size();
+    centerMassRestPose /= particleGroup.size();
     
-  
     glm::vec3 r(0), p(0);
     glm::mat3 A(0);
 //       utilityCore::printVec3(p);
     
-    for(int i=0;i<particles.size(); i++)
+    for(int i=0;i<particleGroup.size(); i++)
     {
-        p = particles.at(i).getPredictedPosition() - centerMassDeformed;
-        r = particles.at(i).getPosition() - centerMassRestPose;
+        p = particles.at(particleGroup.at(i)).getPredictedPosition() - centerMassDeformed;
+        r = particles.at(particleGroup.at(i)).getPosition() - centerMassRestPose;
         A += p * r;//particles.at(i).getRestOffset();
         
 //        utilityCore::printVec3(p);
@@ -132,7 +131,7 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
         Matrix correction = Matrix::Identity();
         correction(2,2) = -1.f;
         
-        Q *= correction;
+        Q = (svd.matrixU() * correction) * svd.matrixV().transpose();
     }
     
     for(int i=0; i<3; i++)
@@ -143,10 +142,10 @@ void ShapeMatchingConstraint::Solve(std::vector<Particle>& particles)
         }
     }
     
-    for(int i = 0; i < particles.size(); i++) {
+//    for(int i = 0; i < particles.size(); i++) {
         //neet to convert from glm to euler to glm
-        particles.at(i).setDeltaPi((A * r + centerMassDeformed) - particles.at(i).getPredictedPosition());
-    }
+        particles.at(_particleIndex).setDeltaPi((A * r + centerMassDeformed) - particles.at(_particleIndex).getPredictedPosition());
+//    }
 }
 
 int ShapeMatchingConstraint::getParticleIndex()

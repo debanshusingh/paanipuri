@@ -281,19 +281,21 @@ void ParticleSystem::update()
             particleCollision(j);
             
             //Change this calculation later: save the groups when particles are added to the scene
-            std::vector<Particle> particleGroup;
+//            std::vector<Particle> particleGroup;
+            std::vector<int> particleGroup;
+            
             Particle& currParticle = particles.at(shapeConstraints.at(j)->getParticleIndex());
             
             for(int i = 0; i<particles.size();i++)
             {
                 if(currParticle.getPhase() == particles.at(i).getPhase())
                 {
-                    particleGroup.push_back(particles.at(i));
+                    particleGroup.push_back(i);
                 }
             }
             //----------------------------------------
             
-            shapeConstraints.at(j)->Solve(particleGroup);
+            shapeConstraints.at(j)->Solve(particleGroup, particles);
             
 //            Particle& currParticle2 = particles.at(j);
 
