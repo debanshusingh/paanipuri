@@ -271,7 +271,7 @@ void ParticleSystem::update()
             Particle& currParticle = particles.at(j);
 //            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             
-//                currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
+//            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (currParticle.getDeltaPi() / currParticle.getMass()));
                 //currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
         });
@@ -279,6 +279,21 @@ void ParticleSystem::update()
         parallel_for<size_t>(0, shapeConstraints.size(), 1, [=](int j)
         {
             particleCollision(j);
+            
+            //Change this calculation later: save the groups when particles are added to the scene
+            std::vector<Particle> particleGroup;
+            Particle& currParticle = particles.at(shapeConstraints.at(j)->getParticleIndex());
+            
+            for(int i = 0; i<particles.size();i++)
+            {
+                if(currParticle.getPhase() == particles.at(i).getPhase())
+                {
+                    particleGroup.push_back(particles.at(i));
+                }
+            }
+            //----------------------------------------
+            
+            shapeConstraints.at(j)->Solve(particleGroup);
         });
     }
     
