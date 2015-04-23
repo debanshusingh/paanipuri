@@ -98,6 +98,7 @@ void Scene::init(){
 //    }
 
     addBallToScene();
+//    addCubeToScene();
     particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
     particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
     particleSystem->setCellSize(cube->getCellSize());
