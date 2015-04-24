@@ -250,6 +250,14 @@ void ParticleSystem::update()
 //        findSolidContacts(i) //resolve contact constraints for stable init. config -> update original & predicted pos
     });
     
+    for (int iter=0; iter<1; iter++) // outer loop can't be parallelized
+    {
+        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
+        {
+            particleCollision(i);
+        });
+    }
+    
     for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
     {
         //constraint-centric approach
@@ -279,7 +287,7 @@ void ParticleSystem::update()
         
         parallel_for<size_t>(0, shapeConstraints.size(), 1, [=](int j)
         {
-            particleCollision(j);
+//            particleCollision(j);
             
             //Change this calculation later: save the groups when particles are added to the scene
 //            std::vector<Particle> particleGroup;
@@ -297,10 +305,11 @@ void ParticleSystem::update()
             //----------------------------------------
             
             shapeConstraints.at(j)->Solve(particleGroup, particles);
+            particleCollision(j);
             
-//            Particle& currParticle2 = particles.at(j);
-
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+            
+
         });
     }
     
@@ -613,3 +622,36 @@ EigenVector3 ParticleSystem::GLM2Eigen(const glm::vec3& glm_vector)
 {
     return EigenVector3(glm_vector[0], glm_vector[1], glm_vector[2]);
 }
+
+void ParticleSystem::setRestPose(int groupID)
+{
+    std::vector<int> particleGroup;
+    glm::vec3 centerMassRest(0.0);
+    glm::vec3 x2(0.0), y2;
+    
+    for(int i = 0; i<particles.size();i++)
+    {
+        if(particles.at(i).getPhase() == groupID)
+        {
+            particleGroup.push_back(i);
+        }
+    }
+    
+//    float mass = particles.at(particleGroup.at(0)).getMass();
+    
+    for(int i = 0; i<particles.size(); i++)
+    {
+        centerMassRest += particles.at(particleGroup.at(i)).getPosition();
+//        y2 += mass;
+    }
+    centerMassRest /= particleGroup.size();
+    
+    for(int i = 0; i<particles.size(); i++)
+    {
+        particles.at(particleGroup.at(i)).setRestOffset(particles.at(particleGroup.at(i)).getPosition() - centerMassRest);
+    }
+}
+
+
+
+

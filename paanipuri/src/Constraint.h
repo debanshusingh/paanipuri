@@ -3,7 +3,7 @@
 #include <vector>
 #include "Particle.h"
 #include "utilities.h"
-#include <Sparse>
+#include <Eigen/Sparse>
 
 typedef Eigen::SparseMatrix<float> SparseMatrix;
 

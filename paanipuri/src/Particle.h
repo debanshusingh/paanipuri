@@ -24,13 +24,10 @@ private:
     float predictedMass;
     
     //  Current values
-    glm::vec3 position;     //Stores the current position of the particle
     glm::vec3 velocity;     //Stores the current velocity of the particle
     glm::vec3 forces;       //Stores the accumulated forces acting on the particle
     
     //predicted values
-    glm::vec3 predictedPosition;    //Predicted particle position
-    glm::vec3 deltaPi;
     
     glm::ivec3 hashPosition; //stores the grid index where the particle predicted position is
     std::vector <int> neighborIndices;    //stores the indices of all the neighbors
@@ -40,7 +37,10 @@ private:
     glm::vec3 restOffset;
     
 public:
-    
+    glm::vec3 position;     //Stores the current position of the particle
+    glm::vec3 predictedPosition;    //Predicted particle position
+    glm::vec3 deltaPi;
+
     //Constructors
     Particle();             //Default
     Particle(glm::vec3);    //Construct a particle at a specific position

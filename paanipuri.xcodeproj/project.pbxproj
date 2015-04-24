@@ -347,7 +347,7 @@
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glfw/include",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/assimp-3.1.1/include",
 					/usr/local/include,
-					"\"$(SRCROOT)/paanipuri/thirdparty/osx/Eigen\"",
+					"\"$(SRCROOT)/paanipuri/thirdparty/osx/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glew/lib",
@@ -371,7 +371,7 @@
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glfw/include",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/assimp-3.1.1/include",
 					/usr/local/include,
-					"\"$(SRCROOT)/paanipuri/thirdparty/osx/Eigen\"",
+					"\"$(SRCROOT)/paanipuri/thirdparty/osx/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glew/lib",

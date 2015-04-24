@@ -4,9 +4,8 @@
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
-#include <SVD>
-
-typedef Eigen::Matrix<float, 3, 3> Matrix;
+#include <Eigen/SVD>
+#include <unsupported/Eigen/MatrixFunctions>
 
 using namespace tbb;
 
@@ -97,76 +96,93 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
         x1 += mass * particles.at(particleGroup.at(i)).getPredictedPosition();
         y1 += mass;
         
-        x2 += mass * particles.at(particleGroup.at(i)).getPosition();
-        y2 += mass;
+//        x2 += mass * particles.at(particleGroup.at(i)).getPosition();
+//        y2 += mass;
     }
     centerMassDeformed = x1 / y1;
-    centerMassRest = x2 / y2;
+//    centerMassRest = x2 / y2;
     
-    glm::vec3 r(0), p(0), rParticle(0);
-    glm::mat3 A(0);
-//       utilityCore::printVec3(p);
+    glm::vec3 q(0), p(0), rParticle(0);
+    glm::mat3 Apq(0);
+    Eigen::Matrix3f A_pq; //for using eigen. A_pq should be set to Apq
+
     
     for(int i=0;i<particleGroup.size(); i++)
     {
         p = particles.at(particleGroup.at(i)).getPredictedPosition() - centerMassDeformed;
-        r = particles.at(particleGroup.at(i)).getPosition() - centerMassRest;
+        q = particles.at(particleGroup.at(i)).getRestOffset();//getPosition() - centerMassRest;
 
-        if(particleGroup.at(i) == _particleIndex)
-        {
-            rParticle = r;
-        }
+//        if(particleGroup.at(i) == _particleIndex)
+//        {
+//            rParticle = r;
+//        }
         
-        A += mass * p * r;//particles.at(i).getRestOffset();
-        
-//        utilityCore::printVec3(p);
-//        utilityCore::printVec3(r);
-//        utilityCore::printMat3(A);
+        Apq += mass * p * q;//particles.at(i).getRestOffset();
     }
     
-    Matrix Aeigen;
     
     for(int i=0; i<3; i++)
     {
         for(int j=0; j<3; j++)
         {
-            Aeigen(i,j) = A[i][j];
+            A_pq(i,j) = Apq[i][j];
         }
     }
     
-    Eigen::JacobiSVD<Matrix> svd(Aeigen, Eigen::ComputeFullU | Eigen::ComputeFullV);
-    Matrix Q = svd.matrixU() * svd.matrixV().transpose();
+//    Eigen::JacobiSVD<Eigen::Matrix3f> svd(Aeigen, Eigen::ComputeFullU | Eigen::ComputeFullV);
+//    Eigen::Matrix3f Q = svd.matrixU() * svd.matrixV().transpose();
+//    std::cout<<svd.singularValues();
+    glm::mat3 rotMat(1.0);
+    bool isSqrtable = true;
     
-    float t = Q.determinant();
+    Eigen::Matrix3f S,Q;
+    S = (A_pq.transpose() * A_pq);
     
-    if(!((t < 1.f+ZERO_ABSORPTION_EPSILON && t > 1.f-ZERO_ABSORPTION_EPSILON) || (t < -1.f+ZERO_ABSORPTION_EPSILON && t > -1.f-ZERO_ABSORPTION_EPSILON) ) )
-    {
-        std::cout<<"ERROR"<<std::endl;
-        std::cout<<t;
+    Eigen::Vector3cf S_eigenvalues = S.eigenvalues();
+    for (int i=0; i<S_eigenvalues.size(); i++){
+//        std::cout<<S_eigenvalues[i].real();
+        if (S_eigenvalues[i].real()<=0 && S_eigenvalues[i].imag() == 0){
+            rotMat = glm::mat3(1.0);
+            isSqrtable = false;
+            break;
+        }
     }
-    
-    if(Q.determinant() < 0.0f)
-    {
-        Matrix correction = Matrix::Identity();
-        correction(2,2) = -1.f;
+    if (isSqrtable) {
+        S = S.sqrt();
+        Q = A_pq*S.inverse();
         
-        Q = (svd.matrixU() * correction) * svd.matrixV().transpose();
-    }
-    
-    for(int i=0; i<3; i++)
-    {
-        for(int j=0; j<3; j++)
+        float t = Q.determinant();
+        
+        if(!((t < 1.f+ZERO_ABSORPTION_EPSILON && t > 1.f-ZERO_ABSORPTION_EPSILON) || (t < -1.f+ZERO_ABSORPTION_EPSILON && t > -1.f-ZERO_ABSORPTION_EPSILON) ) )
         {
-            A[i][j] = Q(i,j);
+//            std::cout<<"ERROR"<<std::endl;
+//            std::cout<<t;
+        }
+
+        else
+        {
+            for(int i=0; i<3; i++)
+            {
+                for(int j=0; j<3; j++)
+                {
+                    rotMat[i][j] = Q(i,j);
+                }
+            }
         }
     }
-    
-//    for(int i = 0; i < particles.size(); i++) {
-        //neet to convert from glm to euler to glm
-    glm::vec3 deltaPi = (A * rParticle + centerMassDeformed) - particles.at(_particleIndex).getPredictedPosition();
-//    utilityCore::printVec3(deltaPi);
-    particles.at(_particleIndex).setDeltaPi(deltaPi);
+
+//    if(Q.determinant() < 0.0f)
+//    {
+//        Eigen::Matrix3f correction = Eigen::Matrix3f::Identity();
+//        //correction(2,2) = -1.f;
+//
+//        Q = (svd.matrixU() * correction) * svd.matrixV().transpose();
 //    }
+    
+    
+    
+    glm::vec3 deltaPi = (rotMat*particles.at(_particleIndex).getRestOffset() + centerMassDeformed) - particles.at(_particleIndex).getPredictedPosition();
+    particles.at(_particleIndex).setDeltaPi(deltaPi);
 }
 
 int ShapeMatchingConstraint::getParticleIndex()
