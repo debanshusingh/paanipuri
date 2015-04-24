@@ -298,7 +298,7 @@ void ParticleSystem::update()
      
         currParticle.setVelocity((currParticle.getPredictedPosition() - currParticle.getPosition()) / timeStep);
 //        viscosity(i);
-        currParticle.setPosition(currParticle.getPredictedPosition());
+        currParticle.setPosition(currParticle.getPredictedPosition()); //TODO: Have to apply sleeping!
     });
     
     for (int i=0; i<particles.size(); i++)
