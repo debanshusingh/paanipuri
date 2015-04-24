@@ -42,6 +42,8 @@ private:
     std::vector<DensityConstraint*> densityConstraints;   //List of all density constraints in the system
     std::vector<ShapeMatchingConstraint*> shapeConstraints;   //List of all shape matching constraints in the system
     
+    std::map<int, std::vector<int>> particleGroup;  // Maps phase to a vector of particle indices
+    
     const float smoothingRadius = 1.5f;
     const int solverIterations = 10;
     

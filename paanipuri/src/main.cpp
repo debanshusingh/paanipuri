@@ -227,8 +227,6 @@ void initShader(){
     glUniformMatrix4fv(unifProj, 1, GL_FALSE, &projection[0][0]);
     
     glUseProgram(0);
-    
-    
 }
 
 void displayParticles()
@@ -250,11 +248,14 @@ void displayParticles()
         if (particle.getPhase() == 1){
             partCol = glm::vec3(0.0,1.0,0.0);
         }
-        else if(particle.getPhase() == 2){
-            partCol = glm::vec3(1.0,1.0,0.0);
-        }
-        else if(particle.getPhase() == 3){
-            partCol = glm::vec3(0.0,1.0,1.0);
+        else if(particle.getPhase() >= 2){
+            
+            if(particle.getPhase() %2 == 0){ //sphere
+                partCol = glm::vec3(1.0,1.0,0.0);
+            }
+            else {  //cube
+                partCol = glm::vec3(0.0,1.0,1.0);
+            }
         }
         particleColData.push_back(partCol);
     }

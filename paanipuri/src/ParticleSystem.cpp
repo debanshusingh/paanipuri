@@ -25,6 +25,7 @@ std::vector<Particle>& ParticleSystem::getAllParticles()
 void ParticleSystem::addParticle(Particle p)
 {
     particles.push_back(p);
+    particleGroup[p.getPhase()].push_back(static_cast<int>(particles.size()-1));
 }
 
 glm::vec3 ParticleSystem::getForces()
@@ -242,7 +243,7 @@ void ParticleSystem::update()
 
     setupConstraints();
     
-    setupInvMassMatrix();
+//    setupInvMassMatrix();
 
     parallel_for<size_t>(0, particles.size(), 1, [=](int i)
     {
@@ -250,13 +251,10 @@ void ParticleSystem::update()
 //        findSolidContacts(i) //resolve contact constraints for stable init. config -> update original & predicted pos
     });
     
-    for (int iter=0; iter<1; iter++) // outer loop can't be parallelized
+    parallel_for<size_t>(0, particles.size(), 1, [=](int i)
     {
-        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
-        {
-            particleCollision(i);
-        });
-    }
+        particleCollision(i);
+    });
     
     for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
     {
@@ -277,39 +275,20 @@ void ParticleSystem::update()
             
             // for particles in constraint
             //update delta atomically
-            Particle& currParticle = particles.at(densityConstraints.at(j)->getParticleIndex());
-//            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             
-//            currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (invMassMatrix.coeff(j, j) * currParticle.getDeltaPi()));
+            Particle& currParticle = particles.at(densityConstraints.at(j)->getParticleIndex());
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (currParticle.getDeltaPi() / currParticle.getMass()));
-                //currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+
         });
         
         parallel_for<size_t>(0, shapeConstraints.size(), 1, [=](int j)
         {
-//            particleCollision(j);
-            
-            //Change this calculation later: save the groups when particles are added to the scene
-//            std::vector<Particle> particleGroup;
-            std::vector<int> particleGroup;
-            
             Particle& currParticle = particles.at(shapeConstraints.at(j)->getParticleIndex());
             
-            for(int i = 0; i<particles.size();i++)
-            {
-                if(currParticle.getPhase() == particles.at(i).getPhase())
-                {
-                    particleGroup.push_back(i);
-                }
-            }
-            //----------------------------------------
-            
-            shapeConstraints.at(j)->Solve(particleGroup, particles);
+            shapeConstraints.at(j)->Solve(particleGroup.at(currParticle.getPhase()), particles);
             particleCollision(j);
             
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
-            
-
         });
     }
     
@@ -327,12 +306,6 @@ void ParticleSystem::update()
         Particle& currParticle = particles.at(i);
         glm::vec3 partPos = currParticle.getPosition();
         particlePosData.push_back(partPos);
-        
-        glm::vec3 partCol(1.0,1.0,1.0);
-        if (currParticle.getPhase() == 1){
-            partCol = glm::vec3(0.0,1.0,0.0);
-        }
-        particleColData.push_back(partCol);
     }
 }
 
@@ -371,6 +344,7 @@ void ParticleSystem::applyForces(const int i)
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
 //    particleContainerCollision(index);
+    particleParticleCollision(index);
 }
 
 void ParticleSystem::particleParticleCollision(int index)
@@ -393,28 +367,42 @@ void ParticleSystem::particleParticleCollision(int index)
 
 
     float distance, radius = currParticle.getRadius();
-
-    radius= smoothingRadius;
+    float m1 = currParticle.getMass(), m2;
+    float currParticleMass = m1, neighborMass;
+    float dampingFactor = 0.5f;
+    
+    radius = smoothingRadius;
     for(int i=0; i<neighbors.size(); i++)
     {
-        particleVelocity = currParticle.getVelocity();
-
-        neighborPosition = particles.at(neighbors.at(i)).getPredictedPosition();
-        neighborVelocity = particles.at(neighbors.at(i)).getVelocity();
-
-        distance = glm::distance(currentParticlePosition, neighborPosition);
-
-        if(distance < 2 * radius + EPSILON)
+        if( (currParticle.getPhase() != particles.at(neighbors.at(i)).getPhase()) //||
+            // (currParticle.getPhase() < 2 && particles.at(neighbors.at(i)).getPhase() < 2)
+           )
+        //Also check if the current and neighbor particle is a fluid, dont do collisions
         {
-            //resolve collision
-            relativeVelocity = particleVelocity - neighborVelocity;
+            particleVelocity = currParticle.getVelocity();
 
-            collisionNormal = glm::normalize(currentParticlePosition - neighborPosition);
+            neighborPosition = particles.at(neighbors.at(i)).getPredictedPosition();
+            neighborVelocity = particles.at(neighbors.at(i)).getVelocity();
+            m2 = particles.at(neighbors.at(i)).getMass();
+            neighborMass = m2;
+            
+            distance = glm::distance(currentParticlePosition, neighborPosition);
 
-            vCollision = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
+            if(distance < 2 * radius + ZERO_ABSORPTION_EPSILON)
+            {
+                //resolve collision
+                relativeVelocity = particleVelocity - neighborVelocity;
 
-            currParticle.setVelocity(particleVelocity - vCollision);
-            particles.at(neighbors.at(i)).setVelocity(neighborVelocity + vCollision);
+                collisionNormal = glm::normalize(currentParticlePosition - neighborPosition);
+
+                vCollision = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
+
+                currParticle.setVelocity( neighborMass * (particleVelocity - vCollision) / (currParticleMass+neighborMass));
+                particles.at(neighbors.at(i)).setVelocity( currParticleMass * (neighborVelocity + vCollision) / (currParticleMass+neighborMass) );
+                
+//                currParticle.setVelocity(((particleVelocity*(m1-m2) + 2.f*m2*neighborVelocity)/(m1+m2)) * dampingFactor);
+//                particles.at(neighbors.at(i)).setVelocity(((neighborVelocity*(m2-m1) + 2.f*m1*particleVelocity)/(m1+m2)) * dampingFactor);
+            }
         }
     }
 }
@@ -639,14 +627,14 @@ void ParticleSystem::setRestPose(int groupID)
     
 //    float mass = particles.at(particleGroup.at(0)).getMass();
     
-    for(int i = 0; i<particles.size(); i++)
+    for(int i = 0; i<particleGroup.size(); i++)
     {
         centerMassRest += particles.at(particleGroup.at(i)).getPosition();
 //        y2 += mass;
     }
     centerMassRest /= particleGroup.size();
     
-    for(int i = 0; i<particles.size(); i++)
+    for(int i = 0; i<particleGroup.size(); i++)
     {
         particles.at(particleGroup.at(i)).setRestOffset(particles.at(particleGroup.at(i)).getPosition() - centerMassRest);
     }

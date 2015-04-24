@@ -86,41 +86,32 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
         return;
     }
     
-    glm::vec3 centerMassDeformed, centerMassRest;
-    glm::vec3 x1, y1, x2, y2;
+    glm::vec3 centerMassDeformed(0.0), centerMassRest;
+    glm::vec3 x1, y1;
     
     float mass = particles.at(particleGroup.at(0)).getMass();
     
+    //Calculating Center of Mass (as mass of all partiles is the same, it becomes the average of positions
     for(int i=0; i<particleGroup.size(); i++)
     {
-        x1 += mass * particles.at(particleGroup.at(i)).getPredictedPosition();
-        y1 += mass;
-        
-//        x2 += mass * particles.at(particleGroup.at(i)).getPosition();
-//        y2 += mass;
+        centerMassDeformed += particles.at(particleGroup.at(i)).getPredictedPosition();
     }
-    centerMassDeformed = x1 / y1;
-//    centerMassRest = x2 / y2;
+    centerMassDeformed /= particleGroup.size();
     
     glm::vec3 q(0), p(0), rParticle(0);
     glm::mat3 Apq(0);
     Eigen::Matrix3f A_pq; //for using eigen. A_pq should be set to Apq
 
-    
+    //Finding Apq matrix
     for(int i=0;i<particleGroup.size(); i++)
     {
         p = particles.at(particleGroup.at(i)).getPredictedPosition() - centerMassDeformed;
-        q = particles.at(particleGroup.at(i)).getRestOffset();//getPosition() - centerMassRest;
+        q = particles.at(particleGroup.at(i)).getRestOffset();
 
-//        if(particleGroup.at(i) == _particleIndex)
-//        {
-//            rParticle = r;
-//        }
-        
-        Apq += mass * p * q;//particles.at(i).getRestOffset();
+        Apq += mass * p * q;
     }
     
-    
+    //Change from mat3 to eigen
     for(int i=0; i<3; i++)
     {
         for(int j=0; j<3; j++)
@@ -132,9 +123,11 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
 //    Eigen::JacobiSVD<Eigen::Matrix3f> svd(Aeigen, Eigen::ComputeFullU | Eigen::ComputeFullV);
 //    Eigen::Matrix3f Q = svd.matrixU() * svd.matrixV().transpose();
 //    std::cout<<svd.singularValues();
+    
     glm::mat3 rotMat(1.0);
     bool isSqrtable = true;
     
+    //Find S
     Eigen::Matrix3f S,Q;
     S = (A_pq.transpose() * A_pq);
     
@@ -147,18 +140,21 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
             break;
         }
     }
+    
     if (isSqrtable) {
         S = S.sqrt();
         Q = A_pq*S.inverse();
         
         float t = Q.determinant();
         
-        if(!((t < 1.f+ZERO_ABSORPTION_EPSILON && t > 1.f-ZERO_ABSORPTION_EPSILON) || (t < -1.f+ZERO_ABSORPTION_EPSILON && t > -1.f-ZERO_ABSORPTION_EPSILON) ) )
+        //If the determinant of the rotation matrix is not ~(1 or -1), discard it
+        if( ! ((t < 1.f+ZERO_ABSORPTION_EPSILON && t > 1.f-ZERO_ABSORPTION_EPSILON) || (t < -1.f+ZERO_ABSORPTION_EPSILON && t > -1.f-ZERO_ABSORPTION_EPSILON)) )
         {
 //            std::cout<<"ERROR"<<std::endl;
 //            std::cout<<t;
         }
-
+        
+        //else convert rotation matrix from eigen to mat3
         else
         {
             for(int i=0; i<3; i++)
@@ -178,7 +174,6 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
 //
 //        Q = (svd.matrixU() * correction) * svd.matrixV().transpose();
 //    }
-    
     
     
     glm::vec3 deltaPi = (rotMat*particles.at(_particleIndex).getRestOffset() + centerMassDeformed) - particles.at(_particleIndex).getPredictedPosition();
@@ -272,19 +267,23 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
     //  If mass is changed, change the for loop to multiply by mass
     for(i=0; i<neighbors.size(); i++)
     {
-        glm::vec3 temp = (currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition());
-        
-//        if(glm::any(glm::isnan(currParticle.getPredictedPosition())))
-//        {
-//            std::cout<<"[ERROR] getDensity at Particles";
-//        }
-//        if(glm::any(glm::isnan(particles.at(neighbors.at(i)).getPredictedPosition())) || glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition())))
-//        {
-//            utilityCore::printVec3(particles.at(neighbors.at(i)).getPredictedPosition());
-//            std::cout<<"[ERROR] getDensity at Neighbours";
-//        }
-        
-        density +=  particles.at(neighbors.at(i)).getMass() * wPoly6Kernel(temp, smoothingRadius);
+        //TODO
+       // if(particles.at(_particleIndex).getPhase() == particles.at(neighbors.at(i)).getPhase())
+        {
+            glm::vec3 temp = (currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition());
+            
+    //        if(glm::any(glm::isnan(currParticle.getPredictedPosition())))
+    //        {
+    //            std::cout<<"[ERROR] getDensity at Particles";
+    //        }
+    //        if(glm::any(glm::isnan(particles.at(neighbors.at(i)).getPredictedPosition())) || glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition())))
+    //        {
+    //            utilityCore::printVec3(particles.at(neighbors.at(i)).getPredictedPosition());
+    //            std::cout<<"[ERROR] getDensity at Neighbours";
+    //        }
+            
+            density +=  particles.at(neighbors.at(i)).getMass() * wPoly6Kernel(temp, smoothingRadius);
+        }
     }
     
     if(density < EPSILON)
