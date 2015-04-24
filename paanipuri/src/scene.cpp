@@ -78,27 +78,27 @@ Scene::Scene()
 void Scene::init(){
     glm::vec3 position(0), velocity(0);
     
-    float smoothingRad = particleSystem->getSmoothingRadius() * 1.f;
-    int damDim = static_cast <int> (std::cbrt(numberOfParticles)),
-    i,j,k=0;
-    
-    //set up dam break
-    
-    //  start with the highest y, and keep filling squares
-    
-    int phase = 0;
-    float mass = 1.f;
-    for(i=0; i<damDim; i++)
-    {
-        for(j=0; j<damDim; j++)
-        {
-            for(k=0; k<damDim; k++)
-            {
-                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.9f;
-                particleSystem->addParticle(Particle(position, velocity, phase, mass));
-            }
-        }
-    }
+//    float smoothingRad = particleSystem->getSmoothingRadius() * 1.f;
+//    int damDim = static_cast <int> (std::cbrt(numberOfParticles)),
+//    i,j,k=0;
+//    
+//    //set up dam break
+//    
+//    //  start with the highest y, and keep filling squares
+//    
+//    int phase = 0;
+//    float mass = 1.f;
+//    for(i=0; i<damDim; i++)
+//    {
+//        for(j=0; j<damDim; j++)
+//        {
+//            for(k=0; k<damDim; k++)
+//            {
+//                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.9f;
+//                particleSystem->addParticle(Particle(position, velocity, phase, mass));
+//            }
+//        }
+//    }
 
 //    addBallToScene();
 //    addCubeToScene();
@@ -158,7 +158,7 @@ void Scene::addParticlesToScene(int type)
 
 void Scene::addCubeToScene()
 {
-    int particleCount = 1000;
+    int particleCount = 8;
 
     int damDim = static_cast <int> (std::cbrt(particleCount)),
     i,j,k=0;
@@ -166,7 +166,7 @@ void Scene::addCubeToScene()
     glm::vec3 position(0), velocity(0,0,0);
     
     int phase = currPhaseCube;
-    float mass = 0.1f;
+    float mass = 1.f;
     
     for(i=0; i<damDim; i++)
     {

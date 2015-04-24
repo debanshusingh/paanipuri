@@ -369,39 +369,64 @@ void ParticleSystem::particleParticleCollision(int index)
     float distance, radius = currParticle.getRadius();
     float m1 = currParticle.getMass(), m2;
     float currParticleMass = m1, neighborMass;
-    float dampingFactor = 0.5f;
+    float dampingFactor = 1.f, scaleUpFactor = 0.5f, e = 0.3;
     
-    radius = smoothingRadius;
+    glm::vec3 newParVelocity, newNeighVelocity;
+    float c;
+    
+//    radius = smoothingRadius;
     for(int i=0; i<neighbors.size(); i++)
     {
-        if( (currParticle.getPhase() != particles.at(neighbors.at(i)).getPhase()) //||
-            // (currParticle.getPhase() < 2 && particles.at(neighbors.at(i)).getPhase() < 2)
-           )
-        //Also check if the current and neighbor particle is a fluid, dont do collisions
+        Particle &neighborParticle = particles.at(neighbors.at(i));
+        
+        if(currParticle.getPhase() < 2 && neighborParticle.getPhase() < 2)
         {
+            //if both particles are fluids, do nothing
+        }
+        
+        else if( (currParticle.getPhase() != neighborParticle.getPhase()))
+        {
+            //else if both are of different phase, then do collision detection and response
             particleVelocity = currParticle.getVelocity();
-
-            neighborPosition = particles.at(neighbors.at(i)).getPredictedPosition();
-            neighborVelocity = particles.at(neighbors.at(i)).getVelocity();
-            m2 = particles.at(neighbors.at(i)).getMass();
+            
+            neighborPosition = neighborParticle.getPredictedPosition();
+            neighborVelocity = neighborParticle.getVelocity();
+            m2 = neighborParticle.getMass();
             neighborMass = m2;
             
             distance = glm::distance(currentParticlePosition, neighborPosition);
 
-            if(distance < 2 * radius + ZERO_ABSORPTION_EPSILON)
+            if(distance < 2.f * radius + ZERO_ABSORPTION_EPSILON)
             {
                 //resolve collision
                 relativeVelocity = particleVelocity - neighborVelocity;
-
+//
                 collisionNormal = glm::normalize(currentParticlePosition - neighborPosition);
+//
+//                vCollision = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
+//
+//                currParticle.setVelocity( (neighborMass * (particleVelocity - vCollision) / (currParticleMass+neighborMass)) * dampingFactor);
+//                neighborParticle.setVelocity( (currParticleMass * (neighborVelocity + vCollision) / (currParticleMass+neighborMass)) * dampingFactor);
 
-                vCollision = glm::dot(collisionNormal, relativeVelocity) * collisionNormal;
-
-                currParticle.setVelocity( neighborMass * (particleVelocity - vCollision) / (currParticleMass+neighborMass));
-                particles.at(neighbors.at(i)).setVelocity( currParticleMass * (neighborVelocity + vCollision) / (currParticleMass+neighborMass) );
-                
+//        collision 2
 //                currParticle.setVelocity(((particleVelocity*(m1-m2) + 2.f*m2*neighborVelocity)/(m1+m2)) * dampingFactor);
 //                particles.at(neighbors.at(i)).setVelocity(((neighborVelocity*(m2-m1) + 2.f*m1*particleVelocity)/(m1+m2)) * dampingFactor);
+                
+//        collision 3
+                
+                //https://www.physicsforums.com/threads/3d-elastic-collisions-of-spheres-angular-momentum.413352/
+                c = glm::dot(collisionNormal, relativeVelocity);
+                newParVelocity = particleVelocity - ( (m2*c) / (m1+m2) ) * ((1.f - e) * collisionNormal);
+                newNeighVelocity = neighborVelocity + ( (m1*c) / (m1+m2) ) * ((1.f - e) * collisionNormal);
+                
+                currParticle.setVelocity(newParVelocity * dampingFactor);
+                neighborParticle.setVelocity(newNeighVelocity * dampingFactor);
+                
+                currParticle.setPredictedPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
+                neighborParticle.setPredictedPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
+//
+//                currParticle.setPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
+//                neighborParticle.setPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
             }
         }
     }
