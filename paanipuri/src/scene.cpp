@@ -160,10 +160,10 @@ void Scene::addCubeToScene()
     int damDim = static_cast <int> (std::cbrt(particleCount)),
     i,j,k=0;
     float smoothingRad = 1.f;
-    glm::vec3 position(0), velocity(0);
+    glm::vec3 position(0), velocity(0,0,0);
     
     int phase = 3;
-    float mass = 100.f;
+    float mass = 1.f;
     
     for(i=0; i<damDim; i++)
     {
@@ -178,6 +178,7 @@ void Scene::addCubeToScene()
     }
     
     numberOfParticles += particleCount;
+    particleSystem->setRestPose(phase);
 }
 
 void Scene::addBallToScene()
@@ -188,10 +189,10 @@ void Scene::addBallToScene()
     int lats=10, longs=10;
     int particleCount = 0;
 
-    glm::vec3 position1(0), position2(0), velocity(0);
+    glm::vec3 position1(0), position2(0), velocity(10,0,0);
 
     int phase = 2;
-    float mass = 100.f;
+    float mass = 1.f;
 
     int i, j;
     for (i = 0; i <= lats; i++)
@@ -224,6 +225,7 @@ void Scene::addBallToScene()
     }
     
     numberOfParticles += particleCount;
+    particleSystem->setRestPose(phase);
 }
 
 void Scene::update(){

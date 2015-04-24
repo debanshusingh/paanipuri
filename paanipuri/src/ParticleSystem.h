@@ -15,8 +15,8 @@
 #include <map>
 #include "Mesh.h"
 #include "Constraint.h"
-#include <Core>
-#include <Dense>
+#include <Eigen/Core>
+#include <Eigen/Dense>
 
 
 typedef Eigen::Matrix<float, 3, 1, 0, 3 ,1> EigenVector3;
@@ -43,7 +43,7 @@ private:
     std::vector<ShapeMatchingConstraint*> shapeConstraints;   //List of all shape matching constraints in the system
     
     const float smoothingRadius = 1.5f;
-    const int solverIterations = 4;
+    const int solverIterations = 10;
     
     const float timeStep = 0.016f;
     
@@ -117,6 +117,8 @@ public:
     bool isValidCell(glm::ivec3);
     
     void setupInvMassMatrix();
+    
+    void setRestPose(int groupID);
 };
 
 #endif
