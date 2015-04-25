@@ -70,7 +70,7 @@ Scene::Scene()
     
     cube = new Cube();
     cube->setCenter(glm::vec3(0,0,0));
-    cube->setDimension(glm::vec3(13)*particleSystem->getSmoothingRadius());
+    cube->setDimension(glm::vec3(20)*particleSystem->getSmoothingRadius());
     cube->setCellSize(particleSystem->getSmoothingRadius());       //depends on cube dimensions and particle radius
     
 }
@@ -101,6 +101,7 @@ void Scene::init(){
 //    }
 
 //    addBallToScene();
+    addParticlesToScene(1);
 //    addCubeToScene();
     particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
     particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
@@ -115,7 +116,7 @@ void Scene::init(){
 
 void Scene::addParticlesToScene(int type)
 {
-    int particleCount = 125;
+    int particleCount = 1000;
     
     int damDim = static_cast <int> (std::cbrt(particleCount)),
         i,j,k=0;
@@ -129,12 +130,12 @@ void Scene::addParticlesToScene(int type)
 
         case 1:
             phase = 0;
-            mass = 1.f;
+            mass = 10.f;
             break;
             
         case 2:
             phase = 1;
-            mass = 100.f;
+            mass = 1.f;
             break;
             
         default:

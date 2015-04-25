@@ -343,7 +343,7 @@ void ParticleSystem::applyForces(const int i)
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-//    particleContainerCollision(index);
+    particleContainerCollision(index);
     particleParticleCollision(index);
 }
 
@@ -369,7 +369,7 @@ void ParticleSystem::particleParticleCollision(int index)
     float distance, radius = currParticle.getRadius();
     float m1 = currParticle.getMass(), m2;
     float currParticleMass = m1, neighborMass;
-    float dampingFactor = 1.f, scaleUpFactor = 0.5f, e = 0.3;
+    float dampingFactor = 0.2f, scaleUpFactor = 1.0f, e = 0.5f;
     
     glm::vec3 newParVelocity, newNeighVelocity;
     float c;
@@ -416,17 +416,17 @@ void ParticleSystem::particleParticleCollision(int index)
                 
                 //https://www.physicsforums.com/threads/3d-elastic-collisions-of-spheres-angular-momentum.413352/
                 c = glm::dot(collisionNormal, relativeVelocity);
-                newParVelocity = particleVelocity - ( (m2*c) / (m1+m2) ) * ((1.f - e) * collisionNormal);
-                newNeighVelocity = neighborVelocity + ( (m1*c) / (m1+m2) ) * ((1.f - e) * collisionNormal);
+                newParVelocity = particleVelocity - ( (m2*c) / (m1+m2) ) * (e * collisionNormal);
+                newNeighVelocity = neighborVelocity + ( (m1*c) / (m1+m2) ) * (e * collisionNormal);
                 
                 currParticle.setVelocity(newParVelocity * dampingFactor);
                 neighborParticle.setVelocity(newNeighVelocity * dampingFactor);
                 
                 currParticle.setPredictedPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
                 neighborParticle.setPredictedPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
-//
-//                currParticle.setPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
-//                neighborParticle.setPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
+
+                currParticle.setPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
+                neighborParticle.setPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
             }
         }
     }

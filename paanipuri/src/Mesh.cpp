@@ -12,6 +12,9 @@
 #include <OpenGL/OpenGL.h>
 #include <GLUT/GLUT.h>
 
+
+//Reference : http://ogldev.atspace.co.uk/www/tutorial22/tutorial22.html
+
 Mesh::MeshEntry::MeshEntry()
 {
     NumIndices  = 0;
