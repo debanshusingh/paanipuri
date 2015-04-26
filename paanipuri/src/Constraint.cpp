@@ -94,7 +94,7 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
     //Calculating Center of Mass (as mass of all partiles is the same, it becomes the average of positions
     for(int i=0; i<particleGroup.size(); i++)
     {
-        centerMassDeformed += particles.at(particleGroup.at(i)).getPredictedPosition();
+        centerMassDeformed += particles.at(particleGroup.at(i)).predictedPosition;
     }
     centerMassDeformed /= particleGroup.size();
     
@@ -105,7 +105,7 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
     //Finding Apq matrix
     for(int i=0;i<particleGroup.size(); i++)
     {
-        p = particles.at(particleGroup.at(i)).getPredictedPosition() - centerMassDeformed;
+        p = particles.at(particleGroup.at(i)).predictedPosition - centerMassDeformed;
         q = particles.at(particleGroup.at(i)).getRestOffset();
 
         Apq += mass * p * q;
@@ -176,7 +176,7 @@ void ShapeMatchingConstraint::Solve(std::vector<int>& particleGroup, std::vector
 //    }
     
     
-    glm::vec3 deltaPi = (rotMat*particles.at(_particleIndex).getRestOffset() + centerMassDeformed) - particles.at(_particleIndex).getPredictedPosition();
+    glm::vec3 deltaPi = (rotMat*particles.at(_particleIndex).getRestOffset() + centerMassDeformed) - particles.at(_particleIndex).predictedPosition;
     particles.at(_particleIndex).setDeltaPi(deltaPi);
 }
 

@@ -66,6 +66,10 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         scene->addBallToScene();
     else if(key == GLFW_KEY_4 && action == GLFW_PRESS)
         scene->addCubeToScene();
+    else if(key == GLFW_KEY_5)
+        scene->pourFluid(1);
+    else if(key == GLFW_KEY_6)
+        scene->pourFluid(2);
     else if(key == GLFW_KEY_W)
         camEye += sensitivity*camDir;
     else if(key == GLFW_KEY_S)
@@ -74,6 +78,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         camEye -= sensitivity*glm::normalize(glm::cross(camDir, camUp));
     else if(key == GLFW_KEY_D)
         camEye += sensitivity*glm::normalize(glm::cross(camDir, camUp));
+
 }
 
 static void mouseCallback(GLFWwindow* window, double xpos, double ypos){
@@ -108,7 +113,6 @@ static void mouseCallback(GLFWwindow* window, double xpos, double ypos){
     dir.y = sin(glm::radians(pitch));
     dir.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     camDir = glm::normalize(dir);
-    
 }
 
 
