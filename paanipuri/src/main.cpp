@@ -31,12 +31,31 @@ GLuint unifLightPos;
 GLuint unifLightColor;
 GLuint unifCamPos;
 
+/**************/
+// Camera setup
+/**************/
+glm::vec3 camEye = glm::vec3(0,2,50);
+glm::vec3 camDir = glm::vec3(0,0,-1);
+glm::vec3 camUp = glm::vec3(0,1,0);
+GLfloat yaw   = -90.0f;
+GLfloat pitch =   0.0f;
+
+/**************/
+// Mouse setup
+/**************/
+GLfloat lastX =  SCREEN_SIZE.x / 2.0;
+GLfloat lastY =  SCREEN_SIZE.y / 2.0;
+bool firstMouse = true;
+
 void init(int argc, char* argv[]);
 void display();
 void displayParticles();
 
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){
+
+    GLfloat sensitivity = 0.5f;
+
     if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q)  && action == GLFW_PRESS)
         glfwSetWindowShouldClose(gWindow, GL_TRUE);
     else if(key == GLFW_KEY_1 && action == GLFW_PRESS)
@@ -47,7 +66,51 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         scene->addBallToScene();
     else if(key == GLFW_KEY_4 && action == GLFW_PRESS)
         scene->addCubeToScene();
+    else if(key == GLFW_KEY_W)
+        camEye += sensitivity*camDir;
+    else if(key == GLFW_KEY_S)
+        camEye -= sensitivity*camDir;
+    else if(key == GLFW_KEY_A)
+        camEye -= sensitivity*glm::normalize(glm::cross(camDir, camUp));
+    else if(key == GLFW_KEY_D)
+        camEye += sensitivity*glm::normalize(glm::cross(camDir, camUp));
 }
+
+static void mouseCallback(GLFWwindow* window, double xpos, double ypos){
+    //source - http://www.learnopengl.com/
+    
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    
+    GLfloat deltaX = xpos - lastX;
+    GLfloat deltaY = lastY - ypos;
+    
+    lastX = xpos; lastY = ypos;
+    
+    GLfloat sensitivity = 0.025f;
+    deltaX *= sensitivity;
+    deltaY *= sensitivity;
+    
+    yaw   += deltaX;
+    pitch += deltaY;
+    
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+    
+    glm::vec3 dir;
+    dir.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    dir.y = sin(glm::radians(pitch));
+    dir.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    camDir = glm::normalize(dir);
+    
+}
+
 
 GLuint loadTexture(Image* image) {
     GLuint textureId;
@@ -213,14 +276,12 @@ void initShader(){
     
     //printGLErrorLog();
     
+    /**************/
     // Camera setup
+    /**************/
     glUseProgram(shaderProgram);
     
-    glm::vec3 camEye = glm::vec3(0,2,50);
-    glm::vec3 camCenter = glm::vec3(0,0,0);
-    glm::vec3 camUp = glm::vec3(0,1,0);
-    
-    glm::mat4 view = glm::lookAt(camEye, camCenter, camUp);
+    glm::mat4 view = glm::lookAt(camEye, camEye+camDir, camUp);
     glUniformMatrix4fv(unifView, 1, GL_FALSE, &view[0][0]);
     
     glm::mat4 projection = glm::perspective<float>(50.0, (float)SCREEN_SIZE.x/SCREEN_SIZE.y, 0.1f, 100.0f);
@@ -268,6 +329,13 @@ void displayParticles()
     glm::mat4 model = glm::mat4();
     glUniformMatrix4fv(unifModel, 1, GL_FALSE, &model[0][0]);
     
+    glm::mat4 view = glm::lookAt(camEye, camEye+camDir, camUp);
+    glUniformMatrix4fv(unifView, 1, GL_FALSE, &view[0][0]);
+    
+    glm::mat4 projection = glm::perspective<float>(50.0, (float)SCREEN_SIZE.x/SCREEN_SIZE.y, 0.1f, 100.0f);
+    glUniformMatrix4fv(unifProj, 1, GL_FALSE, &projection[0][0]);
+
+    
     glBindVertexArray(gVAO);
     
     //bind the VBO
@@ -276,7 +344,6 @@ void displayParticles()
     glEnableVertexAttribArray(locationPos);
     glVertexAttribPointer(locationPos, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     
     //bind the VBO
     glBindBuffer(GL_ARRAY_BUFFER, gBufCol);
@@ -446,8 +513,12 @@ void initGLFW(int argc, char* argv[]) {
     glDepthFunc(GL_LESS);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_PROGRAM_POINT_SIZE); // enable point size to be changed in vertex shader
     
     glfwSetKeyCallback(gWindow, keyCallback);
+    glfwSetCursorPosCallback(gWindow, mouseCallback);
+    glfwSetInputMode(gWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
 }
 
 int main(int argc, char * argv[]) {
