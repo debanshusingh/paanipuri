@@ -203,6 +203,8 @@ void ParticleSystem::setupConstraints(){
             //we don't actually need to have the particle index as part of this do we?
             ShapeMatchingConstraint* sc = new ShapeMatchingConstraint(i);
             shapeConstraints.push_back(sc);
+            DensityConstraint* dc = new DensityConstraint(i);
+            densityConstraints.push_back(dc);
         }
     }
 }
@@ -251,12 +253,16 @@ void ParticleSystem::update()
 //        findSolidContacts(i) //resolve contact constraints for stable init. config -> update original & predicted pos
     });
     
-    parallel_for<size_t>(0, particles.size(), 1, [=](int i)
-    {
-        particleCollision(i);
-    });
+    //Stability Step
+    for(int j = 0; j < stabilityIterations; j++) {
+        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
+        {
+            particleCollision(i);
+        });
+    }
     
-    for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
+    
+    for (int iter=0; iter<fluidSolverIterations; iter++) // outer loop can't be parallelized
     {
         //constraint-centric approach
         
@@ -280,7 +286,10 @@ void ParticleSystem::update()
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (currParticle.getDeltaPi() / currParticle.getMass()));
 
         });
-        
+    }
+    
+    for (int iter=0; iter<solidSolverIterations; iter++) // outer loop can't be parallelized
+    {
         parallel_for<size_t>(0, shapeConstraints.size(), 1, [=](int j)
         {
             Particle& currParticle = particles.at(shapeConstraints.at(j)->getParticleIndex());
@@ -298,9 +307,12 @@ void ParticleSystem::update()
      
         currParticle.setVelocity((currParticle.getPredictedPosition() - currParticle.getPosition()) / timeStep);
 //        viscosity(i);
-        currParticle.setPosition(currParticle.getPredictedPosition()); //TODO: Have to apply sleeping!
+        
+        //Particle sleeping not working apparently because of some issue with the collision detection
+        currParticle.setPosition(currParticle.getPredictedPosition());
     });
     
+    particlePosData.clear();
     for (int i=0; i<particles.size(); i++)
     {
         Particle& currParticle = particles.at(i);

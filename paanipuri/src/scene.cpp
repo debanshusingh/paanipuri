@@ -150,6 +150,7 @@ void Scene::addParticlesToScene(int type)
             {
                 position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.9f;
                 particleSystem->addParticle(Particle(position, velocity, phase, mass));
+//                particleSystem->particleSizData.push_back(glm::vec3(2.0f));
             }
         }
     }
@@ -196,6 +197,7 @@ void Scene::pourFluid(int type)
             {
                 position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.5f + translate;
                 particleSystem->addParticle(Particle(position, velocity, phase, mass));
+//                particleSystem->particleSizData.push_back(glm::vec3(2.0f));
             }
         }
     }
@@ -209,11 +211,11 @@ void Scene::addCubeToScene()
 
     int damDim = static_cast <int> (std::cbrt(particleCount)),
     i,j,k=0;
-    float smoothingRad = 1.5f;
-    glm::vec3 position(0), velocity(0,0,0);
+    float smoothingRad = particleSystem->getSmoothingRadius();
+    glm::vec3 position(0), position2(0, cube->getCenter().y + cube->getHalfDimensions().y*0.5, 0), velocity(0,0,0);
     
     int phase = currPhaseCube;
-    float mass = 0.01f;
+    float mass = 1.f;
     
     for(i=0; i<damDim; i++)
     {
@@ -221,8 +223,9 @@ void Scene::addCubeToScene()
         {
             for(k=0; k<damDim; k++)
             {
-                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.9f;
+                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f)) + position2;
                 particleSystem->addParticle(Particle(position, velocity, phase, mass));
+//                particleSystem->particleSizData.push_back(glm::vec3(3.0f));
             }
         }
     }
@@ -236,15 +239,15 @@ void Scene::addBallToScene()
 {
     //reference: http://stackoverflow.com/questions/9084189/draw-a-sphere-using-3d-pixels-voxels
     
-    float radius = 1.5f;
+    float radius = particleSystem->getSmoothingRadius();
     
-    int lats=10, longs=10;
+    int lats=8, longs=8;
     int particleCount = 0;
 
-    glm::vec3 position1(0), position2(0, cube->getCenter().y + cube->getHalfDimensions().y*0.5, 0), velocity(5,0,0);
+    glm::vec3 position1(0), position2(0, cube->getCenter().y + cube->getHalfDimensions().y*0.5, 0), velocity(0,0,0);
 
     int phase = currPhaseBall;
-    float mass = 0.01f;
+    float mass = 1.f;
 
     int i, j;
     for (i = 0; i <= lats; i++)
@@ -262,7 +265,7 @@ void Scene::addBallToScene()
             position1 = glm::vec3(x * zr0, y * zr0, z0) + position2;
             
             particleSystem->addParticle(Particle(position1*radius, velocity, phase, mass));
-            
+//            particleSystem->particleSizData.push_back(glm::vec3(3.0f));
             particleCount++;
         }
     }
