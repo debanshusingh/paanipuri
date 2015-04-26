@@ -355,7 +355,7 @@ void ParticleSystem::particleParticleCollision(int index)
     
     std::vector<int> neighbors = currParticle.getNeighborIndices();
 
-    glm::vec3 currentParticlePosition = currParticle.getPredictedPosition(),
+    glm::vec3 currentParticlePosition = currParticle.predictedPosition,
                 neighborPosition,
                 particleVelocity,
                 neighborVelocity;
@@ -369,7 +369,7 @@ void ParticleSystem::particleParticleCollision(int index)
     float distance, radius = currParticle.getRadius();
     float m1 = currParticle.getMass(), m2;
     float currParticleMass = m1, neighborMass;
-    float dampingFactor = 0.2f, scaleUpFactor = 1.0f, e = 0.5f;
+    float dampingFactor = 0.2f, scaleUpFactor = 0.5f, e = 0.5f;
     
     glm::vec3 newParVelocity, newNeighVelocity;
     float c;
@@ -389,7 +389,7 @@ void ParticleSystem::particleParticleCollision(int index)
             //else if both are of different phase, then do collision detection and response
             particleVelocity = currParticle.getVelocity();
             
-            neighborPosition = neighborParticle.getPredictedPosition();
+            neighborPosition = neighborParticle.predictedPosition;
             neighborVelocity = neighborParticle.getVelocity();
             m2 = neighborParticle.getMass();
             neighborMass = m2;
@@ -422,11 +422,11 @@ void ParticleSystem::particleParticleCollision(int index)
                 currParticle.setVelocity(newParVelocity * dampingFactor);
                 neighborParticle.setVelocity(newNeighVelocity * dampingFactor);
                 
-                currParticle.setPredictedPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
-                neighborParticle.setPredictedPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
+                currParticle.setPredictedPosition(currParticle.position + currParticle.getVelocity()*timeStep*scaleUpFactor);
+                neighborParticle.setPredictedPosition(neighborParticle.position + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
 
-                currParticle.setPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
-                neighborParticle.setPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
+//                currParticle.setPosition(currParticle.position + currParticle.getVelocity()*timeStep*scaleUpFactor);
+//                neighborParticle.setPosition(neighborParticle.position + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
             }
         }
     }

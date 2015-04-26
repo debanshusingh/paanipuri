@@ -101,7 +101,7 @@ void Scene::init(){
 //    }
 
 //    addBallToScene();
-    addParticlesToScene(1);
+//    addParticlesToScene(1);
 //    addCubeToScene();
     particleSystem->setUpperBounds(cube->getCenter() + cube->getHalfDimensions());
     particleSystem->setLowerBounds(cube->getCenter() - cube->getHalfDimensions());
@@ -157,6 +157,52 @@ void Scene::addParticlesToScene(int type)
     numberOfParticles += particleCount;
 }
 
+void Scene::pourFluid(int type)
+{
+    int particleCount = 27;
+    int damDim = static_cast <int> (std::cbrt(particleCount)),
+    i,j,k=0;
+    float smoothingRad = particleSystem->getSmoothingRadius() * 1.f;
+    glm::vec3 position(0), translate(0), velocity(10,0,0);
+    
+    int phase = 0;
+    float mass = 10.f;
+    
+    switch (type) {
+            
+        case 1:
+            phase = 0;
+            mass = 10.f;
+            translate = glm::vec3(-cube->getHalfDimensions().x*0.5,cube->getHalfDimensions().y*0.9,0);
+            velocity = glm::vec3(10,0,0);
+            break;
+            
+        case 2:
+            phase = 1;
+            mass = 1.f;
+            translate = glm::vec3(cube->getHalfDimensions().x*0.5,cube->getHalfDimensions().y*0.9,0);
+            velocity = glm::vec3(-10,0,0);
+            break;
+            
+        default:
+            break;
+    }
+    
+    for(i=0; i<damDim; i++)
+    {
+        for(j=0; j<damDim; j++)
+        {
+            for(k=0; k<damDim; k++)
+            {
+                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f)) + translate;
+                particleSystem->addParticle(Particle(position, velocity, phase, mass));
+            }
+        }
+    }
+    
+    numberOfParticles += particleCount;
+}
+
 void Scene::addCubeToScene()
 {
     int particleCount = 8;
@@ -190,12 +236,12 @@ void Scene::addBallToScene()
 {
     //reference: http://stackoverflow.com/questions/9084189/draw-a-sphere-using-3d-pixels-voxels
     
-    float radius = 0.5f;
+    float radius = 0.4f;
     
-    int lats=15, longs=15;
+    int lats=10, longs=10;
     int particleCount = 0;
 
-    glm::vec3 position1(0), position2(0), velocity(0,0,0);
+    glm::vec3 position1(0), position2(0, cube->getCenter().y + cube->getHalfDimensions().y*0.5, 0), velocity(5,0,0);
 
     int phase = currPhaseBall;
     float mass = 0.1f;
@@ -213,7 +259,7 @@ void Scene::addBallToScene()
             double x = cos(lng);
             double y = sin(lng);
             
-            position1 = glm::vec3(x * zr0, y * zr0, z0);
+            position1 = glm::vec3(x * zr0, y * zr0, z0) + position2;
             
             particleSystem->addParticle(Particle(position1*radius, velocity, phase, mass));
             

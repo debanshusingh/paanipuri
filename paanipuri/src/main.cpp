@@ -47,6 +47,10 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         scene->addBallToScene();
     else if(key == GLFW_KEY_4 && action == GLFW_PRESS)
         scene->addCubeToScene();
+    else if(key == GLFW_KEY_5)
+        scene->pourFluid(1);
+    else if(key == GLFW_KEY_6)
+        scene->pourFluid(2);
 }
 
 GLuint loadTexture(Image* image) {

@@ -70,6 +70,7 @@ public:
     void addParticlesToScene(int);
     void addBallToScene();
     void addCubeToScene();
+    void pourFluid(int);
 };
 
 #endif /* defined(__paani__scene__) */
