@@ -251,10 +251,14 @@ void ParticleSystem::update()
 //        findSolidContacts(i) //resolve contact constraints for stable init. config -> update original & predicted pos
     });
     
-    parallel_for<size_t>(0, particles.size(), 1, [=](int i)
-    {
-        particleCollision(i);
-    });
+    //Stability Step
+    for(int j = 0; j < stabilityIterations; j++) {
+        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
+        {
+            particleCollision(i);
+        });
+    }
+    
     
     for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
     {
@@ -286,9 +290,10 @@ void ParticleSystem::update()
             Particle& currParticle = particles.at(shapeConstraints.at(j)->getParticleIndex());
             
             shapeConstraints.at(j)->Solve(particleGroup.at(currParticle.getPhase()), particles);
-            particleCollision(j);
+            
             
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
+            particleCollision(j);
         });
     }
     
@@ -298,7 +303,9 @@ void ParticleSystem::update()
      
         currParticle.setVelocity((currParticle.getPredictedPosition() - currParticle.getPosition()) / timeStep);
 //        viscosity(i);
-        currParticle.setPosition(currParticle.getPredictedPosition()); //TODO: Have to apply sleeping!
+        
+        //Particle sleeping not working apparently because of some issue with the collision detection
+        currParticle.setPosition(currParticle.getPredictedPosition());
     });
     
     for (int i=0; i<particles.size(); i++)
