@@ -216,9 +216,9 @@ void initShader(){
     // Camera setup
     glUseProgram(shaderProgram);
     
-    glm::vec3 camEye = glm::vec3(0,2,50);
+    glm::vec3 camEye = glm::vec3(0,2,-100);
     glm::vec3 camCenter = glm::vec3(0,0,0);
-    glm::vec3 camUp = glm::vec3(0,1,0);
+    glm::vec3 camUp = glm::vec3(0,-1,0);
     
     glm::mat4 view = glm::lookAt(camEye, camCenter, camUp);
     glUniformMatrix4fv(unifView, 1, GL_FALSE, &view[0][0]);
