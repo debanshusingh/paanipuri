@@ -1,4 +1,4 @@
-#version 410
+#version 330 core
 
 in vec3 outColor;
 //in vec3 lightDirection;

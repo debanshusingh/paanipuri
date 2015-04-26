@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1281BD9B1ADE359600A51AE3 /* libglfw3.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1281BD9A1ADE359600A51AE3 /* libglfw3.3.1.dylib */; };
+		12AA474D1AED68BF003413FC /* libSOIL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12AA474C1AED68BF003413FC /* libSOIL.a */; };
 		12CB7C431AA272990095666D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12CB7C421AA272990095666D /* main.cpp */; };
 		12CB7C461AA275E90095666D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C451AA275E90095666D /* OpenGL.framework */; };
 		12CB7C481AA276870095666D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CB7C471AA276870095666D /* IOKit.framework */; };
@@ -42,6 +43,10 @@
 		12730EA31ADB355800F13D4C /* frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = frag.glsl; path = shaders/frag.glsl; sourceTree = "<group>"; };
 		12730EA41ADB355800F13D4C /* vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vert.glsl; path = shaders/vert.glsl; sourceTree = "<group>"; };
 		1281BD9A1ADE359600A51AE3 /* libglfw3.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.1.dylib; path = /usr/local/Cellar/glfw3/3.1/lib/libglfw3.3.1.dylib; sourceTree = "<absolute>"; };
+		12AA474C1AED68BF003413FC /* libSOIL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSOIL.a; path = ../../../../../../../usr/local/lib/libSOIL.a; sourceTree = "<group>"; };
+		12AA474E1AED6C31003413FC /* vs_floor.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vs_floor.glsl; path = shaders/vs_floor.glsl; sourceTree = "<group>"; };
+		12AA474F1AED6DCD003413FC /* fs_floor.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fs_floor.glsl; path = shaders/fs_floor.glsl; sourceTree = "<group>"; };
+		12AA47501AED7052003413FC /* Shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
 		12CB7C421AA272990095666D /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		12CB7C451AA275E90095666D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		12CB7C471AA276870095666D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -74,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12AA474D1AED68BF003413FC /* libSOIL.a in Frameworks */,
 				89B12C111AE1B1D30063168D /* libassimp.3.1.1.dylib in Frameworks */,
 				1281BD9B1ADE359600A51AE3 /* libglfw3.3.1.dylib in Frameworks */,
 				897E7F531AD4D91C0056699C /* libtbb.dylib in Frameworks */,
@@ -93,6 +99,8 @@
 			children = (
 				12730EA41ADB355800F13D4C /* vert.glsl */,
 				12730EA31ADB355800F13D4C /* frag.glsl */,
+				12AA474E1AED6C31003413FC /* vs_floor.glsl */,
+				12AA474F1AED6DCD003413FC /* fs_floor.glsl */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
@@ -117,6 +125,7 @@
 				89A663E01AB5432600B11963 /* imageloader.h */,
 				12F5ECA11AA2900C0055DEE6 /* utilities.cpp */,
 				12F5ECA21AA2900C0055DEE6 /* utilities.h */,
+				12AA47501AED7052003413FC /* Shader.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -124,6 +133,7 @@
 		12E9289A1AA26FF600D11B5B = {
 			isa = PBXGroup;
 			children = (
+				12AA474C1AED68BF003413FC /* libSOIL.a */,
 				89B12C101AE1B1D30063168D /* libassimp.3.1.1.dylib */,
 				1281BD9A1ADE359600A51AE3 /* libglfw3.3.1.dylib */,
 				897E7F511AD4D91C0056699C /* libtbb.dylib */,
@@ -341,19 +351,21 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/paanipuri/thirdparty/osx/\"",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glm",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glew/include",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glfw/include",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/assimp-3.1.1/include",
+					"$(PROJECT_DIR)/paanipuri/thirdparty/soil/src",
 					/usr/local/include,
-					"\"$(SRCROOT)/paanipuri/thirdparty/osx/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glew/lib",
 					"/usr/local/Cellar/tbb/4.3-20141023/lib",
 					/usr/local/Cellar/glfw3/3.1/lib,
 					"$(PROJECT_DIR)/paanipuri/thirdparty/assimp-3.1.1/lib/",
+					"$(PROJECT_DIR)/paanipuri/thirdparty/soil",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -365,19 +377,21 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/paanipuri/thirdparty/osx/\"",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glm",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glew/include",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glfw/include",
 					"$(PROJECT_DIR)/paanipuri/thirdparty/assimp-3.1.1/include",
+					"$(PROJECT_DIR)/paanipuri/thirdparty/soil/src",
 					/usr/local/include,
-					"\"$(SRCROOT)/paanipuri/thirdparty/osx/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/paanipuri/thirdparty/osx/glew/lib",
 					"/usr/local/Cellar/tbb/4.3-20141023/lib",
 					/usr/local/Cellar/glfw3/3.1/lib,
 					"$(PROJECT_DIR)/paanipuri/thirdparty/assimp-3.1.1/lib/",
+					"$(PROJECT_DIR)/paanipuri/thirdparty/soil",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
