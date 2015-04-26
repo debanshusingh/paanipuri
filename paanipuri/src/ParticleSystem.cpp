@@ -203,6 +203,8 @@ void ParticleSystem::setupConstraints(){
             //we don't actually need to have the particle index as part of this do we?
             ShapeMatchingConstraint* sc = new ShapeMatchingConstraint(i);
             shapeConstraints.push_back(sc);
+            DensityConstraint* dc = new DensityConstraint(i);
+            densityConstraints.push_back(dc);
         }
     }
 }
@@ -260,7 +262,7 @@ void ParticleSystem::update()
     }
     
     
-    for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
+    for (int iter=0; iter<fluidSolverIterations; iter++) // outer loop can't be parallelized
     {
         //constraint-centric approach
         
@@ -284,15 +286,18 @@ void ParticleSystem::update()
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (currParticle.getDeltaPi() / currParticle.getMass()));
 
         });
-        
+    }
+    
+    for (int iter=0; iter<solidSolverIterations; iter++) // outer loop can't be parallelized
+    {
         parallel_for<size_t>(0, shapeConstraints.size(), 1, [=](int j)
         {
             Particle& currParticle = particles.at(shapeConstraints.at(j)->getParticleIndex());
             
             shapeConstraints.at(j)->Solve(particleGroup.at(currParticle.getPhase()), particles);
+            particleCollision(j);
             
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
-            particleCollision(j);
         });
     }
     

@@ -230,7 +230,7 @@ void DensityConstraint::findLambda(std::vector<Particle>& particles){
     
     for (int i=0; i<numNeighbors; i++) {
         
-//        if(particles.at(neighbors.at(i)).getPhase() < 2)
+        if(particles.at(neighbors.at(i)).getPhase() < 2)
         {
             gradientNeighbor = glm::length(gradientConstraintForNeighbor(index, i, particles));
             sumGradientAtParticle += gradientNeighbor * gradientNeighbor / currParticle.getMass();
@@ -273,7 +273,7 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
     for(i=0; i<neighbors.size(); i++)
     {
         //TODO
-//        if(particles.at(neighbors.at(i)).getPhase() < 2)
+        if(particles.at(neighbors.at(i)).getPhase() < 2)
         {
             glm::vec3 temp = (currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition());
             
@@ -351,7 +351,7 @@ glm::vec3 DensityConstraint::gradientConstraintAtParticle(int index, std::vector
     
     for(int i=0; i<neighbors.size(); i++)
     {
-//        if(particles.at(neighbors.at(i)).getPhase() < 2)
+        if(particles.at(neighbors.at(i)).getPhase() < 2)
         {
             gradientReturn += restDensityInverse *
             gradientWSpikyKernel((particles.at(index).getPosition() - particles.at(neighbors.at(i)).getPosition()), smoothingRadius);
@@ -391,7 +391,7 @@ glm::vec3 DensityConstraint::findDeltaPosition(int index, std::vector<Particle>&
 //            std::cout<<neighbors.at(i)<<std::endl;
 //        }
 
-//        if(particles.at(neighbors.at(i)).getPhase() < 2)
+        if(particles.at(neighbors.at(i)).getPhase() < 2)
         {
         
             float temp = wPoly6Kernel(glm::vec3(deltaQ, 0, 0), smoothingRadius);

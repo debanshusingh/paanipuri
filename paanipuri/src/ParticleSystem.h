@@ -45,8 +45,9 @@ private:
     std::map<int, std::vector<int>> particleGroup;  // Maps phase to a vector of particle indices
     
     const float smoothingRadius = 1.5f;
-    const int solverIterations = 2;
-    const int stabilityIterations = 2;
+    const int fluidSolverIterations = 10;
+    const int solidSolverIterations = 6;
+    const int stabilityIterations = 1;
     
     const float timeStep = 0.016f;
     
@@ -71,8 +72,6 @@ private:
     
     glm::vec3 Eigen2GLM(const EigenVector3& eigen_vector);
     EigenVector3 GLM2Eigen(const glm::vec3& glm_vector);
-    
-    float sleepThreshold = 0.0000000001;
     
 public:
     
