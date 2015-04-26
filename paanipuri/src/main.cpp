@@ -18,11 +18,16 @@ GLFWwindow* gWindow;
 GLuint gVAO = 0;
 GLuint gBufPos = 0;
 GLuint gBufCol = 0;
+GLuint gBufSiz = 0;
+
 GLuint _textureId; //The id of the texture
 GLuint shaderProgram;
+
 GLuint locationPos;
 GLuint locationCol;
 GLuint locationNor;
+GLuint locationSiz;
+
 GLuint unifProj;
 GLuint unifView;
 GLuint unifModel;
@@ -270,6 +275,8 @@ void initShader(){
     locationPos = glGetAttribLocation (shaderProgram, "vs_Position");
     //    locationNor    = glGetAttribLocation (shaderProgram, "vs_Normal");
     locationCol = glGetAttribLocation (shaderProgram, "vs_Color");
+    locationSiz = glGetAttribLocation (shaderProgram, "vs_Size");
+    
     unifProj    = glGetUniformLocation(shaderProgram, "u_projection");
     unifView    = glGetUniformLocation(shaderProgram, "u_view");
     unifModel   = glGetUniformLocation(shaderProgram, "u_model");
@@ -302,7 +309,10 @@ void displayParticles()
     // Put the three verticies into the VBO
     std::vector<glm::vec3> particlePosData;
     std::vector<glm::vec3> particleColData;
+    std::vector<glm::vec3> particleSizData;
+    
     std::vector<Particle> particles = scene->particleSystem->getAllParticles();
+    
     for (std::vector<Particle>::iterator it=particles.begin(); it < particles.end(); it++)
     {
         Particle particle = *it;
@@ -310,11 +320,14 @@ void displayParticles()
         particlePosData.push_back(partPos);
         
         glm::vec3 partCol(0.0,1.0,1.0);
+        glm::vec3 partSize(2.f);
+        
         if (particle.getPhase() == 1){
             partCol = glm::vec3(1.0,1.0,1.0);
         }
         else if(particle.getPhase() >= 2){
             
+            partSize = glm::vec3(5.f);
             if(particle.getPhase() %4 == 0){ //sphere
                 partCol = glm::vec3(1.0,1.0,0.0);
             }
@@ -329,6 +342,7 @@ void displayParticles()
             }
         }
         particleColData.push_back(partCol);
+        particleSizData.push_back(partSize);
     }
     
     // Tell the GPU which shader program to use to draw things
@@ -353,6 +367,13 @@ void displayParticles()
     glBufferData(GL_ARRAY_BUFFER, particlePosData.size()*sizeof(glm::vec3), &particlePosData[0], GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(locationPos);
     glVertexAttribPointer(locationPos, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    //bind the VBO
+    glBindBuffer(GL_ARRAY_BUFFER, gBufSiz);
+    glBufferData(GL_ARRAY_BUFFER, particleSizData.size()*sizeof(glm::vec3), &particleSizData[0], GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(locationSiz);
+    glVertexAttribPointer(locationSiz, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     //bind the VBO
@@ -471,6 +492,14 @@ void loadParticles() {
     glVertexAttribPointer(locationPos, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
+    glGenBuffers(1, &gBufSiz);
+    glBindBuffer(GL_ARRAY_BUFFER, gBufSiz);
+    glBufferData(GL_ARRAY_BUFFER, scene->particleSystem->particleSizData.size()*sizeof(glm::vec3),\
+                 &scene->particleSystem->particleSizData[0], GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(locationSiz);
+    glVertexAttribPointer(locationSiz, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
     glGenBuffers(1, &gBufCol);
     glBindBuffer(GL_ARRAY_BUFFER, gBufCol);
     glBufferData(GL_ARRAY_BUFFER, scene->particleSystem->particleColData.size()*sizeof(glm::vec3), \
@@ -501,7 +530,7 @@ void initGLFW(int argc, char* argv[]) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
-    gWindow = glfwCreateWindow((int)SCREEN_SIZE.x, (int)SCREEN_SIZE.y, "paani", NULL, NULL);
+    gWindow = glfwCreateWindow((int)SCREEN_SIZE.x, (int)SCREEN_SIZE.y, "paanipuri", NULL, NULL);
     if(!gWindow)
         throw std::runtime_error("glfwCreateWindow failed. Can your hardware handle OpenGL 3.2?");
     glfwMakeContextCurrent(gWindow);

@@ -301,6 +301,7 @@ void ParticleSystem::update()
         currParticle.setPosition(currParticle.getPredictedPosition()); //TODO: Have to apply sleeping!
     });
     
+    particlePosData.clear();
     for (int i=0; i<particles.size(); i++)
     {
         Particle& currParticle = particles.at(i);

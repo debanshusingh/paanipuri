@@ -76,7 +76,8 @@ public:
     typedef std::pair<int, glm::vec3> Neighbor;
     std::vector<glm::vec3> particlePosData;
     std::vector<glm::vec3> particleColData;
-
+    std::vector<glm::vec3> particleSizData;
+    
     //Getter functions
     std::vector<Particle>& getAllParticles();   //Returns the list of all particles in the system
     float getSmoothingRadius();
