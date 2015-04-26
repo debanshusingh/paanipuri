@@ -40,8 +40,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		12730EA31ADB355800F13D4C /* frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = frag.glsl; path = shaders/frag.glsl; sourceTree = "<group>"; };
-		12730EA41ADB355800F13D4C /* vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vert.glsl; path = shaders/vert.glsl; sourceTree = "<group>"; };
+		12730EA31ADB355800F13D4C /* fs_particle.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fs_particle.glsl; path = shaders/fs_particle.glsl; sourceTree = "<group>"; };
+		12730EA41ADB355800F13D4C /* vs_particle.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vs_particle.glsl; path = shaders/vs_particle.glsl; sourceTree = "<group>"; };
 		1281BD9A1ADE359600A51AE3 /* libglfw3.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.1.dylib; path = /usr/local/Cellar/glfw3/3.1/lib/libglfw3.3.1.dylib; sourceTree = "<absolute>"; };
 		12AA474C1AED68BF003413FC /* libSOIL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSOIL.a; path = ../../../../../../../usr/local/lib/libSOIL.a; sourceTree = "<group>"; };
 		12AA474E1AED6C31003413FC /* vs_floor.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vs_floor.glsl; path = shaders/vs_floor.glsl; sourceTree = "<group>"; };
@@ -97,8 +97,8 @@
 		12730EA21ADB354900F13D4C /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				12730EA41ADB355800F13D4C /* vert.glsl */,
-				12730EA31ADB355800F13D4C /* frag.glsl */,
+				12730EA41ADB355800F13D4C /* vs_particle.glsl */,
+				12730EA31ADB355800F13D4C /* fs_particle.glsl */,
 				12AA474E1AED6C31003413FC /* vs_floor.glsl */,
 				12AA474F1AED6DCD003413FC /* fs_floor.glsl */,
 			);
