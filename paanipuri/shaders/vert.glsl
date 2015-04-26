@@ -1,4 +1,4 @@
-#version 410
+#version 330 core
 
 in vec3 vs_Position;
 in vec3 vs_Color;
@@ -8,6 +8,7 @@ uniform mat4 u_view;
 uniform mat4 u_model;
 
 out vec3 outColor;
+out vec2 outTexCoords;
 
 void main()
 {
