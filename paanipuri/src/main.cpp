@@ -48,7 +48,7 @@ GLuint floorTexture;
 /**************/
 // Camera setup
 /**************/
-glm::vec3 camEye = glm::vec3(0,2,50);
+glm::vec3 camEye = glm::vec3(0,5,50);
 glm::vec3 camDir = glm::vec3(0,0,-1);
 glm::vec3 camUp = glm::vec3(0,1,0);
 GLfloat yaw   = -90.0f;
@@ -378,6 +378,14 @@ void loadParticles() {
     glVertexAttribPointer(locationCol, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
+    glGenBuffers(1, &gBufSiz);
+    glBindBuffer(GL_ARRAY_BUFFER, gBufSiz);
+    glBufferData(GL_ARRAY_BUFFER, scene->particleSystem->particleSizData.size()*sizeof(glm::vec3),\
+                 &scene->particleSystem->particleSizData[0], GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(locationSiz);
+    glVertexAttribPointer(locationSiz, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
     glBindVertexArray(0);
     
 }
@@ -471,18 +479,6 @@ void displayParticles()
     
 }
 
-    glGenBuffers(1, &gBufSiz);
-    glBindBuffer(GL_ARRAY_BUFFER, gBufSiz);
-    glBufferData(GL_ARRAY_BUFFER, scene->particleSystem->particleSizData.size()*sizeof(glm::vec3),\
-                 &scene->particleSystem->particleSizData[0], GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(locationSiz);
-    glVertexAttribPointer(locationSiz, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-
-void display() {
-    
-}
 
 void initGLFW(int argc, char* argv[]) {
     
