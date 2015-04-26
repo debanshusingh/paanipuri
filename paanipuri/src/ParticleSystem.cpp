@@ -368,8 +368,8 @@ void ParticleSystem::particleParticleCollision(int index)
 
     float distance, radius = currParticle.getRadius();
     float m1 = currParticle.getMass(), m2;
-    float currParticleMass = m1, neighborMass;
-    float dampingFactor = 0.2f, scaleUpFactor = 0.5f, e = 0.5f;
+//    float currParticleMass = m1, neighborMass;
+    float dampingFactor = 0.2f, scaleUpFactor = 1.f, e = 0.1f;
     
     glm::vec3 newParVelocity, newNeighVelocity;
     float c;
@@ -392,7 +392,7 @@ void ParticleSystem::particleParticleCollision(int index)
             neighborPosition = neighborParticle.predictedPosition;
             neighborVelocity = neighborParticle.getVelocity();
             m2 = neighborParticle.getMass();
-            neighborMass = m2;
+//            neighborMass = m2;
             
             distance = glm::distance(currentParticlePosition, neighborPosition);
 
@@ -422,11 +422,11 @@ void ParticleSystem::particleParticleCollision(int index)
                 currParticle.setVelocity(newParVelocity * dampingFactor);
                 neighborParticle.setVelocity(newNeighVelocity * dampingFactor);
                 
-                currParticle.setPredictedPosition(currParticle.position + currParticle.getVelocity()*timeStep*scaleUpFactor);
-                neighborParticle.setPredictedPosition(neighborParticle.position + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
+                currParticle.setPredictedPosition(currParticle.predictedPosition + collisionNormal*timeStep*scaleUpFactor);
+                neighborParticle.setPredictedPosition(neighborParticle.predictedPosition - collisionNormal*timeStep*scaleUpFactor);
 
-//                currParticle.setPosition(currParticle.position + currParticle.getVelocity()*timeStep*scaleUpFactor);
-//                neighborParticle.setPosition(neighborParticle.position + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
+//                currParticle.setPosition(currParticle.position + collisionNormal*timeStep*scaleUpFactor);
+//                neighborParticle.setPosition(neighborParticle.position + collisionNormal*timeStep*scaleUpFactor);
             }
         }
     }

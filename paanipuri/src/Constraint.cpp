@@ -9,6 +9,8 @@
 
 using namespace tbb;
 
+bool checkPhase = true;
+
 Constraint::Constraint() {
 }
 
@@ -212,7 +214,6 @@ void DensityConstraint::Solve(std::vector<Particle>& particles) {
     glm::vec3 deltaPi = findDeltaPosition(_particleIndex, particles); //constraintDelta*lambda
     Particle& currParticle = particles.at(_particleIndex);
     currParticle.setDeltaPi(deltaPi);
-//        particleCollision(i);
 }
 
 void DensityConstraint::findLambda(std::vector<Particle>& particles){
@@ -228,8 +229,12 @@ void DensityConstraint::findLambda(std::vector<Particle>& particles){
     float gradientNeighbor = 0.0f;
     
     for (int i=0; i<numNeighbors; i++) {
-        gradientNeighbor = glm::length(gradientConstraintForNeighbor(index, i, particles));
-        sumGradientAtParticle += gradientNeighbor * gradientNeighbor / currParticle.getMass();
+        
+//        if(particles.at(neighbors.at(i)).getPhase() < 2)
+        {
+            gradientNeighbor = glm::length(gradientConstraintForNeighbor(index, i, particles));
+            sumGradientAtParticle += gradientNeighbor * gradientNeighbor / currParticle.getMass();
+        }
     }
     
     float gradientParticle = glm::length(gradientConstraintAtParticle(index, particles));
@@ -268,7 +273,7 @@ float DensityConstraint::getDensity(int index, std::vector<Particle>& particles)
     for(i=0; i<neighbors.size(); i++)
     {
         //TODO
-       // if(particles.at(_particleIndex).getPhase() == particles.at(neighbors.at(i)).getPhase())
+//        if(particles.at(neighbors.at(i)).getPhase() < 2)
         {
             glm::vec3 temp = (currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition());
             
@@ -346,8 +351,11 @@ glm::vec3 DensityConstraint::gradientConstraintAtParticle(int index, std::vector
     
     for(int i=0; i<neighbors.size(); i++)
     {
-        gradientReturn += restDensityInverse *
-        gradientWSpikyKernel((particles.at(index).getPosition() - particles.at(neighbors.at(i)).getPosition()), smoothingRadius);
+//        if(particles.at(neighbors.at(i)).getPhase() < 2)
+        {
+            gradientReturn += restDensityInverse *
+            gradientWSpikyKernel((particles.at(index).getPosition() - particles.at(neighbors.at(i)).getPosition()), smoothingRadius);
+        }
     }
     
     return gradientReturn;
@@ -383,18 +391,22 @@ glm::vec3 DensityConstraint::findDeltaPosition(int index, std::vector<Particle>&
 //            std::cout<<neighbors.at(i)<<std::endl;
 //        }
 
-        float temp = wPoly6Kernel(glm::vec3(deltaQ, 0, 0), smoothingRadius);
+//        if(particles.at(neighbors.at(i)).getPhase() < 2)
+        {
         
-        artificialTerm = wPoly6Kernel((currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius) / (temp+EPSILON);
+            float temp = wPoly6Kernel(glm::vec3(deltaQ, 0, 0), smoothingRadius);
+            
+            artificialTerm = wPoly6Kernel((currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius) / (temp+EPSILON);
 
-//        if (glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition()))){
-//            std::cout<<neighbors.at(i)<<std::endl;
-//        }
-        
-        sCorr = -1.0 * k * artificialTerm * artificialTerm * artificialTerm * artificialTerm;
-        
-        deltaPi += (particles.at(neighbors[i]).getLambda() + lambda_i + sCorr) *
-        gradientWSpikyKernel((currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius);
+    //        if (glm::any(glm::isinf(particles.at(neighbors.at(i)).getPredictedPosition()))){
+    //            std::cout<<neighbors.at(i)<<std::endl;
+    //        }
+            
+            sCorr = -1.0 * k * artificialTerm * artificialTerm * artificialTerm * artificialTerm;
+            
+            deltaPi += (particles.at(neighbors[i]).getLambda() + lambda_i + sCorr) *
+            gradientWSpikyKernel((currParticle.getPredictedPosition() - particles.at(neighbors.at(i)).getPredictedPosition()), smoothingRadius);
+        }
     }
     
     return (deltaPi/restDensity);

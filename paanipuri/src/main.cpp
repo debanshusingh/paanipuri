@@ -309,17 +309,23 @@ void displayParticles()
         glm::vec3 partPos = particle.getPosition();
         particlePosData.push_back(partPos);
         
-        glm::vec3 partCol(1.0,1.0,1.0);
+        glm::vec3 partCol(0.0,1.0,1.0);
         if (particle.getPhase() == 1){
-            partCol = glm::vec3(0.0,1.0,0.0);
+            partCol = glm::vec3(1.0,1.0,1.0);
         }
         else if(particle.getPhase() >= 2){
             
-            if(particle.getPhase() %2 == 0){ //sphere
+            if(particle.getPhase() %4 == 0){ //sphere
                 partCol = glm::vec3(1.0,1.0,0.0);
             }
-            else {  //cube
-                partCol = glm::vec3(0.0,1.0,1.0);
+            else if(particle.getPhase() %2 == 0){ //sphere
+                partCol = glm::vec3(1.0,0.0,0.0);
+            }
+            else if((particle.getPhase()-1) %4 == 0){  //cube
+                partCol = glm::vec3(1.0,0.54901960784,0.0);
+            }
+            else{
+                partCol = glm::vec3(0.49803921568,1.0,0.0);
             }
         }
         particleColData.push_back(partCol);

@@ -194,7 +194,7 @@ void Scene::pourFluid(int type)
         {
             for(k=0; k<damDim; k++)
             {
-                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f)) + translate;
+                position = (glm::vec3(i,j,k)*smoothingRad - glm::vec3(float(damDim) * smoothingRad/2.0f))*0.5f + translate;
                 particleSystem->addParticle(Particle(position, velocity, phase, mass));
             }
         }
@@ -205,15 +205,15 @@ void Scene::pourFluid(int type)
 
 void Scene::addCubeToScene()
 {
-    int particleCount = 8;
+    int particleCount = 27;
 
     int damDim = static_cast <int> (std::cbrt(particleCount)),
     i,j,k=0;
-    float smoothingRad = 0.5f;
+    float smoothingRad = 1.5f;
     glm::vec3 position(0), velocity(0,0,0);
     
     int phase = currPhaseCube;
-    float mass = 1.f;
+    float mass = 0.01f;
     
     for(i=0; i<damDim; i++)
     {
@@ -236,7 +236,7 @@ void Scene::addBallToScene()
 {
     //reference: http://stackoverflow.com/questions/9084189/draw-a-sphere-using-3d-pixels-voxels
     
-    float radius = 0.4f;
+    float radius = 1.5f;
     
     int lats=10, longs=10;
     int particleCount = 0;
@@ -244,7 +244,7 @@ void Scene::addBallToScene()
     glm::vec3 position1(0), position2(0, cube->getCenter().y + cube->getHalfDimensions().y*0.5, 0), velocity(5,0,0);
 
     int phase = currPhaseBall;
-    float mass = 0.1f;
+    float mass = 0.01f;
 
     int i, j;
     for (i = 0; i <= lats; i++)
