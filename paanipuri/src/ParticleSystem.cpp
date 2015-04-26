@@ -291,7 +291,6 @@ void ParticleSystem::update()
             
             shapeConstraints.at(j)->Solve(particleGroup.at(currParticle.getPhase()), particles);
             
-            
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + currParticle.getDeltaPi());
             particleCollision(j);
         });
