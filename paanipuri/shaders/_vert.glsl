@@ -14,7 +14,6 @@ void main()
 {
     //built-in things to pass down the pipeline
     gl_Position = u_projection * u_view * u_model * vec4(vs_Position, 1.0);
-    //gl_PointSize = vs_Size.x;
-    gl_PointSize = 10;
+    gl_PointSize = vs_Size.x;
     outColor = vs_Color;
 }

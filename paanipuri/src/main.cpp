@@ -349,6 +349,8 @@ void displayParticles()
     // bind the program (the shaders)
     glUseProgram(shaderProgram);
     
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    
     // set model matrix
     glm::mat4 model = glm::mat4();
     glUniformMatrix4fv(unifModel, 1, GL_FALSE, &model[0][0]);
