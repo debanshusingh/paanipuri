@@ -1,8 +1,7 @@
 #paanipuri
-Based on - Miles Macklin, Matthias Müller: Unified Particle Physics for Real-Time Applications - SIGGRAPH 2014
+Based on - Miles Macklin, Matthias Müller: Unified Particle Physics for Real-Time Applications, SIGGRAPH 2014
 
-CIS 563 Project - 
-debanshu singh, sanchit garg & bradley crusco
+CIS 563 Project - debanshu singh, sanchit garg & bradley crusco
 
 ===============
 Work Breakdown
@@ -41,19 +40,19 @@ External Dependencies
 Usage
 =====
 
-OSX - paanipuri.xcodeproj
-Windows - Paanipuri_Windows.sln
+- OSX - paanipuri.xcodeproj
+- Windows - Paanipuri_Windows.sln
 
-Keyboard Controls - 
-q - quit
-1 - Fluid (high density)
-2 - Fluid (low density)
-3 - Sphere
-4 - Cube
-5 - Fluid Pipe (high density)
-6 - Fluid Pipe (low density)
-WASD - camera movement
-mouse movement - yaw & pitch
+- Keyboard Controls - 
+* q - quit
+* 1 - Fluid (high density)
+* 2 - Fluid (low density)
+* 3 - Sphere
+* 4 - Cube
+* 5 - Fluid Pipe (high density)
+* 6 - Fluid Pipe (low density)
+* WASD - camera movement
+* mouse movement - yaw & pitch
 
 ======
 Method
