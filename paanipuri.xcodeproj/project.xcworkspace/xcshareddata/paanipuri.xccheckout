@@ -11,7 +11,7 @@
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>BDB5DC6522B99AA22D91DE398147F6FFF27AD02C</key>
-		<string>https://github.com/debanshusingh/paanipuri</string>
+		<string>https://github.com/debanshusingh/paanipuri.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>paanipuri.xcodeproj</string>
@@ -21,7 +21,7 @@
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/debanshusingh/paanipuri</string>
+	<string>https://github.com/debanshusingh/paanipuri.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
