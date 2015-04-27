@@ -43,10 +43,10 @@ RM = /Applications/CMake.app/Contents/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil
+CMAKE_SOURCE_DIR = "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil
+CMAKE_BINARY_DIR = "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -114,9 +114,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/CMakeFiles /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/CMakeFiles" "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target

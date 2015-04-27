@@ -1,4 +1,4 @@
-# Install script for directory: /Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil
+# Install script for directory: /Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -28,7 +28,7 @@ if(NOT CMAKE_INSTALL_COMPONENT)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/libSOIL.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/libSOIL.a")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libSOIL.a" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libSOIL.a")
     execute_process(COMMAND "/usr/bin/ranlib" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libSOIL.a")
@@ -37,12 +37,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/SOIL" TYPE FILE FILES
-    "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/src/image_DXT.h"
-    "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/src/image_helper.h"
-    "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/src/SOIL.h"
-    "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/src/stb_image_aug.h"
-    "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/src/stbi_DDS_aug.h"
-    "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/src/stbi_DDS_aug_c.h"
+    "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/src/image_DXT.h"
+    "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/src/image_helper.h"
+    "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/src/SOIL.h"
+    "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/src/stb_image_aug.h"
+    "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/src/stbi_DDS_aug.h"
+    "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/src/stbi_DDS_aug_c.h"
     )
 endif()
 
@@ -52,7 +52,7 @@ else()
   set(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 endif()
 
-file(WRITE "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/${CMAKE_INSTALL_MANIFEST}" "")
+file(WRITE "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/${CMAKE_INSTALL_MANIFEST}" "")
 foreach(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  file(APPEND "/Users/debanshu/Dropbox/work/code/github/paanipuri/paanipuri/thirdparty/soil/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  file(APPEND "/Users/sanchitgarg/Desktop/cggt/spring 2015/phys based ani/cis563_FinalProject/code/paanipuri/paanipuri/thirdparty/soil/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 endforeach()

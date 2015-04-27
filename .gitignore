@@ -6,3 +6,5 @@ Build/
 DerivedData/
 paanipuri.xcodeproj/project.xcworkspace/xcuserdata/
 paanipuri.xcodeproj/xcuserdata/
+paanipuri/thirdparty/soil/CMakeFiles
+paanipuri/thirdparty/soil/CMakeCache.txt
