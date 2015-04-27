@@ -101,7 +101,10 @@ glm::vec3 Particle::getDeltaPi()
 }
 
 float Particle::getDensity(){
-    return density;
+    if(phase < 2)
+        return density;
+    else
+        return 0.0;
 }
 
 void Particle::setDensity(float density)

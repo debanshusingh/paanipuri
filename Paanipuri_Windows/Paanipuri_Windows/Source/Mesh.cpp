@@ -10,10 +10,10 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 //#include <OpenGL/OpenGL.h>
-//#include <GL\gl.h>
-
-
 //#include <GLUT/GLUT.h>
+
+
+//Reference : http://ogldev.atspace.co.uk/www/tutorial22/tutorial22.html
 
 Mesh::MeshEntry::MeshEntry()
 {

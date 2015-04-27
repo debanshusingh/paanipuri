@@ -203,6 +203,8 @@ void ParticleSystem::setupConstraints(){
             //we don't actually need to have the particle index as part of this do we?
             ShapeMatchingConstraint* sc = new ShapeMatchingConstraint(i);
             shapeConstraints.push_back(sc);
+            DensityConstraint* dc = new DensityConstraint(i);
+            densityConstraints.push_back(dc);
         }
     }
 }
@@ -251,12 +253,16 @@ void ParticleSystem::update()
 //        findSolidContacts(i) //resolve contact constraints for stable init. config -> update original & predicted pos
     });
     
-    parallel_for<size_t>(0, particles.size(), 1, [=](int i)
-    {
-        particleCollision(i);
-    });
+    //Stability Step
+    for(int j = 0; j < stabilityIterations; j++) {
+        parallel_for<size_t>(0, particles.size(), 1, [=](int i)
+        {
+            particleCollision(i);
+        });
+    }
     
-    for (int iter=0; iter<solverIterations; iter++) // outer loop can't be parallelized
+    
+    for (int iter=0; iter<fluidSolverIterations; iter++) // outer loop can't be parallelized
     {
         //constraint-centric approach
         
@@ -280,7 +286,10 @@ void ParticleSystem::update()
             currParticle.setPredictedPosition(currParticle.getPredictedPosition() + (currParticle.getDeltaPi() / currParticle.getMass()));
 
         });
-        
+    }
+    
+    for (int iter=0; iter<solidSolverIterations; iter++) // outer loop can't be parallelized
+    {
         parallel_for<size_t>(0, shapeConstraints.size(), 1, [=](int j)
         {
             Particle& currParticle = particles.at(shapeConstraints.at(j)->getParticleIndex());
@@ -298,9 +307,12 @@ void ParticleSystem::update()
      
         currParticle.setVelocity((currParticle.getPredictedPosition() - currParticle.getPosition()) / timeStep);
 //        viscosity(i);
-        currParticle.setPosition(currParticle.getPredictedPosition()); //TODO: Have to apply sleeping!
+        
+        //Particle sleeping not working apparently because of some issue with the collision detection
+        currParticle.setPosition(currParticle.getPredictedPosition());
     });
     
+    particlePosData.clear();
     for (int i=0; i<particles.size(); i++)
     {
         Particle& currParticle = particles.at(i);
@@ -343,7 +355,7 @@ void ParticleSystem::applyForces(const int i)
 
 void ParticleSystem::particleCollision(int index){
     particleBoxCollision(index);
-//    particleContainerCollision(index);
+    particleContainerCollision(index);
     particleParticleCollision(index);
 }
 
@@ -355,7 +367,7 @@ void ParticleSystem::particleParticleCollision(int index)
     
     std::vector<int> neighbors = currParticle.getNeighborIndices();
 
-    glm::vec3 currentParticlePosition = currParticle.getPredictedPosition(),
+    glm::vec3 currentParticlePosition = currParticle.predictedPosition,
                 neighborPosition,
                 particleVelocity,
                 neighborVelocity;
@@ -368,8 +380,8 @@ void ParticleSystem::particleParticleCollision(int index)
 
     float distance, radius = currParticle.getRadius();
     float m1 = currParticle.getMass(), m2;
-    float currParticleMass = m1, neighborMass;
-    float dampingFactor = 1.f, scaleUpFactor = 0.5f, e = 0.3;
+//    float currParticleMass = m1, neighborMass;
+    float dampingFactor = 0.2f, scaleUpFactor = 1.f, e = 0.1f;
     
     glm::vec3 newParVelocity, newNeighVelocity;
     float c;
@@ -389,10 +401,10 @@ void ParticleSystem::particleParticleCollision(int index)
             //else if both are of different phase, then do collision detection and response
             particleVelocity = currParticle.getVelocity();
             
-            neighborPosition = neighborParticle.getPredictedPosition();
+            neighborPosition = neighborParticle.predictedPosition;
             neighborVelocity = neighborParticle.getVelocity();
             m2 = neighborParticle.getMass();
-            neighborMass = m2;
+//            neighborMass = m2;
             
             distance = glm::distance(currentParticlePosition, neighborPosition);
 
@@ -416,17 +428,17 @@ void ParticleSystem::particleParticleCollision(int index)
                 
                 //https://www.physicsforums.com/threads/3d-elastic-collisions-of-spheres-angular-momentum.413352/
                 c = glm::dot(collisionNormal, relativeVelocity);
-                newParVelocity = particleVelocity - ( (m2*c) / (m1+m2) ) * ((1.f - e) * collisionNormal);
-                newNeighVelocity = neighborVelocity + ( (m1*c) / (m1+m2) ) * ((1.f - e) * collisionNormal);
+                newParVelocity = particleVelocity - ( (m2*c) / (m1+m2) ) * (e * collisionNormal);
+                newNeighVelocity = neighborVelocity + ( (m1*c) / (m1+m2) ) * (e * collisionNormal);
                 
                 currParticle.setVelocity(newParVelocity * dampingFactor);
                 neighborParticle.setVelocity(newNeighVelocity * dampingFactor);
                 
-                currParticle.setPredictedPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
-                neighborParticle.setPredictedPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
-//
-//                currParticle.setPosition(currParticle.getPosition() + currParticle.getVelocity()*timeStep*scaleUpFactor);
-//                neighborParticle.setPosition(neighborParticle.getPosition() + neighborParticle.getVelocity()*timeStep*scaleUpFactor);
+                currParticle.setPredictedPosition(currParticle.predictedPosition + collisionNormal*timeStep*scaleUpFactor);
+                neighborParticle.setPredictedPosition(neighborParticle.predictedPosition - collisionNormal*timeStep*scaleUpFactor);
+
+//                currParticle.setPosition(currParticle.position + collisionNormal*timeStep*scaleUpFactor);
+//                neighborParticle.setPosition(neighborParticle.position + collisionNormal*timeStep*scaleUpFactor);
             }
         }
     }
@@ -441,21 +453,21 @@ void ParticleSystem::loadContainer(Mesh& mesh)
     //TODO --------------------------------------
     //  scale triangles as per obj size
     
-    glm::vec3 minimum(0.0), maximum(0.0);
+    glm::vec3 min(0.0), max(0.0);
     for(int i = 0; i<container.numIndices; ++i)
     {
         container.triangles[i] *= 10.0f;
         for(int j=0; j<3; j++)
         {
-			if (container.triangles[i][j] < minimum[j])
-				minimum[j] = container.triangles[i][j];
-			if (container.triangles[i][j] > maximum[j])
-				maximum[j] = container.triangles[i][j];
+            if(container.triangles[i][j] < min[j])
+                min[j] = container.triangles[i][j];
+            if(container.triangles[i][j] > max[j])
+                max[j] = container.triangles[i][j];
         }
     }
     
-	container.boundingCenter = (minimum + maximum) / 2.0f;
-	container.boundingRadius = glm::distance(minimum, container.boundingCenter);
+    container.boundingCenter = (min + max)/2.0f;
+    container.boundingRadius = glm::distance(min, container.boundingCenter);
     
     createContainerGrid();
 }
@@ -474,7 +486,7 @@ void ParticleSystem::createContainerGrid()
     //  2. Mark all voxels with that range as true
     
     glm::vec3 v1, v2, v3;         //triangle vertices
-    glm::vec3 minimum(0), maximum(0);     //saves the min and max x,y,z (triangle span)
+    glm::vec3 min(0), max(0);     //saves the min and max x,y,z (triangle span)
     
     for(int i=0; i<container.triangles.size(); i+=3)
     {
@@ -482,26 +494,26 @@ void ParticleSystem::createContainerGrid()
         v2 = container.triangles.at(i+1) + upperBounds;
         v3 = container.triangles.at(i+2) + upperBounds;
         
-		minimum = v1;
-		maximum = v1;
+        min = v1;
+        max = v1;
         
         for(int j = 0; j<3; ++j)
         {
-			if (minimum[j] > v2[j])
-				minimum[j] = v2[j];
-			if (minimum[j] > v3[j])
-				minimum[j] = v3[j];
+            if(min[j] > v2[j])
+                min[j] = v2[j];
+            if(min[j] > v3[j])
+                min[j] = v3[j];
             
-			if (maximum[j] < v2[j])
-				maximum[j] = v2[j];
-			if (maximum[j] < v3[j])
-				maximum[j] = v3[j];
+            if(max[j] < v2[j])
+                max[j] = v2[j];
+            if(max[j] < v3[j])
+                max[j] = v3[j];
         }
         
         glm::ivec3 rangeMin, rangeMax;
         
-		rangeMin = minimum / cellSize;
-		rangeMax = maximum / cellSize;
+        rangeMin = min/cellSize;
+        rangeMax = max/cellSize;
         rangeMax += glm::ivec3(1,1,1);
         
         for(int x = rangeMin.x; x<rangeMax.x; ++x)
