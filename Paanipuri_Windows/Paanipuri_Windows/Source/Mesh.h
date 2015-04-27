@@ -8,16 +8,12 @@
 
 #ifndef __paani__Mesh__
 #define __paani__Mesh__
+
 #include <iostream>
 #include <vector>
-
-
 #include "GL\glew.h"
 #include "GL\freeglut.h"
-//#include <windows.h>
-//#include <GL/gl.h>
-//
-//#include <OpenGL/OpenGL.h> //not sure if this is cool
+//#include <OpenGL/OpenGL.h>
 #include <glm/glm.hpp>
 #include <assimp/scene.h>
 

@@ -45,7 +45,9 @@ private:
     std::map<int, std::vector<int>> particleGroup;  // Maps phase to a vector of particle indices
     
     const float smoothingRadius = 1.5f;
-    const int solverIterations = 10;
+    const int fluidSolverIterations = 10;
+    const int solidSolverIterations = 6;
+    const int stabilityIterations = 1;
     
     const float timeStep = 0.016f;
     
@@ -76,7 +78,8 @@ public:
     typedef std::pair<int, glm::vec3> Neighbor;
     std::vector<glm::vec3> particlePosData;
     std::vector<glm::vec3> particleColData;
-
+    std::vector<glm::vec3> particleSizData;
+    
     //Getter functions
     std::vector<Particle>& getAllParticles();   //Returns the list of all particles in the system
     float getSmoothingRadius();
