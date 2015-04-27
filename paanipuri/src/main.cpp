@@ -61,6 +61,8 @@ GLfloat lastX =  SCREEN_SIZE.x / 2.0;
 GLfloat lastY =  SCREEN_SIZE.y / 2.0;
 bool firstMouse = true;
 
+glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
+
 void init(int argc, char* argv[]);
 void display();
 void displayParticles();
@@ -236,8 +238,8 @@ void printLinkInfoLog(int prog)
 void initShader(){
     // Read in the shader program source files
     
-    std::string vertSourceS = textFileRead("./paanipuri/shaders/vert.glsl");
-    std::string fragSourceS = textFileRead("./paanipuri/shaders/frag.glsl");
+    std::string vertSourceS = textFileRead("./paanipuri/shaders/vs_particle.glsl");
+    std::string fragSourceS = textFileRead("./paanipuri/shaders/fs_particle.glsl");
     
     const char *vertSource = vertSourceS.c_str();
     const char *fragSource = fragSourceS.c_str();
@@ -340,8 +342,6 @@ void displayPlane(Shader& shader){
     glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-    glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-
     //set light uniforms
     glUniform3fv(glGetUniformLocation(shader.Program, "lightPos"), 1, &lightPos[0]);
     glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camEye[0]);
@@ -434,6 +434,8 @@ void displayParticles()
     // Tell the GPU which shader program to use to draw things
     // bind the program (the shaders)
     glUseProgram(shaderProgram);
+    
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
     
     // set model matrix
     glm::mat4 model = glm::mat4();
