@@ -78,4 +78,4 @@ We extend our spatial hash grid to find neighboring particles of different phase
 Example - Fluid-Solid will collide. Solid-Solid will collide. Fluid-Fluid will not collide (this is because fluid separation is taken care of automatically by density constraints)
 
 - [x] Collisions - Particle Mesh (method - compare signed distance of predicted & current position to determine collision)
-We use Assimp to load an obj mesh (glass bowl). We embed the object into a spatial hash grid to find the cells where mesh boundary is present. If a particle is in that cell, we check for collision with triangles in that cell using signed distance checking.
+We use Assimp to load an obj mesh (glass bowl - we had to be careful of scale). We embed the object into a spatial hash grid to find the cells where mesh boundary is present. If a particle is in that cell, we check for collision with triangles in that cell using signed distance checking.
